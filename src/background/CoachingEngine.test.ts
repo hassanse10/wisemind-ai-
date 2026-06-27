@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { CoachingEngine } from './CoachingEngine'
 import { DEFAULT_SETTINGS } from '../shared/StorageManager'
 
@@ -72,7 +72,11 @@ describe('CoachingEngine.resetSession', () => {
     fakeNow += 0
     // We verify resetSession doesn't throw and is callable
     expect(() => engine.resetSession()).not.toThrow()
+  })
 
+  afterEach(() => {
+    // Restore the Date.now spy even if the test above throws, so it cannot
+    // leak into other suites (clearAllMocks does not restore spies).
     vi.restoreAllMocks()
   })
 })
