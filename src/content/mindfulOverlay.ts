@@ -1,4 +1,3 @@
-import { onMessage, sendMessage } from '../shared/messaging'
 
 const OVERLAY_STYLES = `
   :host { all: initial; }
@@ -62,7 +61,7 @@ function createOverlay(message: string, stats: string): HTMLElement {
   if (statsEl) statsEl.textContent = stats
 
   const dismiss = (response: 'continue' | 'take_break' | 'dismissed', mood: string | null = null) => {
-    sendMessage({ type: 'COACHING_RESPONSE', payload: { response, mood } })
+    chrome.runtime.sendMessage({ type: 'COACHING_RESPONSE', payload: { response, mood } })
     host.remove()
   }
 
@@ -84,7 +83,7 @@ function createOverlay(message: string, stats: string): HTMLElement {
   return host
 }
 
-onMessage(msg => {
+chrome.runtime.onMessage.addListener((msg) => {
   if (msg.type === 'SHOW_MINDFUL_CHECKIN') {
     const existing = document.getElementById('wisemind-overlay-host')
     existing?.remove()

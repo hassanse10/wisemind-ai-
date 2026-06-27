@@ -1,5 +1,3 @@
-import { sendMessage } from '../shared/messaging'
-
 let scrollIntensity = 0
 let videoPlaying = false
 
@@ -36,7 +34,7 @@ let intervalStarted = false
 if (!intervalStarted) {
   intervalStarted = true
   setInterval(() => {
-    sendMessage({
+    chrome.runtime.sendMessage({
       type: 'ACTIVITY_SIGNAL',
       payload: {
         scrollIntensity: Math.round(scrollIntensity),

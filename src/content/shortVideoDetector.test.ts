@@ -1,8 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-vi.mock('../shared/messaging', () => ({ sendMessage: vi.fn() }))
-
-import { sendMessage } from '../shared/messaging'
 import { detectYouTubeShorts, detectTikTok } from './shortVideoDetector'
 
 beforeEach(() => vi.clearAllMocks())
@@ -14,7 +11,7 @@ describe('detectYouTubeShorts', () => {
       writable: true,
     })
     detectYouTubeShorts()
-    expect(sendMessage).toHaveBeenCalledWith({
+    expect(chrome.runtime.sendMessage).toHaveBeenCalledWith({
       type: 'SHORT_WATCHED',
       payload: expect.objectContaining({ platform: 'youtube_shorts', count: 1 }),
     })
@@ -26,14 +23,14 @@ describe('detectYouTubeShorts', () => {
       writable: true,
     })
     detectYouTubeShorts()
-    expect(sendMessage).not.toHaveBeenCalled()
+    expect(chrome.runtime.sendMessage).not.toHaveBeenCalled()
   })
 })
 
 describe('detectTikTok', () => {
   it('sends SHORT_WATCHED with platform tiktok', () => {
     detectTikTok()
-    expect(sendMessage).toHaveBeenCalledWith({
+    expect(chrome.runtime.sendMessage).toHaveBeenCalledWith({
       type: 'SHORT_WATCHED',
       payload: expect.objectContaining({ platform: 'tiktok', count: 1 }),
     })
