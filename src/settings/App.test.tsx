@@ -48,13 +48,12 @@ describe('Settings App', () => {
     expect(screen.getByText('Wise Mentor')).toBeInTheDocument()
   })
 
-  it('renders all five personality options', () => {
+  it('renders all four personality options', () => {
     render(<App />)
     expect(screen.getByText('Wise Mentor')).toBeInTheDocument()
     expect(screen.getByText('Friendly Friend')).toBeInTheDocument()
-    expect(screen.getByText('Tough Coach')).toBeInTheDocument()
-    expect(screen.getByText('Mindfulness Guide')).toBeInTheDocument()
-    expect(screen.getByText('Funny Companion')).toBeInTheDocument()
+    expect(screen.getByText('Strict Coach')).toBeInTheDocument()
+    expect(screen.getByText('Motivational Guide')).toBeInTheDocument()
   })
 
   it('calls updateSettings when API key saved', () => {

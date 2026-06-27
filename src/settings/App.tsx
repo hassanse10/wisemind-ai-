@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSettings } from '../shared/hooks/useStorage'
 import { updateSettings } from '../shared/StorageManager'
 import type { MentorPersonality, Theme, CoachingFrequency } from '../shared/types'
@@ -6,9 +6,8 @@ import type { MentorPersonality, Theme, CoachingFrequency } from '../shared/type
 const PERSONALITIES: Array<{ id: MentorPersonality; label: string; desc: string }> = [
   { id: 'wise', label: 'Wise Mentor', desc: 'Calm, thoughtful, reflective.' },
   { id: 'friendly', label: 'Friendly Friend', desc: 'Relaxed, positive, casual.' },
-  { id: 'coach', label: 'Tough Coach', desc: 'Disciplined, direct, no excuses.' },
-  { id: 'mindful', label: 'Mindfulness Guide', desc: 'Peaceful, focused on breathing.' },
-  { id: 'funny', label: 'Funny Companion', desc: 'Playful reminders with humour.' },
+  { id: 'strict', label: 'Strict Coach', desc: 'Disciplined, direct, no excuses.' },
+  { id: 'motivational', label: 'Motivational Guide', desc: 'Energetic, inspiring, goal-focused.' },
 ]
 
 const MODELS = [
@@ -31,6 +30,12 @@ export function App() {
   const [saved, setSaved] = useState(false)
   const [newDomain, setNewDomain] = useState('')
   const [showClearConfirm, setShowClearConfirm] = useState(false)
+
+  useEffect(() => {
+    if (settings?.openrouterApiKey !== undefined) {
+      setApiKey(settings.openrouterApiKey)
+    }
+  }, [settings?.openrouterApiKey])
 
   if (!settings) return <div className="min-h-screen bg-slate-900" />
 
