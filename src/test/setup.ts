@@ -14,6 +14,7 @@ const chromeMock = {
   tabs: {
     query: vi.fn().mockResolvedValue([]),
     get: vi.fn(),
+    sendMessage: vi.fn().mockResolvedValue(undefined),
     onActivated: { addListener: vi.fn() },
     onUpdated: { addListener: vi.fn() },
     onRemoved: { addListener: vi.fn() },
