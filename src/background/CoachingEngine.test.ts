@@ -23,6 +23,7 @@ vi.mock('../shared/db', () => ({
   getVisitsByDateRange: vi.fn().mockResolvedValue([]),
   addCoachingEvent: vi.fn(),
   getActiveGoals: vi.fn().mockResolvedValue([]),
+  getLastNDailySummaries: vi.fn().mockResolvedValue([]),
 }))
 
 beforeEach(() => vi.clearAllMocks())
@@ -95,6 +96,44 @@ describe('CoachingEngine rule: short video', () => {
     const engine = new CoachingEngine()
     const result = await engine.evaluateRules()
     expect(result).not.toBeNull()
+  })
+})
+
+describe('CoachingEngine habit suppression', () => {
+  it('does not fire shorts_overload when it is a suppressed habit (>= 5 of last 7 days)', async () => {
+    const db = await import('../shared/db')
+
+    // Return 7 daily summaries where 5+ days have >50 short videos — triggers suppression
+    const suppressedSummaries = Array.from({ length: 7 }, (_, i) => ({
+      date: `2026-06-${(19 + i).toString().padStart(2, '0')}`,
+      totalTime: 3600,
+      byCategory: {},
+      shortVideoCount: i < 5 ? 60 : 10, // 5 days with 60 (>50), 2 days with 10
+      shortVideoDuration: 0,
+      healthScore: 80,
+      productivityScore: 70,
+      learningScore: 60,
+      breaks: 2,
+      lateNightMinutes: 0,
+      topSites: [],
+    }))
+    vi.mocked(db.getLastNDailySummaries).mockResolvedValueOnce(suppressedSummaries as any)
+
+    // Today also has >50 shorts so the rule would normally fire
+    vi.mocked(db.getShortVideosByDateRange).mockResolvedValueOnce([
+      { id: 's1', platform: 'youtube_shorts', count: 55, duration: 1800, startTime: 0, endTime: 0 },
+    ])
+
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ choices: [{ message: { content: 'Lots of shorts today!' } }] }),
+    }) as any
+
+    const engine = new CoachingEngine()
+    const result = await engine.evaluateRules()
+
+    // shorts_overload is suppressed — it should NOT fire
+    expect(result).toBeNull()
   })
 })
 

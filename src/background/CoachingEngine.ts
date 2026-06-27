@@ -1,8 +1,9 @@
 import type { CoachingContext } from '../shared/types'
 import { getSettings, markRuleFired, getRuleLastFired } from '../shared/StorageManager'
-import { getShortVideosByDateRange, getVisitsByDateRange, addCoachingEvent, getActiveGoals } from '../shared/db'
+import { getShortVideosByDateRange, getVisitsByDateRange, addCoachingEvent, getActiveGoals, getLastNDailySummaries } from '../shared/db'
 import { getTodayRange } from '../shared/constants'
 import { v4 as uuid } from 'uuid'
+import { detectSuppressedRules } from './habitDetection'
 
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions'
 
@@ -77,9 +78,13 @@ export class CoachingEngine {
     const hour = new Date().getHours()
     if (hour < settings.coachingHours.start || hour >= settings.coachingHours.end) return null
 
+    const summaries = await getLastNDailySummaries(7)
+    const suppressed = new Set(detectSuppressedRules(summaries))
+
     const ctx = await this.gatherContext(settings)
 
     for (const rule of RULES) {
+      if (suppressed.has(rule.id)) continue
       if (!rule.check(ctx)) continue
       const lastFired = await getRuleLastFired(rule.id)
       if (Date.now() - lastFired < rule.cooldownMs) continue
