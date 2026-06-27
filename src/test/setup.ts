@@ -24,7 +24,7 @@ const chromeMock = {
     onHistoryStateUpdated: { addListener: vi.fn() },
   },
   runtime: {
-    sendMessage: vi.fn(),
+    sendMessage: vi.fn().mockResolvedValue(undefined),
     onMessage: { addListener: vi.fn(), removeListener: vi.fn() },
     onInstalled: { addListener: vi.fn() },
   },
@@ -45,7 +45,7 @@ const chromeMock = {
     WINDOW_ID_NONE: -1,
   },
   sidePanel: {
-    setPanelBehavior: vi.fn(),
+    setPanelBehavior: vi.fn().mockResolvedValue(undefined),
   },
 }
 

@@ -121,3 +121,4 @@ export type ExtensionMessage =
   | { type: 'SCORE_UPDATE'; payload: Scores }
   | { type: 'SHOW_MINDFUL_CHECKIN'; payload: { message: string; stats: string } }
   | { type: 'COACHING_RESPONSE'; payload: { response: 'continue' | 'take_break' | 'dismissed'; mood: string | null } }
+  | { type: 'GET_SETTINGS' }
