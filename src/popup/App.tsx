@@ -16,7 +16,7 @@ export function App() {
   const learning = scores?.learning ?? 0
 
   return (
-    <div className="w-[400px] min-h-[400px] bg-slate-900 text-slate-100 p-4 flex flex-col gap-4">
+    <div className="w-[400px] min-h-[580px] bg-slate-900 text-slate-100 p-4 flex flex-col gap-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -49,11 +49,15 @@ export function App() {
 
       {/* Quick links */}
       <div className="flex gap-2 mt-auto">
-        <button onClick={() => chrome.tabs.create({ url: 'newtab.html' })}
+        <button onClick={() => chrome.tabs.create({ url: chrome.runtime.getURL('newtab.html') })}
           className="flex-1 text-xs bg-slate-800 hover:bg-slate-700 rounded-lg py-2 text-slate-300">
           Dashboard
         </button>
-        <button onClick={() => chrome.sidePanel?.open({ windowId: undefined as unknown as number })}
+        <button onClick={() => {
+          chrome.windows.getCurrent(w => {
+            if (w.id !== undefined) chrome.sidePanel.open({ windowId: w.id })
+          })
+        }}
           className="flex-1 text-xs bg-slate-800 hover:bg-slate-700 rounded-lg py-2 text-slate-300">
           AI Coach
         </button>

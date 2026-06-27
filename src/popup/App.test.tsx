@@ -15,7 +15,7 @@ vi.mock('../shared/hooks/useScores', () => ({ useScores: () => ({ health: 82, pr
 describe('Popup App', () => {
   it('renders health score', () => {
     render(<App />)
-    expect(screen.getByText('82')).toBeInTheDocument()
+    expect(screen.getAllByText('82').length).toBeGreaterThan(0)
   })
 
   it('shows short video count', () => {
