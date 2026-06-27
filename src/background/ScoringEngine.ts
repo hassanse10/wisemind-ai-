@@ -1,6 +1,6 @@
 import type { Visit, ShortVideoSession, Scores, ExtensionSettings } from '../shared/types'
 import { PRODUCTIVE_CATEGORIES, getTodayRange, getDateString } from '../shared/constants'
-import { getVisitsByDateRange, getShortVideosByDateRange, putDailySummary, getDailySummary, getLastNDailySummaries } from '../shared/db'
+import { getVisitsByDateRange, getShortVideosByDateRange, putDailySummary, getLastNDailySummaries } from '../shared/db'
 import { getSettings, updateSettings } from '../shared/StorageManager'
 
 export class ScoringEngine {
@@ -42,10 +42,8 @@ export class ScoringEngine {
       .map(([domain, duration]) => ({ domain, duration }))
 
     const date = getDateString()
-    // Read existing summary so we don't lose data (unused but keeps the call per interface)
-    await getDailySummary(date)
 
-    await putDailySummary({
+    const todaysSummary = {
       date,
       totalTime: visits.reduce((s, v) => s + v.duration, 0),
       byCategory: byCategory as any,
@@ -57,23 +55,13 @@ export class ScoringEngine {
       breaks: breakCount,
       lateNightMinutes: Math.round(lateNightMinutes),
       topSites,
-    })
+    }
+
+    await putDailySummary(todaysSummary)
 
     await updateSettings({
       lastHealthScore: health,
-      todaysSummary: {
-        date,
-        totalTime: visits.reduce((s, v) => s + v.duration, 0),
-        byCategory: byCategory as any,
-        shortVideoCount,
-        shortVideoDuration: shortVideos.reduce((s, sv) => s + sv.duration, 0),
-        healthScore: health,
-        productivityScore: productivity,
-        learningScore: learning,
-        breaks: breakCount,
-        lateNightMinutes: Math.round(lateNightMinutes),
-        topSites,
-      },
+      todaysSummary,
     })
 
     return scores
@@ -115,7 +103,7 @@ export class ScoringEngine {
 
     // Learning dimension (20 pts): scale from 0 (0 min) to full 20 pts at 30+ min
     const learningSeconds = visits
-      .filter(v => v.category === 'learning' || v.category === 'programming')
+      .filter(v => v.category === 'learning' || v.category === 'programming') // programming counts as productive-learning for health; reading is tracked separately in computeLearningScore
       .reduce((s, v) => s + v.duration, 0)
     const learningMinutes = learningSeconds / 60
     if (learningMinutes < 30) {
@@ -155,7 +143,7 @@ export class ScoringEngine {
     const base = Math.round((productive / total) * 100)
     let score = base
     if (shortVideoCount > 30) score -= 10
-    return Math.min(100, score)
+    return Math.max(0, Math.min(100, score))
   }
 
   private computeLearningScore(visits: Visit[], hasLearningStreak: boolean): number {

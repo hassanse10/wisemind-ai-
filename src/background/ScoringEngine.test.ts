@@ -51,7 +51,10 @@ describe('ScoringEngine.computeProductivityScore', () => {
   })
 
   it('penalises heavy short-video consumption', () => {
-    const visits: Visit[] = [makeVisit('entertainment', 3600)]
+    const visits: Visit[] = [
+      makeVisit('programming', 1800),  // 30 min productive
+      makeVisit('entertainment', 1800),  // 30 min non-productive
+    ]
     const scoreLight = engine['computeProductivityScore'](visits, [], 10)
     const scoreHeavy = engine['computeProductivityScore'](visits, [], 40)
     expect(scoreHeavy).toBeLessThan(scoreLight)
