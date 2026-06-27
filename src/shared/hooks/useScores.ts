@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
-import type { Scores } from '../types'
+import type { Scores, ExtensionMessage } from '../types'
 import { getSettings } from '../StorageManager'
-import { onMessage } from '../messaging'
 
 export function useScores(): Scores | null {
   const [scores, setScores] = useState<Scores | null>(null)
@@ -18,11 +17,14 @@ export function useScores(): Scores | null {
     })
 
     // Listen for real-time score updates from the background
-    onMessage(msg => {
-      if (msg.type === 'SCORE_UPDATE') {
-        setScores(msg.payload)
+    const listener = (msg: unknown) => {
+      const m = msg as ExtensionMessage
+      if (m.type === 'SCORE_UPDATE') {
+        setScores(m.payload)
       }
-    })
+    }
+    chrome.runtime.onMessage.addListener(listener)
+    return () => chrome.runtime.onMessage.removeListener(listener)
   }, [])
 
   return scores
