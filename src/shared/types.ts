@@ -122,3 +122,4 @@ export type ExtensionMessage =
   | { type: 'SHOW_MINDFUL_CHECKIN'; payload: { message: string; stats: string } }
   | { type: 'COACHING_RESPONSE'; payload: { response: 'continue' | 'take_break' | 'dismissed'; mood: string | null } }
   | { type: 'GET_SETTINGS' }
+  | { type: 'ACHIEVEMENT_UNLOCKED'; payload: { ids: string[] } }

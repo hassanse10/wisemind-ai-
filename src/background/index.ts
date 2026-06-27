@@ -2,6 +2,7 @@ import { TrackingEngine } from './TrackingEngine'
 import { ClassifierEngine } from './ClassifierEngine'
 import { CoachingEngine } from './CoachingEngine'
 import { ScoringEngine } from './ScoringEngine'
+import { AchievementsEngine } from './AchievementsEngine'
 import { NotificationManager } from './NotificationManager'
 import { getSettings, updateSettings, isPrivateMode } from '../shared/StorageManager'
 import { addShortVideoSession, addCoachingEvent } from '../shared/db'
@@ -15,6 +16,7 @@ const tracking = new TrackingEngine()
 const classifier = new ClassifierEngine()
 const coaching = new CoachingEngine()
 const scoring = new ScoringEngine()
+const achievements = new AchievementsEngine()
 
 tracking.init()
 classifier.init()
@@ -66,6 +68,10 @@ chrome.alarms.onAlarm.addListener(async (alarm: chrome.alarms.Alarm) => {
 
   if (alarm.name === 'dailySummary') {
     await scoring.computeAndStore()
+    const unlocked = await achievements.evaluate()
+    if (unlocked.length > 0) {
+      chrome.runtime.sendMessage({ type: 'ACHIEVEMENT_UNLOCKED', payload: { ids: unlocked } }).catch(() => {})
+    }
   }
 })
 

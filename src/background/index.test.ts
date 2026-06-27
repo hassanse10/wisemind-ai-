@@ -19,6 +19,7 @@ const mockCoachingInit = vi.fn()
 const mockCoachingEvaluateRules = vi.fn().mockResolvedValue(null)
 const mockCoachingResetSession = vi.fn()
 const mockScoringComputeAndStore = vi.fn().mockResolvedValue({ health: 80, productivity: 70, learning: 60 })
+const mockAchievementsEvaluate = vi.fn().mockResolvedValue([])
 const mockNotificationDeliver = vi.fn().mockResolvedValue(undefined)
 const mockGetSettings = vi.fn().mockResolvedValue({
   openrouterApiKey: '',
@@ -65,6 +66,12 @@ vi.mock('./CoachingEngine', () => ({
 vi.mock('./ScoringEngine', () => ({
   ScoringEngine: vi.fn(function (this: Record<string, unknown>) {
     this.computeAndStore = mockScoringComputeAndStore
+  }),
+}))
+
+vi.mock('./AchievementsEngine', () => ({
+  AchievementsEngine: vi.fn(function (this: Record<string, unknown>) {
+    this.evaluate = mockAchievementsEvaluate
   }),
 }))
 
@@ -208,6 +215,30 @@ describe('background/index — alarm routing', () => {
   it('dailySummary → calls scoring.computeAndStore()', async () => {
     await fireAlarm('dailySummary')
     expect(mockScoringComputeAndStore).toHaveBeenCalledTimes(1)
+  })
+
+  it('dailySummary → calls achievements.evaluate()', async () => {
+    await fireAlarm('dailySummary')
+    expect(mockAchievementsEvaluate).toHaveBeenCalledTimes(1)
+  })
+
+  it('dailySummary with new unlocks → broadcasts ACHIEVEMENT_UNLOCKED', async () => {
+    mockAchievementsEvaluate.mockResolvedValueOnce(['deep_learner'])
+    await fireAlarm('dailySummary')
+    expect(chrome.runtime.sendMessage).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'ACHIEVEMENT_UNLOCKED', payload: { ids: ['deep_learner'] } })
+    )
+  })
+
+  it('dailySummary with no unlocks → does NOT broadcast ACHIEVEMENT_UNLOCKED', async () => {
+    mockAchievementsEvaluate.mockResolvedValueOnce([])
+    await fireAlarm('dailySummary')
+    const calls = vi.mocked(chrome.runtime.sendMessage).mock.calls
+    const achievementCall = calls.find(c => {
+      const msg = c[0] as unknown as { type?: string }
+      return msg?.type === 'ACHIEVEMENT_UNLOCKED'
+    })
+    expect(achievementCall).toBeUndefined()
   })
 
   it('coachingTick → calls coaching.evaluateRules()', async () => {
