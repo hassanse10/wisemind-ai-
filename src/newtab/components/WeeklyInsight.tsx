@@ -12,6 +12,7 @@ interface Props {
 
 type State =
   | { status: 'no_key' }
+  | { status: 'private_mode' }
   | { status: 'loading' }
   | { status: 'loaded'; text: string }
   | { status: 'error' }
@@ -140,12 +141,21 @@ function LoadingState() {
 // ---------------------------------------------------------------------------
 function WeeklyInsightCard({ summaries, goals, settings }: Props) {
   const [state, setState] = useState<State>(
-    settings.openrouterApiKey ? { status: 'loading' } : { status: 'no_key' }
+    settings.privateModeActive
+      ? { status: 'private_mode' }
+      : settings.openrouterApiKey
+        ? { status: 'loading' }
+        : { status: 'no_key' }
   )
 
   const lastDate = summaries[summaries.length - 1]?.date ?? ''
 
   useEffect(() => {
+    if (settings.privateModeActive) {
+      setState({ status: 'private_mode' })
+      return
+    }
+
     if (!settings.openrouterApiKey) {
       setState({ status: 'no_key' })
       return
@@ -169,13 +179,19 @@ function WeeklyInsightCard({ summaries, goals, settings }: Props) {
     return () => {
       controller.abort()
     }
-    // Re-run when number of summaries, last date, or API key changes
+    // Re-run when number of summaries, last date, API key, or private mode changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [summaries.length, lastDate, settings.openrouterApiKey])
+  }, [summaries.length, lastDate, settings.openrouterApiKey, settings.privateModeActive])
 
   return (
     <div className="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-5">
       <h3 className="text-sm font-semibold text-slate-300 mb-4">Weekly Insight</h3>
+
+      {state.status === 'private_mode' && (
+        <p className="text-sm text-slate-400">
+          Weekly insight is paused in Private Mode.
+        </p>
+      )}
 
       {state.status === 'no_key' && (
         <p className="text-sm text-slate-400">

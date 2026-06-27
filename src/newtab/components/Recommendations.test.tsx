@@ -127,6 +127,19 @@ describe('Recommendations', () => {
     })
   })
 
+  it('does NOT call fetch and renders paused message when privateModeActive is true', () => {
+    vi.stubGlobal('fetch', vi.fn())
+    render(
+      <Recommendations
+        summary={makeSummary()}
+        settings={makeSettings({ privateModeActive: true })}
+      />
+    )
+
+    expect(screen.getByText(/Recommendations are paused in Private Mode/i)).toBeInTheDocument()
+    expect(vi.mocked(globalThis.fetch)).not.toHaveBeenCalled()
+  })
+
   it('renders only the first 3 recommendations when the API returns more', async () => {
     mockFetchSuccess(['Tip 1', 'Tip 2', 'Tip 3', 'Tip 4', 'Tip 5'])
     render(<Recommendations summary={makeSummary()} settings={makeSettings()} />)

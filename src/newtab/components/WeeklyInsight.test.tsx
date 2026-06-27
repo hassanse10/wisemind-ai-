@@ -152,6 +152,22 @@ describe('WeeklyInsight', () => {
     expect(vi.mocked(globalThis.fetch)).not.toHaveBeenCalled()
   })
 
+  it('does NOT call fetch and renders paused message when privateModeActive is true', () => {
+    vi.stubGlobal('fetch', vi.fn())
+
+    const summaries = [makeSummary({ date: '2026-06-26' }), makeSummary({ date: '2026-06-27' })]
+    render(
+      <WeeklyInsight
+        summaries={summaries}
+        goals={[makeGoal()]}
+        settings={makeSettings({ privateModeActive: true })}
+      />
+    )
+
+    expect(screen.getByText(/Weekly insight is paused in Private Mode/i)).toBeInTheDocument()
+    expect(vi.mocked(globalThis.fetch)).not.toHaveBeenCalled()
+  })
+
   it('renders graceful fallback on fetch rejection without throwing', async () => {
     mockFetchReject()
 
