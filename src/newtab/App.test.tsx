@@ -29,6 +29,8 @@ vi.mock('../shared/db', () => ({
   getLastNDailySummaries: vi.fn().mockResolvedValue([]),
   getVisitsByDateRange: vi.fn().mockResolvedValue([]),
   getActiveGoals: vi.fn().mockResolvedValue([]),
+  addGoal: vi.fn().mockResolvedValue(undefined),
+  putGoal: vi.fn().mockResolvedValue(undefined),
 }))
 
 describe('NewTab App', () => {
@@ -80,8 +82,8 @@ describe('NewTab App', () => {
 
   it('renders score labels', () => {
     render(<App />)
-    expect(screen.getByText('Health')).toBeInTheDocument()
-    expect(screen.getByText('Productivity')).toBeInTheDocument()
-    expect(screen.getByText('Learning')).toBeInTheDocument()
+    expect(screen.getAllByText('Health').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Productivity').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Learning').length).toBeGreaterThan(0)
   })
 })

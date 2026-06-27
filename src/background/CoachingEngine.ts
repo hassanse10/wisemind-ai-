@@ -1,6 +1,6 @@
-import type { CoachingContext, Goal } from '../shared/types'
+import type { CoachingContext } from '../shared/types'
 import { getSettings, markRuleFired, getRuleLastFired } from '../shared/StorageManager'
-import { getShortVideosByDateRange, getVisitsByDateRange, addCoachingEvent } from '../shared/db'
+import { getShortVideosByDateRange, getVisitsByDateRange, addCoachingEvent, getActiveGoals } from '../shared/db'
 import { getTodayRange } from '../shared/constants'
 import { v4 as uuid } from 'uuid'
 
@@ -100,9 +100,10 @@ export class CoachingEngine {
 
   private async gatherContext(settings: Awaited<ReturnType<typeof getSettings>>): Promise<CoachingContext> {
     const { start, end } = getTodayRange()
-    const [visits, shortVideos] = await Promise.all([
+    const [visits, shortVideos, goals] = await Promise.all([
       getVisitsByDateRange(start, end),
       getShortVideosByDateRange(start, end),
+      getActiveGoals(),
     ])
 
     const now = Date.now()
@@ -117,7 +118,7 @@ export class CoachingEngine {
     return {
       continuousMinutes, currentCategory, shortVideoCount, shortVideoMinutes,
       lateNight, lastBreakMinutes: 0, todayHealthScore: settings.lastHealthScore,
-      goals: [], recentMood: null, mentorPersonality: settings.mentorPersonality,
+      goals, recentMood: null, mentorPersonality: settings.mentorPersonality,
     }
   }
 

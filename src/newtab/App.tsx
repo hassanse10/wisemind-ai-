@@ -4,6 +4,7 @@ import { ScoreCards } from './components/ScoreCards'
 import { Timeline } from './components/Timeline'
 import { ShortVideoReport } from './components/ShortVideoReport'
 import { GoalsProgress } from './components/GoalsProgress'
+import { GoalManager } from './components/GoalManager'
 import { Achievements } from './components/Achievements'
 import { WeeklyReport } from './components/WeeklyReport'
 import { getLastNDailySummaries, getVisitsByDateRange, getActiveGoals } from '../shared/db'
@@ -15,6 +16,10 @@ export function App() {
   const [visits, setVisits] = useState<Visit[]>([])
   const [weeklySummaries, setWeeklySummaries] = useState<DailySummary[]>([])
   const [goals, setGoals] = useState<Goal[]>([])
+
+  const refreshGoals = () => {
+    void getActiveGoals().then(setGoals)
+  }
 
   useEffect(() => {
     const { start, end } = getTodayRange()
@@ -60,6 +65,7 @@ export function App() {
         <Timeline visits={visits} />
         {summary.shortVideoCount > 0 && <ShortVideoReport summary={summary} />}
         <GoalsProgress goals={goals} summary={summary} />
+        <GoalManager goals={goals} onChange={refreshGoals} />
         <WeeklyReport summaries={weeklySummaries} />
         <Achievements achievements={settings?.achievements ?? []} />
 

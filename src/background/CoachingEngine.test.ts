@@ -22,6 +22,7 @@ vi.mock('../shared/db', () => ({
   getShortVideosByDateRange: vi.fn().mockResolvedValue([]),
   getVisitsByDateRange: vi.fn().mockResolvedValue([]),
   addCoachingEvent: vi.fn(),
+  getActiveGoals: vi.fn().mockResolvedValue([]),
 }))
 
 beforeEach(() => vi.clearAllMocks())
@@ -90,5 +91,50 @@ describe('CoachingEngine rule: short video', () => {
     const engine = new CoachingEngine()
     const result = await engine.evaluateRules()
     expect(result).not.toBeNull()
+  })
+})
+
+describe('CoachingEngine gatherContext: real goals', () => {
+  it('surfaces active goals from getActiveGoals so goal_nudge can fire', async () => {
+    const db = await import('../shared/db')
+    // Return one active goal
+    vi.mocked(db.getActiveGoals).mockResolvedValueOnce([
+      {
+        id: 'goal-test-1',
+        type: 'reduce',
+        target: 'entertainment',
+        dailyLimitMinutes: 60,
+        weeklyTargetMinutes: null,
+        createdAt: Date.now(),
+        active: true,
+      },
+    ])
+    // Make the last visit be 'entertainment' so goal_nudge check can see it
+    vi.mocked(db.getVisitsByDateRange).mockResolvedValueOnce([
+      {
+        id: 'v1', url: 'https://netflix.com', domain: 'netflix.com', title: 'Netflix',
+        startTime: Date.now() - 3600_000, endTime: Date.now(),
+        duration: 3600, category: 'entertainment', aiCategory: 'entertainment', classified: true,
+      },
+    ])
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ choices: [{ message: { content: 'Time to take a break from entertainment.' } }] }),
+    }) as any
+
+    // Set sessionStartTime far enough back that continuousMinutes > 30
+    const engine = new CoachingEngine()
+    // Manipulate sessionStartTime via init (resets to now), then subtract 35 min
+    const realNow = Date.now()
+    vi.spyOn(Date, 'now').mockImplementation(() => realNow - 35 * 60_000)
+    engine.init() // sets sessionStartTime = realNow - 35min
+    vi.spyOn(Date, 'now').mockImplementation(() => realNow) // now is current
+
+    const result = await engine.evaluateRules()
+    // goal_nudge should fire: goals.length > 0, entertainment, continuousMinutes > 30
+    expect(result).not.toBeNull()
+    expect(result).toContain('break')
+
+    vi.restoreAllMocks()
   })
 })
