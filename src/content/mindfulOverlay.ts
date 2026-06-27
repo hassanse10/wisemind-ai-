@@ -28,7 +28,7 @@ const OVERLAY_STYLES = `
 
 function createOverlay(message: string, stats: string): HTMLElement {
   const host = document.createElement('div')
-  const shadow = host.attachShadow({ mode: 'closed' })
+  const shadow = host.attachShadow({ mode: 'open' })
 
   const style = document.createElement('style')
   style.textContent = OVERLAY_STYLES
@@ -38,8 +38,8 @@ function createOverlay(message: string, stats: string): HTMLElement {
   card.innerHTML = `
     <button class="close" aria-label="Close">✕</button>
     <div class="title">Mindful Check-in</div>
-    <div class="message">${message}</div>
-    ${stats ? `<div class="stats">${stats}</div>` : ''}
+    <div class="message"></div>
+    ${stats ? `<div class="stats"></div>` : ''}
     <div class="moods">
       <button class="mood-btn" data-mood="energized">😊 Energized</button>
       <button class="mood-btn" data-mood="fine">😐 Fine</button>
@@ -54,6 +54,12 @@ function createOverlay(message: string, stats: string): HTMLElement {
 
   shadow.appendChild(style)
   shadow.appendChild(card)
+
+  // Set message and stats via textContent to prevent XSS
+  const msgEl = card.querySelector('.message')
+  if (msgEl) msgEl.textContent = message
+  const statsEl = card.querySelector('.stats')
+  if (statsEl) statsEl.textContent = stats
 
   const dismiss = (response: 'continue' | 'take_break' | 'dismissed', mood: string | null = null) => {
     sendMessage({ type: 'COACHING_RESPONSE', payload: { response, mood } })
