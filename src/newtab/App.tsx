@@ -7,6 +7,7 @@ import { GoalsProgress } from './components/GoalsProgress'
 import { GoalManager } from './components/GoalManager'
 import { Achievements } from './components/Achievements'
 import { WeeklyReport } from './components/WeeklyReport'
+import { Recommendations } from './components/Recommendations'
 import { getLastNDailySummaries, getVisitsByDateRange, getActiveGoals } from '../shared/db'
 import { getTodayRange } from '../shared/constants'
 import type { Visit, DailySummary, Goal } from '../shared/types'
@@ -62,6 +63,9 @@ export function App() {
           productivity={summary.productivityScore}
           learning={summary.learningScore}
         />
+        {settings && (
+          <Recommendations summary={summary} settings={settings} />
+        )}
         <Timeline visits={visits} />
         {summary.shortVideoCount > 0 && <ShortVideoReport summary={summary} />}
         <GoalsProgress goals={goals} summary={summary} />
