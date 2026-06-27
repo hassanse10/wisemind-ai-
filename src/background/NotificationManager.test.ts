@@ -7,7 +7,8 @@ describe('NotificationManager', () => {
   })
 
   it('sends message to active tab', async () => {
-    vi.mocked(chrome.tabs.query).mockResolvedValue([{ id: 1 } as chrome.tabs.Tab])
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(chrome.tabs.query as any).mockResolvedValue([{ id: 1 } as chrome.tabs.Tab])
     vi.mocked(chrome.tabs.sendMessage).mockResolvedValue(undefined)
 
     await NotificationManager.deliver('Stay focused!')
@@ -19,7 +20,8 @@ describe('NotificationManager', () => {
   })
 
   it('falls back to system notification when no active tab', async () => {
-    vi.mocked(chrome.tabs.query).mockResolvedValue([])
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(chrome.tabs.query as any).mockResolvedValue([])
 
     await NotificationManager.deliver('Drink water')
 

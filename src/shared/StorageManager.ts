@@ -19,8 +19,8 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
 
 export function getSettings(): Promise<ExtensionSettings> {
   return new Promise(resolve => {
-    chrome.storage.local.get(DEFAULT_SETTINGS, result => {
-      resolve(result as ExtensionSettings)
+    chrome.storage.local.get(DEFAULT_SETTINGS as unknown as string[], result => {
+      resolve(result as unknown as ExtensionSettings)
     })
   })
 }

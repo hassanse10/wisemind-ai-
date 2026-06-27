@@ -63,6 +63,10 @@ export class CoachingEngine {
     this.sessionStartTime = Date.now()
   }
 
+  resetSession(): void {
+    this.sessionStartTime = Date.now()
+  }
+
   async evaluateRules(): Promise<string | null> {
     const settings = await getSettings()
 

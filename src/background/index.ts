@@ -3,7 +3,9 @@ import { ClassifierEngine } from './ClassifierEngine'
 import { CoachingEngine } from './CoachingEngine'
 import { ScoringEngine } from './ScoringEngine'
 import { NotificationManager } from './NotificationManager'
-import { getSettings, updateSettings } from '../shared/StorageManager'
+import { getSettings, updateSettings, isPrivateMode } from '../shared/StorageManager'
+import { addShortVideoSession, addCoachingEvent } from '../shared/db'
+import type { CoachingEvent } from '../shared/types'
 
 // ─── Engine instances ─────────────────────────────────────────────────────
 // Instantiated at module level so they survive service worker restarts.
@@ -17,6 +19,9 @@ const scoring = new ScoringEngine()
 tracking.init()
 classifier.init()
 coaching.init()
+
+// Track last activity signal timestamp to support continuousMinutes tracking
+let lastActivityTime = Date.now()
 
 // computeScores fires every 5 minutes to keep scores fresh
 chrome.alarms.create('computeScores', { periodInMinutes: 5 })
@@ -46,7 +51,8 @@ chrome.alarms.onAlarm.addListener(async (alarm: chrome.alarms.Alarm) => {
   }
 
   if (alarm.name === 'computeScores') {
-    await scoring.computeAndStore()
+    const scores = await scoring.computeAndStore()
+    chrome.runtime.sendMessage({ type: 'SCORE_UPDATE', payload: scores }).catch(() => {})
   }
 
   if (alarm.name === 'coachingTick') {
@@ -67,13 +73,49 @@ chrome.alarms.onAlarm.addListener(async (alarm: chrome.alarms.Alarm) => {
 
 chrome.runtime.onMessage.addListener(
   (
-    message: { type: string },
+    message: { type: string; payload?: unknown },
     _sender: chrome.runtime.MessageSender,
     sendResponse: (response?: unknown) => void
   ) => {
     if (message.type === 'GET_SETTINGS') {
       getSettings().then(sendResponse)
       return true // keep the message channel open for the async response
+    }
+
+    if (message.type === 'SHORT_WATCHED') {
+      const payload = message.payload as { platform: import('../shared/types').ShortVideoPlatform; count: number; duration: number }
+      void (async () => {
+        if (await isPrivateMode()) return
+        const now = Date.now()
+        await addShortVideoSession({
+          id: crypto.randomUUID(),
+          platform: payload.platform,
+          startTime: now,
+          endTime: now,
+          count: payload.count,
+          duration: payload.duration,
+        })
+      })()
+      return false
+    }
+
+    if (message.type === 'COACHING_RESPONSE') {
+      const payload = message.payload as { response: 'continue' | 'take_break' | 'dismissed'; mood: string | null }
+      void addCoachingEvent({
+        id: crypto.randomUUID(),
+        timestamp: Date.now(),
+        type: 'mindful_checkin',
+        message: '',
+        userResponse: payload.response as CoachingEvent['userResponse'],
+        mood: payload.mood as CoachingEvent['mood'],
+      })
+      return false
+    }
+
+    if (message.type === 'ACTIVITY_SIGNAL') {
+      const payload = message.payload as { scrollIntensity: number; videoPlaying: boolean; hasFocus: boolean; timestamp: number }
+      lastActivityTime = payload.timestamp
+      return false
     }
   }
 )
@@ -96,6 +138,11 @@ chrome.idle.onStateChanged.addListener(async (state: string) => {
         })
       }
     }
+  }
+
+  // A break (idle or locked screen) ends the continuous browsing session
+  if (state === 'idle' || state === 'locked') {
+    coaching.resetSession()
   }
 })
 

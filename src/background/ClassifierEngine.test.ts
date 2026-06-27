@@ -42,7 +42,7 @@ describe('ClassifierEngine.runBatch', () => {
       duration: 60, category: 'other', aiCategory: '', classified: false,
     }])
 
-    global.fetch = vi.fn().mockResolvedValueOnce({
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
       json: async () => ({
         choices: [{ message: { content: JSON.stringify({

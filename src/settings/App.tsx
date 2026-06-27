@@ -4,10 +4,11 @@ import { updateSettings } from '../shared/StorageManager'
 import type { MentorPersonality, Theme, CoachingFrequency } from '../shared/types'
 
 const PERSONALITIES: Array<{ id: MentorPersonality; label: string; desc: string }> = [
-  { id: 'wise', label: 'Wise Mentor', desc: 'Calm, thoughtful, reflective.' },
-  { id: 'friendly', label: 'Friendly Friend', desc: 'Relaxed, positive, casual.' },
-  { id: 'strict', label: 'Strict Coach', desc: 'Disciplined, direct, no excuses.' },
-  { id: 'motivational', label: 'Motivational Guide', desc: 'Energetic, inspiring, goal-focused.' },
+  { id: 'wise',     label: 'Wise Mentor',       desc: 'Calm, thoughtful guidance' },
+  { id: 'friendly', label: 'Friendly Friend',   desc: 'Relaxed and encouraging' },
+  { id: 'coach',    label: 'Tough Coach',        desc: 'Disciplined, motivates action' },
+  { id: 'mindful',  label: 'Mindfulness Guide',  desc: 'Peaceful, stress-reducing' },
+  { id: 'funny',    label: 'Funny Companion',    desc: 'Playful, light humour' },
 ]
 
 const MODELS = [
@@ -37,8 +38,6 @@ export function App() {
     }
   }, [settings?.openrouterApiKey])
 
-  if (!settings) return <div className="min-h-screen bg-slate-900" />
-
   async function saveApiKey() {
     await updateSettings({ openrouterApiKey: apiKey })
     setSaved(true)
@@ -46,6 +45,7 @@ export function App() {
   }
 
   function addDomain() {
+    if (!settings) return
     const domain = newDomain.trim().toLowerCase()
     if (!domain || settings.excludedDomains.includes(domain)) return
     updateSettings({ excludedDomains: [...settings.excludedDomains, domain] })
@@ -53,8 +53,11 @@ export function App() {
   }
 
   function removeDomain(domain: string) {
+    if (!settings) return
     updateSettings({ excludedDomains: settings.excludedDomains.filter(d => d !== domain) })
   }
+
+  if (!settings) return <div className="min-h-screen bg-slate-900" />
 
   async function clearData() {
     const { getDB } = await import('../shared/db')

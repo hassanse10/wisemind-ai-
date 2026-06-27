@@ -49,4 +49,4 @@ const chromeMock = {
   },
 }
 
-Object.defineProperty(global, 'chrome', { value: chromeMock, writable: true })
+Object.defineProperty(globalThis, 'chrome', { value: chromeMock, writable: true })

@@ -46,3 +46,5 @@ if (!intervalStarted) {
     scrollIntensity = Math.max(0, scrollIntensity - 1) // decay
   }, 30_000)
 }
+
+export {}

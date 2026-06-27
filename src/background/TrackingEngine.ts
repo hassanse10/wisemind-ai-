@@ -18,7 +18,7 @@ export class TrackingEngine {
     chrome.windows.onFocusChanged.addListener(id => this.handleWindowFocus(id))
   }
 
-  private async handleTabActivated(info: chrome.tabs.TabActiveInfo): Promise<void> {
+  private async handleTabActivated(info: chrome.tabs.OnActivatedInfo): Promise<void> {
     await this.endSession()
     const tab = await chrome.tabs.get(info.tabId).catch(() => null)
     if (tab?.url) {

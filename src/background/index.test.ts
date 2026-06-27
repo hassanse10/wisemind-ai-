@@ -17,6 +17,7 @@ const mockClassifierInit = vi.fn()
 const mockClassifierRunBatch = vi.fn().mockResolvedValue(undefined)
 const mockCoachingInit = vi.fn()
 const mockCoachingEvaluateRules = vi.fn().mockResolvedValue(null)
+const mockCoachingResetSession = vi.fn()
 const mockScoringComputeAndStore = vi.fn().mockResolvedValue({ health: 80, productivity: 70, learning: 60 })
 const mockNotificationDeliver = vi.fn().mockResolvedValue(undefined)
 const mockGetSettings = vi.fn().mockResolvedValue({
@@ -36,6 +37,9 @@ const mockGetSettings = vi.fn().mockResolvedValue({
   ruleLastFired: {},
 })
 const mockUpdateSettings = vi.fn().mockResolvedValue(undefined)
+const mockIsPrivateMode = vi.fn().mockResolvedValue(false)
+const mockAddShortVideoSession = vi.fn().mockResolvedValue(undefined)
+const mockAddCoachingEvent = vi.fn().mockResolvedValue(undefined)
 
 vi.mock('./TrackingEngine', () => ({
   TrackingEngine: vi.fn(function (this: Record<string, unknown>) {
@@ -54,6 +58,7 @@ vi.mock('./CoachingEngine', () => ({
   CoachingEngine: vi.fn(function (this: Record<string, unknown>) {
     this.init = mockCoachingInit
     this.evaluateRules = mockCoachingEvaluateRules
+    this.resetSession = mockCoachingResetSession
   }),
 }))
 
@@ -70,7 +75,13 @@ vi.mock('./NotificationManager', () => ({
 vi.mock('../shared/StorageManager', () => ({
   getSettings: mockGetSettings,
   updateSettings: mockUpdateSettings,
+  isPrivateMode: mockIsPrivateMode,
   DEFAULT_SETTINGS: {},
+}))
+
+vi.mock('../shared/db', () => ({
+  addShortVideoSession: mockAddShortVideoSession,
+  addCoachingEvent: mockAddCoachingEvent,
 }))
 
 // Helper: reset module cache + clear mocks, then re-import so top-level code reruns
@@ -92,7 +103,7 @@ function getMessageListener() {
   const calls = vi.mocked(chrome.runtime.onMessage.addListener).mock.calls
   if (calls.length === 0) throw new Error('No message listener registered')
   return calls[0][0] as (
-    message: { type: string },
+    message: { type: string; payload?: unknown },
     sender: chrome.runtime.MessageSender,
     sendResponse: (response?: unknown) => void
   ) => boolean | undefined
@@ -246,5 +257,110 @@ describe('background/index — message routing', () => {
     await vi.waitFor(() => expect(sendResponse).toHaveBeenCalled())
     expect(mockGetSettings).toHaveBeenCalled()
     expect(sendResponse).toHaveBeenCalledWith(expect.objectContaining({ lastHealthScore: 75 }))
+  })
+
+  it('SHORT_WATCHED → calls addShortVideoSession (not in private mode)', async () => {
+    mockIsPrivateMode.mockResolvedValueOnce(false)
+    const handler = getMessageListener()
+    const sendResponse = vi.fn()
+    handler(
+      { type: 'SHORT_WATCHED', payload: { platform: 'youtube_shorts', count: 3, duration: 120 } },
+      {} as chrome.runtime.MessageSender,
+      sendResponse
+    )
+    await vi.waitFor(() => expect(mockAddShortVideoSession).toHaveBeenCalled())
+    expect(mockAddShortVideoSession).toHaveBeenCalledWith(
+      expect.objectContaining({ platform: 'youtube_shorts', count: 3, duration: 120 })
+    )
+  })
+
+  it('SHORT_WATCHED → skips addShortVideoSession in private mode', async () => {
+    mockIsPrivateMode.mockResolvedValueOnce(true)
+    const handler = getMessageListener()
+    handler(
+      { type: 'SHORT_WATCHED', payload: { platform: 'tiktok', count: 1, duration: 60 } },
+      {} as chrome.runtime.MessageSender,
+      vi.fn()
+    )
+    // Give async IIFE time to settle
+    await new Promise(r => setTimeout(r, 50))
+    expect(mockAddShortVideoSession).not.toHaveBeenCalled()
+  })
+
+  it('COACHING_RESPONSE → calls addCoachingEvent with correct fields', async () => {
+    const handler = getMessageListener()
+    handler(
+      { type: 'COACHING_RESPONSE', payload: { response: 'take_break', mood: 'tired' } },
+      {} as chrome.runtime.MessageSender,
+      vi.fn()
+    )
+    await vi.waitFor(() => expect(mockAddCoachingEvent).toHaveBeenCalled())
+    expect(mockAddCoachingEvent).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: 'mindful_checkin',
+        userResponse: 'take_break',
+        mood: 'tired',
+      })
+    )
+  })
+
+  it('ACTIVITY_SIGNAL → returns false (does not keep channel open)', async () => {
+    const handler = getMessageListener()
+    const returnValue = handler(
+      { type: 'ACTIVITY_SIGNAL', payload: { scrollIntensity: 5, videoPlaying: false, hasFocus: true, timestamp: Date.now() } },
+      {} as chrome.runtime.MessageSender,
+      vi.fn()
+    )
+    expect(returnValue).toBeFalsy()
+  })
+
+  it('GET_SETTINGS → returns true (keeps channel open for async)', async () => {
+    const handler = getMessageListener()
+    const returnValue = handler({ type: 'GET_SETTINGS' }, {} as chrome.runtime.MessageSender, vi.fn())
+    expect(returnValue).toBe(true)
+  })
+})
+
+// ─── computeScores broadcasts SCORE_UPDATE ─────────────────────────────────
+
+describe('background/index — computeScores broadcasts SCORE_UPDATE', () => {
+  beforeEach(freshImport)
+
+  it('computeScores alarm → sends SCORE_UPDATE with scores payload', async () => {
+    const handler = getAlarmListener()
+    await handler({ name: 'computeScores', scheduledTime: Date.now() } as chrome.alarms.Alarm)
+    expect(chrome.runtime.sendMessage).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'SCORE_UPDATE', payload: expect.objectContaining({ health: 80 }) })
+    )
+  })
+})
+
+// ─── Idle state resets session ─────────────────────────────────────────────
+
+describe('background/index — idle state resets coaching session', () => {
+  beforeEach(freshImport)
+
+  function getIdleListener() {
+    const calls = vi.mocked(chrome.idle.onStateChanged.addListener).mock.calls
+    if (calls.length === 0) throw new Error('No idle listener registered')
+    return calls[0][0] as (state: string) => Promise<void>
+  }
+
+  it('idle state → calls coaching.resetSession()', async () => {
+    const handler = getIdleListener()
+    await handler('idle')
+    expect(mockCoachingResetSession).toHaveBeenCalledTimes(1)
+  })
+
+  it('locked state → calls coaching.resetSession()', async () => {
+    const handler = getIdleListener()
+    await handler('locked')
+    expect(mockCoachingResetSession).toHaveBeenCalledTimes(1)
+  })
+
+  it('active state → does NOT call coaching.resetSession()', async () => {
+    const handler = getIdleListener()
+    await handler('active')
+    expect(mockCoachingResetSession).not.toHaveBeenCalled()
   })
 })

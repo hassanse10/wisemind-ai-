@@ -156,7 +156,7 @@ describe('Integration: ClassifierEngine.runBatch', () => {
   it('does not call fetch when no unclassified visits exist', async () => {
     // Mark all existing as classified by not adding any new ones here.
     // (This test isolates by testing the no-op branch.)
-    global.fetch = vi.fn() as unknown as typeof fetch
+    globalThis.fetch = vi.fn() as unknown as typeof fetch
 
     // Clear unclassified state by adding nothing; the existing DB may have visits
     // from previous tests but they were added as classified: true.
@@ -181,7 +181,7 @@ describe('Integration: ClassifierEngine.runBatch', () => {
     })
     await addVisit(unclassifiedVisit)
 
-    global.fetch = vi.fn().mockResolvedValueOnce({
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
       json: async () => ({
         choices: [{
@@ -205,7 +205,7 @@ describe('Integration: ClassifierEngine.runBatch', () => {
     vi.mocked(chrome.storage.local.get).mockImplementation((_defaults, cb) => {
       cb?.({ ...DEFAULT_SETTINGS, openrouterApiKey: '' })
     })
-    global.fetch = vi.fn() as unknown as typeof fetch
+    globalThis.fetch = vi.fn() as unknown as typeof fetch
 
     const engine = new ClassifierEngine()
     await engine.runBatch()
@@ -247,7 +247,8 @@ describe('Integration: StorageManager — domain exclusion', () => {
 
 describe('Integration: NotificationManager deliver', () => {
   it('delivers to active tab and does NOT create a system notification', async () => {
-    vi.mocked(chrome.tabs.query).mockResolvedValueOnce([{ id: 42 } as chrome.tabs.Tab])
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(chrome.tabs.query as any).mockResolvedValueOnce([{ id: 42 } as chrome.tabs.Tab])
     vi.mocked(chrome.tabs.sendMessage).mockResolvedValueOnce(undefined)
 
     await NotificationManager.deliver('Take a break!', '10 Shorts')
@@ -260,7 +261,8 @@ describe('Integration: NotificationManager deliver', () => {
   })
 
   it('falls back to system notification when sendMessage throws', async () => {
-    vi.mocked(chrome.tabs.query).mockResolvedValueOnce([{ id: 7 } as chrome.tabs.Tab])
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(chrome.tabs.query as any).mockResolvedValueOnce([{ id: 7 } as chrome.tabs.Tab])
     vi.mocked(chrome.tabs.sendMessage).mockRejectedValueOnce(new Error('No receiver'))
 
     await NotificationManager.deliver('Stay focused!')
@@ -271,7 +273,8 @@ describe('Integration: NotificationManager deliver', () => {
   })
 
   it('falls back to system notification when there is no active tab', async () => {
-    vi.mocked(chrome.tabs.query).mockResolvedValueOnce([])
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(chrome.tabs.query as any).mockResolvedValueOnce([])
 
     await NotificationManager.deliver('Drink water', '')
 
@@ -281,7 +284,8 @@ describe('Integration: NotificationManager deliver', () => {
   })
 
   it('delivers default empty stats when omitted', async () => {
-    vi.mocked(chrome.tabs.query).mockResolvedValueOnce([{ id: 1 } as chrome.tabs.Tab])
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(chrome.tabs.query as any).mockResolvedValueOnce([{ id: 1 } as chrome.tabs.Tab])
     vi.mocked(chrome.tabs.sendMessage).mockResolvedValueOnce(undefined)
 
     await NotificationManager.deliver('Hello')
@@ -301,7 +305,7 @@ describe('Integration: manifest.json contract', () => {
 
   beforeEach(async () => {
     // Use dynamic import to load the JSON
-    const { default: m } = await import('../../public/manifest.json', { assert: { type: 'json' } })
+    const { default: m } = await import('../../public/manifest.json', { with: { type: 'json' } })
     manifest = m as Record<string, unknown>
   })
 

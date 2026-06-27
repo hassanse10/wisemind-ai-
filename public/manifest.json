@@ -30,6 +30,11 @@
       "run_at": "document_idle"
     },
     {
+      "matches": ["<all_urls>"],
+      "js": ["mindfulOverlay.js"],
+      "run_at": "document_idle"
+    },
+    {
       "matches": [
         "*://*.youtube.com/*", "*://*.tiktok.com/*",
         "*://*.instagram.com/*", "*://*.facebook.com/*"
