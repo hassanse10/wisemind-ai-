@@ -18,6 +18,9 @@ tracking.init()
 classifier.init()
 coaching.init()
 
+// computeScores fires every 5 minutes to keep scores fresh
+chrome.alarms.create('computeScores', { periodInMinutes: 5 })
+
 // ─── One-time setup on install / update ───────────────────────────────────
 // No engine init() calls here — only first-run configuration.
 

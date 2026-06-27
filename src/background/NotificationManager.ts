@@ -10,6 +10,6 @@ export const NotificationManager = {
         // tab can't receive messages (e.g. chrome:// page), fall through
       }
     }
-    chrome.notifications.create({ type: 'basic', iconUrl: 'icons/icon48.png', title: 'WiseMind', message })
+    chrome.notifications.create({ type: 'basic', iconUrl: 'icons/icon48.png', title: 'WiseMind AI', message })
   }
 }

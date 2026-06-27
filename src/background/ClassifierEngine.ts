@@ -11,7 +11,7 @@ export class ClassifierEngine {
     chrome.alarms.create('classifyBatch', { periodInMinutes: 2 })
   }
 
-  localClassify(domain: string): Category | null {
+  private localClassify(domain: string): Category | null {
     return DOMAIN_MAP[domain] ?? null
   }
 
