@@ -2,6 +2,17 @@ import { useState, useRef, useEffect } from 'react'
 import { ChatThread } from './components/ChatThread'
 import { QuickPrompts } from './components/QuickPrompts'
 import { useSettings } from '../shared/hooks/useStorage'
+import type { ExtensionMessage } from '../shared/types'
+
+const ACHIEVEMENT_LABELS: Record<string, string> = {
+  deep_learner: 'Deep Learner',
+  seven_day_focus: 'Seven-day Focus',
+  healthy_week: 'Healthy Week',
+  balanced_day: 'Balanced Day',
+  digital_minimalist: 'Digital Minimalist',
+  learning_streak: 'Learning Streak',
+  eye_care_champion: 'Eye Care Champion',
+}
 
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions'
 
@@ -29,6 +40,29 @@ export function App() {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
+  const [toastLabels, setToastLabels] = useState<string[]>([])
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    const listener = (msg: unknown) => {
+      const m = msg as ExtensionMessage
+      if (m.type === 'ACHIEVEMENT_UNLOCKED') {
+        const labels = m.payload.ids
+          .map(id => ACHIEVEMENT_LABELS[id] ?? id)
+        setToastLabels(labels)
+        if (toastTimerRef.current !== null) clearTimeout(toastTimerRef.current)
+        toastTimerRef.current = setTimeout(() => {
+          setToastLabels([])
+          toastTimerRef.current = null
+        }, 5000)
+      }
+    }
+    chrome.runtime.onMessage.addListener(listener)
+    return () => {
+      chrome.runtime.onMessage.removeListener(listener)
+      if (toastTimerRef.current !== null) clearTimeout(toastTimerRef.current)
+    }
+  }, [])
 
   useEffect(() => {
     if (settings) {
@@ -92,6 +126,34 @@ export function App() {
 
   return (
     <div className="flex flex-col h-screen bg-slate-900 text-slate-100">
+      {/* Achievement toast */}
+      {toastLabels.length > 0 && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="absolute top-0 left-0 right-0 z-50 mx-3 mt-2 bg-yellow-900/90 border border-yellow-600 rounded-xl px-4 py-3 flex items-start justify-between gap-3 shadow-lg"
+        >
+          <div className="flex flex-col gap-1 min-w-0">
+            {toastLabels.map(label => (
+              <span key={label} className="text-sm font-semibold text-yellow-200">
+                🏆 Achievement unlocked: {label}
+              </span>
+            ))}
+          </div>
+          <button
+            onClick={() => {
+              if (toastTimerRef.current !== null) clearTimeout(toastTimerRef.current)
+              toastTimerRef.current = null
+              setToastLabels([])
+            }}
+            aria-label="Dismiss achievement notification"
+            className="shrink-0 text-yellow-400 hover:text-yellow-200 text-lg leading-none"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       {/* Header */}
       <div className="px-4 py-3 border-b border-slate-800 flex items-center gap-2 shrink-0">
         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-teal-400 flex items-center justify-center text-sm">

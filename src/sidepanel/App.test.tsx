@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeAll, afterEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { describe, it, expect, vi, beforeAll, afterEach, beforeEach } from 'vitest'
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import { App } from './App'
 
 // Mock scrollIntoView which is not implemented in jsdom
@@ -224,5 +224,72 @@ describe('SidePanel App — no API key', () => {
       achievements: [],
       ruleLastFired: {},
     })
+  })
+})
+
+describe('SidePanel App — achievement toast', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  function getOnMessageListener() {
+    const calls = vi.mocked(chrome.runtime.onMessage.addListener).mock.calls
+    // Return the most recently registered listener
+    const lastCall = calls[calls.length - 1]
+    return lastCall?.[0] as ((msg: unknown) => void) | undefined
+  }
+
+  it('does not show a toast initially (before any message)', () => {
+    render(<App />)
+    expect(screen.queryByRole('status')).not.toBeInTheDocument()
+  })
+
+  it('shows achievement toast when ACHIEVEMENT_UNLOCKED message arrives with deep_learner', () => {
+    render(<App />)
+
+    const listener = getOnMessageListener()
+    expect(listener).toBeDefined()
+
+    act(() => {
+      listener!({ type: 'ACHIEVEMENT_UNLOCKED', payload: { ids: ['deep_learner'] } })
+    })
+
+    expect(screen.getByText(/Achievement unlocked: Deep Learner/i)).toBeInTheDocument()
+  })
+
+  it('auto-dismisses the toast after 5 seconds', () => {
+    render(<App />)
+
+    const listener = getOnMessageListener()
+    act(() => {
+      listener!({ type: 'ACHIEVEMENT_UNLOCKED', payload: { ids: ['deep_learner'] } })
+    })
+
+    expect(screen.getByText(/Achievement unlocked: Deep Learner/i)).toBeInTheDocument()
+
+    act(() => {
+      vi.advanceTimersByTime(5000)
+    })
+
+    expect(screen.queryByText(/Achievement unlocked: Deep Learner/i)).not.toBeInTheDocument()
+  })
+
+  it('can be manually dismissed via the close button', () => {
+    render(<App />)
+
+    const listener = getOnMessageListener()
+    act(() => {
+      listener!({ type: 'ACHIEVEMENT_UNLOCKED', payload: { ids: ['balanced_day'] } })
+    })
+
+    expect(screen.getByText(/Achievement unlocked: Balanced Day/i)).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: /Dismiss achievement/i }))
+
+    expect(screen.queryByText(/Achievement unlocked: Balanced Day/i)).not.toBeInTheDocument()
   })
 })
