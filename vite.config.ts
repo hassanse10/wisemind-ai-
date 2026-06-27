@@ -6,6 +6,9 @@ import { resolve } from 'path'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   root: resolve(__dirname, 'src'),
+  // root is src/, so Vite's default publicDir would be src/public. Point it at
+  // the real top-level public/ so manifest.json + icons/ are copied into dist/.
+  publicDir: resolve(__dirname, 'public'),
   build: {
     outDir: resolve(__dirname, 'dist'),
     emptyOutDir: true,
