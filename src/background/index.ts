@@ -6,7 +6,7 @@ import { AchievementsEngine } from './AchievementsEngine'
 import { NotificationManager } from './NotificationManager'
 import { getSettings, updateSettings, isPrivateMode } from '../shared/StorageManager'
 import { addShortVideoSession, addCoachingEvent } from '../shared/db'
-import type { CoachingEvent } from '../shared/types'
+import type { CoachingEvent, ShortVideoPlatform } from '../shared/types'
 
 // ─── Engine instances ─────────────────────────────────────────────────────
 // Instantiated at module level so they survive service worker restarts.
@@ -149,6 +149,56 @@ chrome.runtime.onMessage.addListener(
     }
   }
 )
+
+// ─── Short-video detection (background, no content script needed) ──────────
+// YouTube Shorts and Instagram Reels change the URL to a new video id as you
+// scroll, via the History API. webNavigation fires for those in the always-
+// wakeable service worker, so we detect Shorts here instead of relying on a
+// content script being injected. Deduped per tab by video id.
+
+const lastShortIdByTab = new Map<number, string>()
+
+function shortFromUrl(url: string): { platform: ShortVideoPlatform; id: string } | null {
+  try {
+    const u = new URL(url)
+    if (u.hostname.endsWith('youtube.com')) {
+      const m = u.pathname.match(/^\/shorts\/([^/?#]+)/)
+      if (m) return { platform: 'youtube_shorts', id: m[1] }
+    } else if (u.hostname.includes('instagram.com')) {
+      const m = u.pathname.match(/^\/reels?\/([^/?#]+)/)
+      if (m) return { platform: 'instagram_reels', id: m[1] }
+    }
+  } catch {
+    // ignore malformed URLs
+  }
+  return null
+}
+
+async function handleShortNavigation(tabId: number, url: string): Promise<void> {
+  const hit = shortFromUrl(url)
+  if (!hit) return
+  if (lastShortIdByTab.get(tabId) === hit.id) return // same short, don't recount
+  lastShortIdByTab.set(tabId, hit.id)
+  if (await isPrivateMode()) return
+  const now = Date.now()
+  await addShortVideoSession({
+    id: crypto.randomUUID(),
+    platform: hit.platform,
+    startTime: now,
+    endTime: now,
+    count: 1,
+    duration: 0,
+  })
+  scheduleRecompute()
+}
+
+chrome.webNavigation.onHistoryStateUpdated.addListener(d => {
+  if (d.frameId === 0) void handleShortNavigation(d.tabId, d.url)
+})
+chrome.webNavigation.onCompleted.addListener(d => {
+  if (d.frameId === 0) void handleShortNavigation(d.tabId, d.url)
+})
+chrome.tabs.onRemoved.addListener(tabId => lastShortIdByTab.delete(tabId))
 
 // ─── Break detection via idle ─────────────────────────────────────────────
 // When the user goes idle during waking hours, count it as a break.

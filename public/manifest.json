@@ -35,10 +35,7 @@
       "run_at": "document_idle"
     },
     {
-      "matches": [
-        "*://*.youtube.com/*", "*://*.tiktok.com/*",
-        "*://*.instagram.com/*", "*://*.facebook.com/*"
-      ],
+      "matches": ["*://*.tiktok.com/*", "*://*.facebook.com/*"],
       "js": ["shortVideoDetector.js"],
       "run_at": "document_idle"
     }

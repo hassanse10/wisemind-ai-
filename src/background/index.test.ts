@@ -359,6 +359,43 @@ describe('background/index — message routing', () => {
   })
 })
 
+// ─── Short detection via webNavigation ─────────────────────────────────────
+
+describe('background/index — short detection via webNavigation', () => {
+  beforeEach(freshImport)
+
+  function getHistoryListener() {
+    const calls = vi.mocked(chrome.webNavigation.onHistoryStateUpdated.addListener).mock.calls
+    if (calls.length === 0) throw new Error('No onHistoryStateUpdated listener registered')
+    return calls[0][0] as (d: { tabId: number; url: string; frameId: number }) => void
+  }
+
+  it('records a YouTube short when the url changes to /shorts/<id>', async () => {
+    mockIsPrivateMode.mockResolvedValue(false)
+    getHistoryListener()({ tabId: 1, url: 'https://www.youtube.com/shorts/abc123', frameId: 0 })
+    await vi.waitFor(() => expect(mockAddShortVideoSession).toHaveBeenCalled())
+    expect(mockAddShortVideoSession).toHaveBeenCalledWith(
+      expect.objectContaining({ platform: 'youtube_shorts', count: 1 })
+    )
+  })
+
+  it('does not double-count the same short id on the same tab', async () => {
+    mockIsPrivateMode.mockResolvedValue(false)
+    const listener = getHistoryListener()
+    listener({ tabId: 1, url: 'https://www.youtube.com/shorts/same', frameId: 0 })
+    listener({ tabId: 1, url: 'https://www.youtube.com/shorts/same', frameId: 0 })
+    await vi.waitFor(() => expect(mockAddShortVideoSession).toHaveBeenCalledTimes(1))
+  })
+
+  it('ignores sub-frame navigations and non-short urls', async () => {
+    const listener = getHistoryListener()
+    listener({ tabId: 2, url: 'https://www.youtube.com/shorts/x', frameId: 1 }) // sub-frame
+    listener({ tabId: 2, url: 'https://www.youtube.com/watch?v=abc', frameId: 0 }) // not a short
+    await new Promise(r => setTimeout(r, 20))
+    expect(mockAddShortVideoSession).not.toHaveBeenCalled()
+  })
+})
+
 // ─── computeScores broadcasts SCORE_UPDATE ─────────────────────────────────
 
 describe('background/index — computeScores broadcasts SCORE_UPDATE', () => {
