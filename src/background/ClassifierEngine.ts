@@ -1,5 +1,5 @@
 import type { Visit, Category } from '../shared/types'
-import { DOMAIN_MAP, isCategory } from '../shared/constants'
+import { categorizeDomain, isCategory } from '../shared/constants'
 import { getUnclassifiedVisits, updateVisit } from '../shared/db'
 import { getApiKey, getSettings } from '../shared/StorageManager'
 
@@ -12,7 +12,7 @@ export class ClassifierEngine {
   }
 
   private localClassify(domain: string): Category | null {
-    return DOMAIN_MAP[domain] ?? null
+    return categorizeDomain(domain)
   }
 
   async runBatch(): Promise<void> {

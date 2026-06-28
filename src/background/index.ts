@@ -257,6 +257,9 @@ async function syncYouTubeSegment(): Promise<void> {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
   ytSegmentStart = isYouTube(tab?.url) ? Date.now() : null
   await updateYouTubeBadge()
+  // A tab switch / navigation just ended the previous visit (TrackingEngine
+  // commits it). Recompute scores so the dashboard reflects it within seconds.
+  scheduleRecompute()
 }
 
 chrome.tabs.onActivated.addListener(() => void syncYouTubeSegment())

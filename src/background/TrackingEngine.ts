@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid'
 import type { ActiveSession, Visit } from '../shared/types'
-import { getDomainFromUrl, DOMAIN_MAP } from '../shared/constants'
+import { getDomainFromUrl, categorizeDomain } from '../shared/constants'
 import { addVisit } from '../shared/db'
 import { isPrivateMode, isDomainExcluded } from '../shared/StorageManager'
 
@@ -66,7 +66,7 @@ export class TrackingEngine {
 
     if (duration < MIN_SESSION_SECONDS) return
 
-    const category = DOMAIN_MAP[session.domain] ?? 'other'
+    const category = categorizeDomain(session.domain) ?? 'other'
     const visit: Visit = {
       id: uuid(),
       url: session.url,
