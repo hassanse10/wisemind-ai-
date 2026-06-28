@@ -25,6 +25,31 @@ describe('detectYouTubeShorts', () => {
     detectYouTubeShorts()
     expect(chrome.runtime.sendMessage).not.toHaveBeenCalled()
   })
+
+  it('fires again when scrolling to a different short id', () => {
+    Object.defineProperty(window, 'location', {
+      value: { href: 'https://www.youtube.com/shorts/first1', pathname: '/shorts/first1' },
+      writable: true,
+    })
+    detectYouTubeShorts()
+    Object.defineProperty(window, 'location', {
+      value: { href: 'https://www.youtube.com/shorts/second2', pathname: '/shorts/second2' },
+      writable: true,
+    })
+    detectYouTubeShorts()
+    expect(chrome.runtime.sendMessage).toHaveBeenCalledTimes(2)
+  })
+
+  it('does not double-count the same short id on repeated checks', () => {
+    Object.defineProperty(window, 'location', {
+      value: { href: 'https://www.youtube.com/shorts/samesame', pathname: '/shorts/samesame' },
+      writable: true,
+    })
+    detectYouTubeShorts()
+    detectYouTubeShorts()
+    detectYouTubeShorts()
+    expect(chrome.runtime.sendMessage).toHaveBeenCalledTimes(1)
+  })
 })
 
 describe('detectTikTok', () => {

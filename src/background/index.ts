@@ -28,6 +28,27 @@ let lastActivityTime = Date.now()
 // computeScores fires every 5 minutes to keep scores fresh
 chrome.alarms.create('computeScores', { periodInMinutes: 5 })
 
+// Compute once on startup so the popup/side panel show real data immediately
+// instead of zeros until the first 5-minute alarm fires.
+void recomputeAndBroadcast()
+
+// Debounced recompute so a burst of events (e.g. scrolling many Shorts) only
+// triggers one recompute, giving the open popup/side panel near-live feedback
+// without waiting for the 5-minute alarm.
+let recomputeTimer: ReturnType<typeof setTimeout> | null = null
+function scheduleRecompute(): void {
+  if (recomputeTimer) return
+  recomputeTimer = setTimeout(() => {
+    recomputeTimer = null
+    void recomputeAndBroadcast()
+  }, 1500)
+}
+
+async function recomputeAndBroadcast(): Promise<void> {
+  const scores = await scoring.computeAndStore()
+  chrome.runtime.sendMessage({ type: 'SCORE_UPDATE', payload: scores }).catch(() => {})
+}
+
 // ─── One-time setup on install / update ───────────────────────────────────
 // No engine init() calls here — only first-run configuration.
 
@@ -101,6 +122,9 @@ chrome.runtime.onMessage.addListener(
           count: payload.count,
           duration: payload.duration,
         })
+        // Refresh scores/summary so the open popup or side panel reflects the
+        // new short within ~1.5s instead of waiting for the 5-minute alarm.
+        scheduleRecompute()
       })()
       return false
     }

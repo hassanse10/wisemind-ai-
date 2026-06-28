@@ -141,9 +141,10 @@ describe('background/index — module-level engine initialisation', () => {
     expect(mockCoachingInit).toHaveBeenCalledTimes(1)
   })
 
-  it('instantiates ScoringEngine (no init — computeAndStore used only on alarm)', () => {
-    // ScoringEngine is instantiated but its init is not called
-    expect(mockScoringComputeAndStore).not.toHaveBeenCalled()
+  it('computes scores once on startup so the UI is not empty before the first alarm', () => {
+    // ScoringEngine has no init(); instead computeAndStore runs once at module
+    // load to populate todaysSummary immediately on service-worker startup.
+    expect(mockScoringComputeAndStore).toHaveBeenCalledTimes(1)
   })
 
   it('registers an onInstalled listener', () => {
@@ -195,7 +196,13 @@ describe('background/index — onInstalled one-time setup', () => {
 // ─── Alarm routing ────────────────────────────────────────────────────────
 
 describe('background/index — alarm routing', () => {
-  beforeEach(freshImport)
+  beforeEach(async () => {
+    await freshImport()
+    // The startup computeAndStore + SCORE_UPDATE broadcast ran during import;
+    // clear them so each alarm test asserts only its own calls.
+    mockScoringComputeAndStore.mockClear()
+    vi.mocked(chrome.runtime.sendMessage).mockClear()
+  })
 
   async function fireAlarm(name: string) {
     const handler = getAlarmListener()
