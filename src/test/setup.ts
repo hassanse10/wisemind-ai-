@@ -24,6 +24,7 @@ const chromeMock = {
     onHistoryStateUpdated: { addListener: vi.fn() },
   },
   runtime: {
+    id: 'test-extension-id',
     sendMessage: vi.fn().mockResolvedValue(undefined),
     onMessage: { addListener: vi.fn(), removeListener: vi.fn() },
     onInstalled: { addListener: vi.fn() },

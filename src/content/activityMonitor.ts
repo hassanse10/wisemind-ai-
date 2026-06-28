@@ -29,16 +29,28 @@ function isVideoPlaying(): boolean {
 let intervalStarted = false
 if (!intervalStarted) {
   intervalStarted = true
-  setInterval(() => {
-    chrome.runtime.sendMessage({
-      type: 'ACTIVITY_SIGNAL',
-      payload: {
-        scrollIntensity: Math.round(scrollIntensity),
-        videoPlaying: isVideoPlaying(),
-        hasFocus: !document.hidden,
-        timestamp: Date.now(),
-      },
-    })
+  const timer = setInterval(() => {
+    // After the extension is reloaded/updated, this orphaned content script
+    // loses its context; `chrome.runtime.id` goes undefined and sendMessage
+    // throws "Extension context invalidated". Stop instead of spamming errors.
+    if (!chrome.runtime?.id) {
+      clearInterval(timer)
+      return
+    }
+    try {
+      chrome.runtime.sendMessage({
+        type: 'ACTIVITY_SIGNAL',
+        payload: {
+          scrollIntensity: Math.round(scrollIntensity),
+          videoPlaying: isVideoPlaying(),
+          hasFocus: !document.hidden,
+          timestamp: Date.now(),
+        },
+      })
+    } catch {
+      clearInterval(timer)
+      return
+    }
     scrollIntensity = Math.max(0, scrollIntensity - 1) // decay
   }, 30_000)
 }

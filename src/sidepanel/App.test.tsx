@@ -62,7 +62,7 @@ describe('SidePanel App', () => {
   })
 
   it('appends user message to chat thread on send', async () => {
-    const mockFetch = vi.fn().mockResolvedValue({
+    const mockFetch = vi.fn().mockResolvedValue({ ok: true,
       json: () => Promise.resolve({ choices: [{ message: { content: 'Great question!' } }] }),
     })
     vi.stubGlobal('fetch', mockFetch)
@@ -79,7 +79,7 @@ describe('SidePanel App', () => {
   })
 
   it('calls OpenRouter API with correct headers and payload', async () => {
-    const mockFetch = vi.fn().mockResolvedValue({
+    const mockFetch = vi.fn().mockResolvedValue({ ok: true,
       json: () => Promise.resolve({ choices: [{ message: { content: 'Response' } }] }),
     })
     vi.stubGlobal('fetch', mockFetch)
@@ -113,7 +113,7 @@ describe('SidePanel App', () => {
   })
 
   it('clears input after sending', async () => {
-    const mockFetch = vi.fn().mockResolvedValue({
+    const mockFetch = vi.fn().mockResolvedValue({ ok: true,
       json: () => Promise.resolve({ choices: [{ message: { content: 'OK' } }] }),
     })
     vi.stubGlobal('fetch', mockFetch)

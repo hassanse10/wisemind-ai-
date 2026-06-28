@@ -8,10 +8,17 @@ import type { ShortVideoPlatform } from '../shared/types'
 let sessionStart = Date.now()
 
 function fireShortWatched(platform: ShortVideoPlatform): void {
-  chrome.runtime.sendMessage({
-    type: 'SHORT_WATCHED',
-    payload: { platform, count: 1, duration: Math.round((Date.now() - sessionStart) / 1000) },
-  })
+  // Skip if this orphaned content script lost its context after an extension
+  // reload (otherwise sendMessage throws "Extension context invalidated").
+  if (!chrome.runtime?.id) return
+  try {
+    chrome.runtime.sendMessage({
+      type: 'SHORT_WATCHED',
+      payload: { platform, count: 1, duration: Math.round((Date.now() - sessionStart) / 1000) },
+    })
+  } catch {
+    return
+  }
   sessionStart = Date.now()
 }
 

@@ -61,11 +61,16 @@ function createOverlay(message: string, stats: string): HTMLElement {
   if (statsEl) statsEl.textContent = stats
 
   const dismiss = (response: 'continue' | 'take_break' | 'dismissed', mood: string | null = null) => {
-    chrome.runtime.sendMessage({ type: 'COACHING_RESPONSE', payload: { response, mood } })
+    // Guard against a stale context after an extension reload.
+    try {
+      if (chrome.runtime?.id) chrome.runtime.sendMessage({ type: 'COACHING_RESPONSE', payload: { response, mood } })
+    } catch {
+      // ignore — context invalidated
+    }
     host.remove()
   }
 
-  card.querySelector('.close')!.addEventListener('click', () => dismiss('dismissed'))
+  card.querySelector('.close')?.addEventListener('click', () => dismiss('dismissed'))
   card.querySelectorAll('.mood-btn').forEach(btn => {
     btn.addEventListener('click', e => {
       card.querySelectorAll('.mood-btn').forEach(b => (b as HTMLElement).style.background = 'rgba(255,255,255,0.07)')

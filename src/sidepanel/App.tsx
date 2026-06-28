@@ -104,6 +104,7 @@ export function App() {
           ],
         }),
       })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       const reply = data.choices?.[0]?.message?.content ?? 'Sorry, I could not respond right now.'
       setMessages(prev => [...prev, { role: 'assistant', content: reply }])
