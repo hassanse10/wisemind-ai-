@@ -11,6 +11,13 @@ vi.mock('../shared/hooks/useStorage', () => ({
   }),
 }))
 vi.mock('../shared/hooks/useScores', () => ({ useScores: () => ({ health: 82, productivity: 75, learning: 60 }) }))
+// Popup reads today's counts straight from the shared database.
+vi.mock('../shared/db', () => ({
+  getShortVideosByDateRange: vi.fn().mockResolvedValue([
+    { id: 's1', platform: 'youtube_shorts', count: 23, duration: 600, startTime: 0, endTime: 0 },
+  ]),
+  getVisitsByDateRange: vi.fn().mockResolvedValue([]),
+}))
 
 describe('Popup App', () => {
   it('renders health score', () => {
@@ -18,8 +25,13 @@ describe('Popup App', () => {
     expect(screen.getAllByText('82').length).toBeGreaterThan(0)
   })
 
-  it('shows short video count', () => {
+  it('shows live short video count from the database', async () => {
     render(<App />)
-    expect(screen.getByText(/23 Shorts/i)).toBeInTheDocument()
+    expect(await screen.findByText(/23 Shorts/i)).toBeInTheDocument()
+  })
+
+  it('shows the tracked-today diagnostic line', async () => {
+    render(<App />)
+    expect(await screen.findByText(/tracked today/i)).toBeInTheDocument()
   })
 })
