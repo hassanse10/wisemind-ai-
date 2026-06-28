@@ -25,7 +25,7 @@ export function WeeklyReport({ summaries }: Props) {
   const learningDiff = lastWeekLearn > 0 ? Math.round(((thisWeekLearn - lastWeekLearn) / lastWeekLearn) * 100) : 0
 
   return (
-    <div className="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-5">
+    <div className="bg-white/[0.025] border border-white/[0.06] rounded-2xl p-5">
       <h3 className="text-sm font-semibold text-slate-300 mb-4">Weekly Trends</h3>
       <div className="grid grid-cols-3 gap-4">
         {[

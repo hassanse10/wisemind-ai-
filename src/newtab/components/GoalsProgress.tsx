@@ -8,7 +8,7 @@ export function GoalsProgress({ goals, summary }: Props) {
   if (goals.length === 0) return null
 
   return (
-    <div className="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-5">
+    <div className="bg-white/[0.025] border border-white/[0.06] rounded-2xl p-5">
       <h3 className="text-sm font-semibold text-slate-300 mb-4">Goals</h3>
       <div className="space-y-4">
         {goals.map(g => {

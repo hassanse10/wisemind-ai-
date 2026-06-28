@@ -57,7 +57,7 @@ export function App() {
     updateSettings({ excludedDomains: settings.excludedDomains.filter(d => d !== domain) })
   }
 
-  if (!settings) return <div className="min-h-screen bg-slate-900" />
+  if (!settings) return <div className="min-h-screen bg-navy-950" />
 
   async function clearData() {
     const { getDB } = await import('../shared/db')
@@ -90,7 +90,7 @@ export function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 p-8">
+    <div className="min-h-screen bg-navy-950 text-ink-100 font-sans p-8">
       <div className="max-w-2xl mx-auto space-y-8">
         <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-teal-400 bg-clip-text text-transparent">
           WiseMind AI Settings
@@ -109,7 +109,7 @@ export function App() {
               value={apiKey}
               onChange={e => setApiKey(e.target.value)}
               placeholder="sk-or-..."
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-100 outline-none focus:border-blue-500"
+              className="w-full bg-navy-800 border border-white/10 rounded-lg px-4 py-2 text-sm text-slate-100 outline-none focus:border-blue-500"
             />
           </div>
           <div>
@@ -120,7 +120,7 @@ export function App() {
               id="model-select"
               value={settings.selectedModel}
               onChange={e => updateSettings({ selectedModel: e.target.value })}
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-100"
+              className="w-full bg-navy-800 border border-white/10 rounded-lg px-4 py-2 text-sm text-slate-100"
             >
               {MODELS.map(m => (
                 <option key={m} value={m}>
@@ -205,7 +205,7 @@ export function App() {
                       coachingHours: { ...settings.coachingHours, [k]: Number(e.target.value) },
                     })
                   }
-                  className="w-20 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100"
+                  className="w-20 bg-navy-800 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-100"
                 />
               ))}
             </div>
@@ -245,7 +245,7 @@ export function App() {
                 onChange={e => setNewDomain(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && addDomain()}
                 placeholder="example.com"
-                className="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 outline-none focus:border-blue-500"
+                className="flex-1 bg-navy-800 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-100 outline-none focus:border-blue-500"
               />
               <button
                 onClick={addDomain}

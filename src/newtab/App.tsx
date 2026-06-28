@@ -33,30 +33,49 @@ export function App() {
   }, [])
 
   const summary = settings?.todaysSummary
+  const dateLabel = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+
   if (!summary) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center text-slate-500 text-sm">
-        Tracking starts as you browse. Open a website to begin.
+      <div className="flex min-h-screen items-center justify-center bg-navy-950 font-sans text-sm text-ink-600">
+        <div className="text-center">
+          <div className="mb-3 font-display text-xl text-ink-200">WiseMind AI</div>
+          Tracking starts as you browse. Open a website to begin.
+        </div>
       </div>
     )
   }
 
+  const hour = new Date().getHours()
+  const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening'
+
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 p-8">
-      <div className="max-w-5xl mx-auto space-y-6">
-        {/* Hero */}
-        <div className="text-center py-6">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-teal-400 bg-clip-text text-transparent">
-            WiseMind AI
-          </h1>
-          <p className="text-slate-500 text-sm mt-1">
-            {new Date().toLocaleDateString('en-US', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
-          </p>
+    <div className="relative min-h-screen overflow-hidden bg-navy-950 font-sans text-ink-100">
+      <div className="pointer-events-none absolute -right-24 -top-40 h-[520px] w-[520px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(59,130,246,.12), transparent 70%)' }} />
+      <div className="pointer-events-none absolute -left-28 -top-28 h-[460px] w-[460px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(52,211,153,.10), transparent 70%)' }} />
+
+      <div className="relative mx-auto max-w-5xl space-y-6 px-8 py-9">
+        {/* top bar */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-[13px] wm-brand-grad shadow-[0_8px_18px_-5px_rgba(52,211,153,.5)]">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M12 3c-3 0-5 2-5 4.5 0 1 .4 1.9 1 2.6-.9.7-1.5 1.8-1.5 3C6.5 15.5 8.4 17 11 17h.5v4" stroke="#06231a" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M12 3c3 0 5 2 5 4.5 0 1-.4 1.9-1 2.6.9.7 1.5 1.8 1.5 3C17.5 15.5 15.6 17 13 17" stroke="#06231a" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" opacity=".55" />
+              </svg>
+            </div>
+            <div className="font-display text-xl font-semibold tracking-tight">WiseMind AI</div>
+          </div>
+          <div className="flex items-center gap-2 text-[13.5px] font-semibold text-ink-500">{dateLabel}</div>
+        </div>
+
+        {/* hero greeting */}
+        <div className="max-w-3xl py-2">
+          <div className="mb-2 text-[13px] font-semibold uppercase tracking-[0.04em] text-ink-600">{greeting}</div>
+          <div className="font-display text-3xl font-medium leading-[1.32] tracking-tight text-ink-100">
+            You learned <span className="text-learn">{Math.round((summary.byCategory['learning'] ?? 0) / 60)}m</span> today.{' '}
+            The mind grows in the hours you protect for it.
+          </div>
         </div>
 
         <ScoreCards
@@ -78,20 +97,20 @@ export function App() {
         <Achievements achievements={settings?.achievements ?? []} />
 
         {/* Quick actions */}
-        <div className="flex gap-3 justify-center pb-4">
+        <div className="flex justify-center gap-3 pb-4">
           <button
             onClick={() => {
               chrome.windows.getCurrent(w => {
                 if (w.id !== undefined) void chrome.sidePanel.open({ windowId: w.id })
               })
             }}
-            className="px-5 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl text-sm font-medium transition-colors"
+            className="rounded-xl px-5 py-2.5 text-sm font-semibold text-[#06231a] transition-opacity hover:opacity-90 wm-brand-grad"
           >
             Open AI Coach
           </button>
           <button
             onClick={() => chrome.tabs.create({ url: chrome.runtime.getURL('settings.html') })}
-            className="px-5 py-2 bg-slate-700 hover:bg-slate-600 rounded-xl text-sm font-medium transition-colors"
+            className="rounded-xl border border-white/[0.08] bg-white/[0.05] px-5 py-2.5 text-sm font-semibold text-ink-300 transition-colors hover:bg-white/10"
           >
             Settings
           </button>

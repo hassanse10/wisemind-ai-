@@ -1,1 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
+
+/* ── WiseMind design tokens (from the WiseMind AI design) ───────────────── */
+@theme {
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'Space Grotesk', 'Manrope', ui-sans-serif, system-ui, sans-serif;
+
+  /* surfaces */
+  --color-navy-950: #070d18;
+  --color-navy-900: #0a1120;
+  --color-navy-850: #0b1120;
+  --color-navy-800: #0d1424;
+
+  /* score / category accents */
+  --color-health: #34d399;
+  --color-prod: #5b9bff;
+  --color-learn: #f7b955;
+  --color-social: #a78bfa;
+  --color-reading: #34d399;
+  --color-shorts: #fb7185;
+  --color-cyan: #22d3ee;
+
+  /* text */
+  --color-ink-100: #eaf1fb;
+  --color-ink-200: #dbe6f5;
+  --color-ink-300: #cdd8ea;
+  --color-ink-400: #9fb0c8;
+  --color-ink-500: #8a99b0;
+  --color-ink-600: #7b8aa3;
+  --color-ink-700: #5d6b82;
+}
+
+/* ── base ──────────────────────────────────────────────────────────────── */
+html,
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── reusable helpers ──────────────────────────────────────────────────── */
+@layer components {
+  .wm-card {
+    background: var(--color-navy-900);
+    border: 1px solid rgb(255 255 255 / 0.07);
+    border-radius: 22px;
+    box-shadow: 0 30px 60px -25px rgb(0 0 0 / 0.65);
+  }
+  .wm-brand-grad {
+    background-image: linear-gradient(140deg, #34d399, #3b82f6);
+  }
+  /* faint glassy inset panel used across cards */
+  .wm-panel {
+    background: rgb(255 255 255 / 0.025);
+    border: 1px solid rgb(255 255 255 / 0.06);
+    border-radius: 20px;
+  }
+}
+
+@keyframes wmpulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.8);
+  }
+}
+@keyframes wmfloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+.wm-anim-pulse {
+  animation: wmpulse 2s infinite;
+}
+.wm-anim-float {
+  animation: wmfloat 5s ease-in-out infinite;
+}

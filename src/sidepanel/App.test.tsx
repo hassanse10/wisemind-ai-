@@ -69,10 +69,11 @@ describe('SidePanel App', () => {
 
     render(<App />)
     const input = screen.getByPlaceholderText(/Ask your coach/i)
-    fireEvent.change(input, { target: { value: 'How am I doing?' } })
+    // unique text so it doesn't collide with a quick-prompt chip of the same label
+    fireEvent.change(input, { target: { value: 'Tell me about my day' } })
     fireEvent.click(screen.getByRole('button', { name: '→' }))
 
-    expect(screen.getByText('How am I doing?')).toBeInTheDocument()
+    expect(screen.getByText('Tell me about my day')).toBeInTheDocument()
 
     await waitFor(() => expect(screen.getByText('Great question!')).toBeInTheDocument())
   })

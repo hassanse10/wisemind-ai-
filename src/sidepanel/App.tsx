@@ -116,26 +116,28 @@ export function App() {
 
   if (settings?.privateModeActive) {
     return (
-      <div className="flex flex-col h-screen bg-slate-900 text-slate-100 items-center justify-center gap-4 px-6 text-center">
+      <div className="flex h-screen flex-col items-center justify-center gap-4 bg-navy-900 px-6 text-center font-sans text-ink-100">
         <div className="text-4xl">🔒</div>
-        <p className="text-sm font-semibold text-slate-300">Private Mode Active</p>
-        <p className="text-xs text-slate-500">AI coaching is disabled while private mode is on. Turn it off in Settings to continue.</p>
+        <p className="text-sm font-semibold text-ink-300">Private Mode Active</p>
+        <p className="text-xs text-ink-600">AI coaching is disabled while private mode is on. Turn it off in Settings to continue.</p>
       </div>
     )
   }
 
+  const health = settings?.lastHealthScore ?? 0
+
   return (
-    <div className="flex flex-col h-screen bg-slate-900 text-slate-100">
+    <div className="relative flex h-screen flex-col bg-navy-900 font-sans text-ink-100">
       {/* Achievement toast */}
       {toastLabels.length > 0 && (
         <div
           role="status"
           aria-live="polite"
-          className="absolute top-0 left-0 right-0 z-50 mx-3 mt-2 bg-yellow-900/90 border border-yellow-600 rounded-xl px-4 py-3 flex items-start justify-between gap-3 shadow-lg"
+          className="absolute left-0 right-0 top-0 z-50 mx-3 mt-2 flex items-start justify-between gap-3 rounded-2xl border border-learn/30 bg-learn/[0.12] px-4 py-3 shadow-lg backdrop-blur"
         >
-          <div className="flex flex-col gap-1 min-w-0">
+          <div className="flex min-w-0 flex-col gap-1">
             {toastLabels.map(label => (
-              <span key={label} className="text-sm font-semibold text-yellow-200">
+              <span key={label} className="text-sm font-semibold text-learn">
                 🏆 Achievement unlocked: {label}
               </span>
             ))}
@@ -147,21 +149,30 @@ export function App() {
               setToastLabels([])
             }}
             aria-label="Dismiss achievement notification"
-            className="shrink-0 text-yellow-400 hover:text-yellow-200 text-lg leading-none"
+            className="shrink-0 text-lg leading-none text-learn hover:opacity-80"
           >
             ×
           </button>
         </div>
       )}
 
-      {/* Header */}
-      <div className="px-4 py-3 border-b border-slate-800 flex items-center gap-2 shrink-0">
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-teal-400 flex items-center justify-center text-sm">
-          🧠
-        </div>
-        <div>
-          <p className="text-sm font-semibold">WiseMind Coach</p>
-          <p className="text-xs text-slate-500">Health: {settings?.lastHealthScore ?? '—'}/100</p>
+      {/* Context bar */}
+      <div
+        className="shrink-0 border-b border-white/[0.06] px-5 pb-4 pt-[18px]"
+        style={{ background: 'linear-gradient(180deg,rgba(59,130,246,.06),transparent)' }}
+      >
+        <div className="flex items-center gap-3">
+          <div className="flex h-[42px] w-[42px] items-center justify-center rounded-[13px] text-xl wm-brand-grad shadow-[0_8px_18px_-6px_rgba(52,211,153,.5)]">
+            🧠
+          </div>
+          <div className="flex-1">
+            <div className="font-display text-[15px] font-semibold">Sage</div>
+            <div className="text-[11.5px] font-medium text-ink-600">Your wellness coach · here to guide</div>
+          </div>
+          <div className="text-right">
+            <div className="text-[11px] font-semibold text-ink-700">Today</div>
+            <div className="text-xs font-semibold text-health">Health {health}/100</div>
+          </div>
         </div>
       </div>
 
@@ -171,19 +182,19 @@ export function App() {
 
       {/* Loading / typing indicator */}
       {loading && (
-        <div className="px-3 pb-2 flex items-center gap-2">
+        <div className="flex items-center gap-2 px-5 pb-2">
           <div className="flex gap-1">
-            <span className="w-2 h-2 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-            <span className="w-2 h-2 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-            <span className="w-2 h-2 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+            <span className="h-1.5 w-1.5 rounded-full bg-ink-600 wm-anim-pulse" />
+            <span className="h-1.5 w-1.5 rounded-full bg-ink-600 wm-anim-pulse" style={{ animationDelay: '.2s' }} />
+            <span className="h-1.5 w-1.5 rounded-full bg-ink-600 wm-anim-pulse" style={{ animationDelay: '.4s' }} />
           </div>
-          <span className="text-xs text-slate-500">Coach is thinking…</span>
+          <span className="text-xs text-ink-600">Coach is thinking…</span>
         </div>
       )}
 
       {/* No API key warning */}
       {!settings?.openrouterApiKey && (
-        <div className="mx-3 mb-2 text-xs text-amber-400 bg-amber-950/40 rounded-lg px-3 py-2">
+        <div className="mx-4 mb-2 rounded-xl border border-learn/20 bg-learn/[0.08] px-3 py-2 text-xs text-learn">
           Add your OpenRouter API key in Settings to enable AI coaching.
         </div>
       )}
@@ -192,22 +203,24 @@ export function App() {
       <QuickPrompts onSelect={sendMessage} />
 
       {/* Input row */}
-      <div className="flex gap-2 px-3 pb-4 shrink-0">
-        <input
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage(input)}
-          placeholder="Ask your coach anything..."
-          disabled={loading}
-          className="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100 placeholder-slate-500 outline-none focus:border-blue-500 disabled:opacity-50"
-        />
-        <button
-          onClick={() => sendMessage(input)}
-          disabled={loading || !input.trim()}
-          className="bg-blue-600 hover:bg-blue-500 disabled:opacity-40 text-white rounded-xl px-4 py-2 text-sm font-medium"
-        >
-          {loading ? '…' : '→'}
-        </button>
+      <div className="px-4 pb-3 pt-2.5">
+        <div className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-white/5 px-3 py-2.5 focus-within:border-prod/50">
+          <input
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage(input)}
+            placeholder="Ask your coach anything..."
+            disabled={loading}
+            className="flex-1 bg-transparent text-[13px] text-ink-100 placeholder-ink-700 outline-none disabled:opacity-50"
+          />
+          <button
+            onClick={() => sendMessage(input)}
+            disabled={loading || !input.trim()}
+            className="flex h-8 w-8 items-center justify-center rounded-[10px] text-[#06231a] wm-brand-grad disabled:opacity-40"
+          >
+            {loading ? '…' : '→'}
+          </button>
+        </div>
       </div>
     </div>
   )

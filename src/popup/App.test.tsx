@@ -27,7 +27,9 @@ describe('Popup App', () => {
 
   it('shows live short video count from the database', async () => {
     render(<App />)
-    expect(await screen.findByText(/23 Shorts/i)).toBeInTheDocument()
+    // card only renders when the live DB count (mocked to 23) is > 0
+    expect(await screen.findByText(/Shorts today/i)).toBeInTheDocument()
+    expect(screen.getByText('23')).toBeInTheDocument()
   })
 
   it('shows the tracked-today diagnostic line', async () => {

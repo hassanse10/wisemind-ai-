@@ -1,20 +1,47 @@
-interface Props { score: number; label: string; color: string; size?: number }
+interface Props {
+  score: number
+  label: string
+  color: string
+  size?: number
+  stroke?: number
+}
 
-export function ScoreRing({ score, label, color, size = 80 }: Props) {
-  const r = (size / 2) - 6
+/** Rounded-cap progress ring with the score centered, matching the WiseMind design. */
+export function ScoreRing({ score, label, color, size = 128, stroke = 11 }: Props) {
+  const r = size / 2 - stroke
   const circ = 2 * Math.PI * r
-  const offset = circ - (score / 100) * circ
+  const offset = circ - (Math.max(0, Math.min(100, score)) / 100) * circ
+  const c = size / 2
 
   return (
-    <div className="flex flex-col items-center gap-1">
-      <svg width={size} height={size} className="-rotate-90">
-        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="#1e293b" strokeWidth={5} />
-        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={5}
-          strokeDasharray={circ} strokeDashoffset={offset}
-          strokeLinecap="round" style={{ transition: 'stroke-dashoffset 0.6s ease' }} />
+    <div className="relative shrink-0" style={{ width: size, height: size }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        <circle cx={c} cy={c} r={r} fill="none" stroke="rgba(255,255,255,.06)" strokeWidth={stroke} />
+        <circle
+          cx={c}
+          cy={c}
+          r={r}
+          fill="none"
+          stroke={color}
+          strokeWidth={stroke}
+          strokeLinecap="round"
+          strokeDasharray={circ}
+          strokeDashoffset={offset}
+          transform={`rotate(-90 ${c} ${c})`}
+          style={{ transition: 'stroke-dashoffset 0.7s ease' }}
+        />
       </svg>
-      <span className="text-2xl font-bold text-slate-100 -mt-[56px] rotate-90 relative z-10">{score}</span>
-      <span className="text-xs text-slate-400 mt-8">{label}</span>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span
+          className="font-display font-semibold leading-none tracking-tight text-ink-100"
+          style={{ fontSize: size * 0.3 }}
+        >
+          {score}
+        </span>
+        <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-ink-600">
+          {label}
+        </span>
+      </div>
     </div>
   )
 }
