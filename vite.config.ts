@@ -27,6 +27,19 @@ export default defineConfig({
         entryFileNames: '[name].js',
         chunkFileNames: 'chunks/[name]-[hash].js',
         assetFileNames: 'assets/[name].[ext]',
+        // Isolate React (and friends) into its own chunk. Otherwise Rollup
+        // merges React with other shared code (e.g. idb) into one chunk, and
+        // because the background service worker imports the db layer — which
+        // shares that chunk — the worker would load React's module-level code,
+        // which references `document`. A service worker has no `document`, so
+        // it crashes on registration ("document is not defined"). Keeping React
+        // in a dedicated chunk that the worker never imports prevents this.
+        manualChunks(id) {
+          if (/node_modules[\\/](react|react-dom|scheduler|react\/jsx-runtime)[\\/]/.test(id)) {
+            return 'react-vendor'
+          }
+          return undefined
+        },
       },
     },
   },
