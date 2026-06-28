@@ -5,7 +5,8 @@ import { ScoringEngine } from './ScoringEngine'
 import { AchievementsEngine } from './AchievementsEngine'
 import { NotificationManager } from './NotificationManager'
 import { getSettings, updateSettings, isPrivateMode } from '../shared/StorageManager'
-import { addShortVideoSession, addCoachingEvent } from '../shared/db'
+import { addShortVideoSession, addCoachingEvent, getVisitsByDateRange } from '../shared/db'
+import { getTodayRange } from '../shared/constants'
 import type { CoachingEvent, ShortVideoPlatform } from '../shared/types'
 
 // ─── Engine instances ─────────────────────────────────────────────────────
@@ -93,6 +94,10 @@ chrome.alarms.onAlarm.addListener(async (alarm: chrome.alarms.Alarm) => {
     if (unlocked.length > 0) {
       chrome.runtime.sendMessage({ type: 'ACHIEVEMENT_UNLOCKED', payload: { ids: unlocked } }).catch(() => {})
     }
+  }
+
+  if (alarm.name === 'ytBadge') {
+    await updateYouTubeBadge()
   }
 })
 
@@ -199,6 +204,68 @@ chrome.webNavigation.onCompleted.addListener(d => {
   if (d.frameId === 0) void handleShortNavigation(d.tabId, d.url)
 })
 chrome.tabs.onRemoved.addListener(tabId => lastShortIdByTab.delete(tabId))
+
+// ─── YouTube time badge ────────────────────────────────────────────────────
+// Show today's time spent on YouTube as a badge on the toolbar icon. Today's
+// committed visits come from the DB (survives service-worker restarts) and the
+// current, not-yet-committed view is added live via ytSegmentStart so the badge
+// ticks up while watching.
+
+let ytSegmentStart: number | null = null
+
+function isYouTube(url: string | undefined): boolean {
+  if (!url) return false
+  try {
+    return new URL(url).hostname.endsWith('youtube.com')
+  } catch {
+    return false
+  }
+}
+
+function badgeText(totalSeconds: number): string {
+  const m = Math.floor(totalSeconds / 60)
+  if (m < 1) return ''
+  if (m < 60) return `${m}m`
+  const h = Math.floor(m / 60)
+  const rem = m % 60
+  return rem === 0 ? `${h}h` : `${h}h${rem}` // e.g. "9m", "1h", "1h20"
+}
+
+async function updateYouTubeBadge(): Promise<void> {
+  const { start, end } = getTodayRange()
+  const visits = await getVisitsByDateRange(start, end)
+  let seconds = visits
+    .filter(v => v.domain === 'youtube.com' || v.domain.endsWith('.youtube.com'))
+    .reduce((sum, v) => sum + v.duration, 0)
+  if (ytSegmentStart !== null) seconds += Math.round((Date.now() - ytSegmentStart) / 1000)
+
+  const text = badgeText(seconds)
+  try {
+    await chrome.action.setBadgeText({ text })
+    if (text) {
+      await chrome.action.setBadgeBackgroundColor({ color: '#fb7185' })
+      chrome.action.setBadgeTextColor?.({ color: '#ffffff' })
+    }
+  } catch {
+    // action API momentarily unavailable — ignore
+  }
+}
+
+// Restart the live segment whenever the active tab / focused window changes or a
+// top-level navigation completes, so it always measures the current YouTube view.
+async function syncYouTubeSegment(): Promise<void> {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+  ytSegmentStart = isYouTube(tab?.url) ? Date.now() : null
+  await updateYouTubeBadge()
+}
+
+chrome.tabs.onActivated.addListener(() => void syncYouTubeSegment())
+chrome.windows.onFocusChanged.addListener(() => void syncYouTubeSegment())
+chrome.webNavigation.onCompleted.addListener(d => {
+  if (d.frameId === 0) void syncYouTubeSegment()
+})
+chrome.alarms.create('ytBadge', { periodInMinutes: 1 })
+void syncYouTubeSegment()
 
 // ─── Break detection via idle ─────────────────────────────────────────────
 // When the user goes idle during waking hours, count it as a break.

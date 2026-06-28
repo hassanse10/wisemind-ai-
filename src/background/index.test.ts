@@ -86,9 +86,11 @@ vi.mock('../shared/StorageManager', () => ({
   DEFAULT_SETTINGS: {},
 }))
 
+const mockGetVisitsByDateRange = vi.fn().mockResolvedValue([])
 vi.mock('../shared/db', () => ({
   addShortVideoSession: mockAddShortVideoSession,
   addCoachingEvent: mockAddCoachingEvent,
+  getVisitsByDateRange: mockGetVisitsByDateRange,
 }))
 
 // Helper: reset module cache + clear mocks, then re-import so top-level code reruns

@@ -48,6 +48,11 @@ const chromeMock = {
   sidePanel: {
     setPanelBehavior: vi.fn().mockResolvedValue(undefined),
   },
+  action: {
+    setBadgeText: vi.fn().mockResolvedValue(undefined),
+    setBadgeBackgroundColor: vi.fn().mockResolvedValue(undefined),
+    setBadgeTextColor: vi.fn().mockResolvedValue(undefined),
+  },
 }
 
 Object.defineProperty(globalThis, 'chrome', { value: chromeMock, writable: true })
