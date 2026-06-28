@@ -1,35 +1,31 @@
 let scrollIntensity = 0
-let videoPlaying = false
 
-document.addEventListener('wheel', e => {
-  scrollIntensity = Math.min(10, scrollIntensity + Math.abs(e.deltaY) / 100)
-})
+// Passive listener so wheel handling never blocks scrolling.
+document.addEventListener(
+  'wheel',
+  e => {
+    scrollIntensity = Math.min(10, scrollIntensity + Math.abs(e.deltaY) / 100)
+  },
+  { passive: true }
+)
 
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) scrollIntensity = 0
 })
 
-// Fix 1: Track attached videos to prevent duplicate listeners
-const attachedVideos = new Set<HTMLVideoElement>()
-
-function attachVideoListeners() {
-  document.querySelectorAll('video').forEach(v => {
-    if (!attachedVideos.has(v)) {
-      attachedVideos.add(v)
-      v.addEventListener('play', () => { videoPlaying = true })
-      v.addEventListener('pause', () => { videoPlaying = false })
-    }
-  })
+// videoPlaying is only needed once every 30s when we emit a signal, so we
+// compute it on demand instead of tracking every <video> with listeners and a
+// MutationObserver. The old observer re-scanned the whole DOM on every
+// mutation, which made heavy SPAs like YouTube janky, and its Set of <video>
+// elements leaked detached nodes. Computing lazily is cheap and leak-free.
+function isVideoPlaying(): boolean {
+  for (const v of document.querySelectorAll('video')) {
+    if (!v.paused && !v.ended && v.readyState > 2) return true
+  }
+  return false
 }
 
-// Attach listeners to videos present at init time
-attachVideoListeners()
-
-// Also observe dynamically added videos
-const observer = new MutationObserver(() => attachVideoListeners())
-observer.observe(document.body, { childList: true, subtree: true })
-
-// Fix 2: Guard against duplicate interval if module is re-executed
+// Guard against duplicate interval if the module is ever re-executed.
 let intervalStarted = false
 if (!intervalStarted) {
   intervalStarted = true
@@ -38,7 +34,7 @@ if (!intervalStarted) {
       type: 'ACTIVITY_SIGNAL',
       payload: {
         scrollIntensity: Math.round(scrollIntensity),
-        videoPlaying,
+        videoPlaying: isVideoPlaying(),
         hasFocus: !document.hidden,
         timestamp: Date.now(),
       },
