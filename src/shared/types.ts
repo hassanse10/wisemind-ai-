@@ -83,6 +83,10 @@ export interface ExtensionSettings {
   privateModeActive: boolean
   eyeHealthReminders: boolean
   breakIntervalMinutes: number   // minutes of continuous use before a break prompt
+  windDownEnabled: boolean        // evening wind-down reminders
+  windDownTintEnabled: boolean    // opt-in warm screen tint at night
+  windDownStart: number           // wind-down start, minutes since midnight
+  windDownBedtime: number         // target bedtime, minutes since midnight
   lastHealthScore: number
   todaysSummary: DailySummary | null
   achievements: Achievement[]
@@ -126,3 +130,5 @@ export type ExtensionMessage =
   | { type: 'ACHIEVEMENT_UNLOCKED'; payload: { ids: string[] } }
   | { type: 'SHOW_BREAK_PROMPT'; payload: { title: string; instruction: string; durationSec: number } }
   | { type: 'BREAK_RESPONSE'; payload: { response: 'completed' | 'skipped' | 'snoozed' } }
+  | { type: 'SHOW_WIND_DOWN'; payload: { message: string } }
+  | { type: 'WIND_DOWN_RESPONSE'; payload: { response: 'dismissed' | 'snoozed' } }

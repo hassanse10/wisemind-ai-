@@ -47,3 +47,14 @@ describe('DEFAULT_SETTINGS break timer', () => {
     expect(DEFAULT_SETTINGS.eyeHealthReminders).toBe(true)
   })
 })
+
+describe('DEFAULT_SETTINGS wind-down', () => {
+  it('defaults reminders on and tint off', () => {
+    expect(DEFAULT_SETTINGS.windDownEnabled).toBe(true)
+    expect(DEFAULT_SETTINGS.windDownTintEnabled).toBe(false)
+  })
+  it('defaults wind-down 21:30 and bedtime 23:00 (minutes since midnight)', () => {
+    expect(DEFAULT_SETTINGS.windDownStart).toBe(1290)
+    expect(DEFAULT_SETTINGS.windDownBedtime).toBe(1380)
+  })
+})
