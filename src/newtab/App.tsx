@@ -4,6 +4,7 @@ import { ScoreCards } from './components/ScoreCards'
 import { ScreenTimeDetails } from './components/ScreenTimeDetails'
 import { DomainActivity } from './components/DomainActivity'
 import { EyeCare } from './components/EyeCare'
+import { SleepNote } from './components/SleepNote'
 import { Timeline } from './components/Timeline'
 import { ShortVideoReport } from './components/ShortVideoReport'
 import { GoalsProgress } from './components/GoalsProgress'
@@ -94,6 +95,7 @@ export function App() {
         <DomainActivity visits={visits} />
         {summary.shortVideoCount > 0 && <ShortVideoReport summary={summary} />}
         <EyeCare summary={summary} />
+        {settings && <SleepNote summary={summary} settings={settings} />}
         <GoalsProgress goals={goals} summary={summary} />
         <GoalManager goals={goals} onChange={refreshGoals} />
         <WeeklyReport summaries={weeklySummaries} />
