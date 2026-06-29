@@ -35,6 +35,11 @@
       "run_at": "document_idle"
     },
     {
+      "matches": ["<all_urls>"],
+      "js": ["windDownTint.js"],
+      "run_at": "document_idle"
+    },
+    {
       "matches": ["*://*.tiktok.com/*", "*://*.facebook.com/*"],
       "js": ["shortVideoDetector.js"],
       "run_at": "document_idle"

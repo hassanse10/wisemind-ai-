@@ -10,6 +10,7 @@ const chromeMock = {
       remove: vi.fn((_keys, cb) => cb?.()),
       onChanged: { addListener: vi.fn(), removeListener: vi.fn() },
     },
+    onChanged: { addListener: vi.fn(), removeListener: vi.fn() },
   },
   tabs: {
     query: vi.fn().mockResolvedValue([]),

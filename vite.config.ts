@@ -22,6 +22,7 @@ export default defineConfig({
         activityMonitor: resolve(__dirname, 'src/content/activityMonitor.ts'),
         shortVideoDetector: resolve(__dirname, 'src/content/shortVideoDetector.ts'),
         mindfulOverlay: resolve(__dirname, 'src/content/mindfulOverlay.ts'),
+        windDownTint: resolve(__dirname, 'src/content/windDownTint.ts'),
       },
       output: {
         entryFileNames: '[name].js',
