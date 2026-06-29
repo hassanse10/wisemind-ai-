@@ -193,3 +193,58 @@ chrome.runtime.onMessage.addListener((msg) => {
     document.body.appendChild(host)
   }
 })
+
+function createWindDownOverlay(message: string): HTMLElement {
+  const host = document.createElement('div')
+  const shadow = host.attachShadow({ mode: 'open' })
+
+  const style = document.createElement('style')
+  style.textContent = OVERLAY_STYLES
+
+  const card = document.createElement('div')
+  card.className = 'overlay'
+  card.innerHTML = `
+    <button class="close" aria-label="Close">✕</button>
+    <div class="title">Bedtime wind-down</div>
+    <div class="message"></div>
+    <div class="actions">
+      <button class="btn btn-secondary" data-action="snooze">Snooze 15m</button>
+      <button class="btn btn-primary" data-action="dismiss">Dismiss</button>
+    </div>
+  `
+
+  shadow.appendChild(style)
+  shadow.appendChild(card)
+
+  const msgEl = card.querySelector('.message')
+  if (msgEl) msgEl.textContent = message
+
+  const report = (response: 'dismissed' | 'snoozed') => {
+    try {
+      if (chrome.runtime?.id) chrome.runtime.sendMessage({ type: 'WIND_DOWN_RESPONSE', payload: { response } })
+    } catch {
+      // ignore — context invalidated
+    }
+    host.remove()
+  }
+
+  card.querySelector('.close')?.addEventListener('click', () => report('dismissed'))
+  card.querySelectorAll('[data-action]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const action = (e.currentTarget as HTMLElement).dataset.action
+      report(action === 'snooze' ? 'snoozed' : 'dismissed')
+    })
+  })
+
+  return host
+}
+
+chrome.runtime.onMessage.addListener((msg) => {
+  if (msg.type === 'SHOW_WIND_DOWN') {
+    const existing = document.getElementById('wisemind-overlay-host')
+    existing?.remove()
+    const host = createWindDownOverlay(msg.payload.message)
+    host.id = 'wisemind-overlay-host'
+    document.body.appendChild(host)
+  }
+})
