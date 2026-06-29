@@ -11,6 +11,7 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   excludedDomains: [],
   privateModeActive: false,
   eyeHealthReminders: true,
+  breakIntervalMinutes: 45,
   lastHealthScore: 0,
   todaysSummary: null,
   achievements: [],

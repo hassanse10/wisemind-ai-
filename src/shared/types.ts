@@ -82,6 +82,7 @@ export interface ExtensionSettings {
   excludedDomains: string[]
   privateModeActive: boolean
   eyeHealthReminders: boolean
+  breakIntervalMinutes: number   // minutes of continuous use before a break prompt
   lastHealthScore: number
   todaysSummary: DailySummary | null
   achievements: Achievement[]
@@ -123,3 +124,5 @@ export type ExtensionMessage =
   | { type: 'COACHING_RESPONSE'; payload: { response: 'continue' | 'take_break' | 'dismissed'; mood: string | null } }
   | { type: 'GET_SETTINGS' }
   | { type: 'ACHIEVEMENT_UNLOCKED'; payload: { ids: string[] } }
+  | { type: 'SHOW_BREAK_PROMPT'; payload: { title: string; instruction: string; durationSec: number } }
+  | { type: 'BREAK_RESPONSE'; payload: { response: 'completed' | 'skipped' | 'snoozed' } }

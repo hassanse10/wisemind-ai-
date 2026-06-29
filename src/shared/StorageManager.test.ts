@@ -38,3 +38,12 @@ describe('isDomainExcluded', () => {
     expect(await isDomainExcluded('github.com')).toBe(false)
   })
 })
+
+describe('DEFAULT_SETTINGS break timer', () => {
+  it('defaults the break interval to 45 minutes', () => {
+    expect(DEFAULT_SETTINGS.breakIntervalMinutes).toBe(45)
+  })
+  it('keeps eyeHealthReminders enabled by default (break-timer flag)', () => {
+    expect(DEFAULT_SETTINGS.eyeHealthReminders).toBe(true)
+  })
+})

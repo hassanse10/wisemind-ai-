@@ -50,6 +50,7 @@ function makeSettings(overrides: Partial<ExtensionSettings> = {}): ExtensionSett
     excludedDomains: [],
     privateModeActive: false,
     eyeHealthReminders: true,
+    breakIntervalMinutes: 45,
     lastHealthScore: 72,
     todaysSummary: null,
     achievements: [],
