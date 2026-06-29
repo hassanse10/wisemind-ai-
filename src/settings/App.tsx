@@ -25,6 +25,13 @@ const FREQUENCIES: Array<{ id: CoachingFrequency; label: string }> = [
   { id: 'assertive', label: 'Active' },
 ]
 
+const toHHMM = (mins: number) =>
+  `${String(Math.floor(mins / 60)).padStart(2, '0')}:${String(mins % 60).padStart(2, '0')}`
+const fromHHMM = (v: string) => {
+  const [h, m] = v.split(':').map(Number)
+  return h * 60 + m
+}
+
 export function App() {
   const settings = useSettings()
   const [apiKey, setApiKey] = useState(settings?.openrouterApiKey ?? '')
@@ -244,6 +251,52 @@ export function App() {
                   {mins} min
                 </button>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Bedtime Wind-Down */}
+        <section className="bg-slate-800/60 rounded-2xl p-6 border border-slate-700/50 space-y-4">
+          <h2 className="text-sm font-semibold text-slate-300">Bedtime Wind-Down</h2>
+          <p className="text-xs text-slate-500">
+            Evening reminders and an optional warm screen tint to help you ease toward sleep. Works without an API key.
+          </p>
+          <label className="flex items-center justify-between">
+            <span className="text-sm text-slate-300">Wind-down reminders</span>
+            <input
+              type="checkbox"
+              checked={settings.windDownEnabled}
+              onChange={e => updateSettings({ windDownEnabled: e.target.checked })}
+              className="w-5 h-5 accent-blue-500"
+            />
+          </label>
+          <label className="flex items-center justify-between">
+            <span className="text-sm text-slate-300">Warm screen tint at night</span>
+            <input
+              type="checkbox"
+              checked={settings.windDownTintEnabled}
+              onChange={e => updateSettings({ windDownTintEnabled: e.target.checked })}
+              className="w-5 h-5 accent-blue-500"
+            />
+          </label>
+          <div className="flex gap-4">
+            <div className="flex-1">
+              <label className="text-xs text-slate-500 mb-1 block">Wind-down starts</label>
+              <input
+                type="time"
+                value={toHHMM(settings.windDownStart)}
+                onChange={e => updateSettings({ windDownStart: fromHHMM(e.target.value) })}
+                className="w-full bg-navy-800 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-100"
+              />
+            </div>
+            <div className="flex-1">
+              <label className="text-xs text-slate-500 mb-1 block">Target bedtime</label>
+              <input
+                type="time"
+                value={toHHMM(settings.windDownBedtime)}
+                onChange={e => updateSettings({ windDownBedtime: fromHHMM(e.target.value) })}
+                className="w-full bg-navy-800 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-100"
+              />
             </div>
           </div>
         </section>

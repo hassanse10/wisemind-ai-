@@ -21,6 +21,10 @@ vi.mock('../shared/hooks/useStorage', () => ({
     todaysSummary: null,
     achievements: [],
     ruleLastFired: {},
+    windDownEnabled: true,
+    windDownTintEnabled: false,
+    windDownStart: 1290,
+    windDownBedtime: 1380,
   }),
 }))
 
@@ -208,6 +212,16 @@ describe('Settings App', () => {
     fireEvent.change(numberInputs[0], { target: { value: '8' } })
     expect(mockUpdateSettings).toHaveBeenCalledWith(
       expect.objectContaining({ coachingHours: expect.objectContaining({ start: 8 }) })
+    )
+  })
+
+  it('toggles the warm tint setting', async () => {
+    render(<App />)
+    const label = screen.getByText('Warm screen tint at night')
+    const checkbox = label.parentElement?.querySelector('input[type="checkbox"]') as HTMLInputElement
+    fireEvent.click(checkbox)
+    expect(mockUpdateSettings).toHaveBeenCalledWith(
+      expect.objectContaining({ windDownTintEnabled: true })
     )
   })
 
