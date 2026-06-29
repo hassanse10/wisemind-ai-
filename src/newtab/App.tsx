@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useSettings } from '../shared/hooks/useStorage'
 import { ScoreCards } from './components/ScoreCards'
+import { ScreenTimeDetails } from './components/ScreenTimeDetails'
+import { DomainActivity } from './components/DomainActivity'
+import { EyeCare } from './components/EyeCare'
 import { Timeline } from './components/Timeline'
 import { ShortVideoReport } from './components/ShortVideoReport'
 import { GoalsProgress } from './components/GoalsProgress'
@@ -86,8 +89,11 @@ export function App() {
         {settings && (
           <Recommendations summary={summary} settings={settings} />
         )}
+        <ScreenTimeDetails summary={summary} visits={visits} />
         <Timeline visits={visits} />
+        <DomainActivity visits={visits} />
         {summary.shortVideoCount > 0 && <ShortVideoReport summary={summary} />}
+        <EyeCare summary={summary} />
         <GoalsProgress goals={goals} summary={summary} />
         <GoalManager goals={goals} onChange={refreshGoals} />
         <WeeklyReport summaries={weeklySummaries} />
