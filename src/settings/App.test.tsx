@@ -16,6 +16,7 @@ vi.mock('../shared/hooks/useStorage', () => ({
     excludedDomains: [],
     privateModeActive: false,
     eyeHealthReminders: true,
+    breakIntervalMinutes: 45,
     lastHealthScore: 0,
     todaysSummary: null,
     achievements: [],
@@ -93,16 +94,16 @@ describe('Settings App', () => {
 
   it('renders eye health reminders toggle', () => {
     render(<App />)
-    expect(screen.getByText('Eye Health Reminders')).toBeInTheDocument()
+    expect(screen.getByText('Enable break reminders')).toBeInTheDocument()
   })
 
   it('calls updateSettings when eye health toggled', () => {
     render(<App />)
     const checkboxes = screen.getAllByRole('checkbox')
-    // Eye health is 3rd checkbox (coaching enabled, then eye health)
+    // Eye health checkbox is in the Break Reminders section, labelled "Enable break reminders"
     const eyeCheckbox = checkboxes.find(cb => {
       const label = cb.closest('label')
-      return label?.textContent?.includes('Eye Health Reminders')
+      return label?.textContent?.includes('Enable break reminders')
     })
     if (eyeCheckbox) {
       fireEvent.click(eyeCheckbox)
@@ -207,6 +208,15 @@ describe('Settings App', () => {
     fireEvent.change(numberInputs[0], { target: { value: '8' } })
     expect(mockUpdateSettings).toHaveBeenCalledWith(
       expect.objectContaining({ coachingHours: expect.objectContaining({ start: 8 }) })
+    )
+  })
+
+  it('updates the break interval when a preset is clicked', async () => {
+    render(<App />)
+    const btn = await screen.findByRole('button', { name: '60 min' })
+    fireEvent.click(btn)
+    expect(mockUpdateSettings).toHaveBeenCalledWith(
+      expect.objectContaining({ breakIntervalMinutes: 60 })
     )
   })
 })
