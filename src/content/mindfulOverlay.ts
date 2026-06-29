@@ -23,6 +23,9 @@ const OVERLAY_STYLES = `
   .btn-secondary { background: rgba(255,255,255,0.1); color: #cbd5e1; }
   .btn:hover { opacity: 0.85; }
   .close { position: absolute; top: 12px; right: 14px; background: none; border: none; color: #64748b; cursor: pointer; font-size: 18px; }
+  .break-instruction { font-size: 14px; line-height: 1.5; color: #cbd5e1; margin-bottom: 16px; }
+  .countdown { font-size: 40px; font-weight: 700; text-align: center; color: #34d399; margin: 8px 0 16px; font-variant-numeric: tabular-nums; }
+  .break-done { font-size: 14px; text-align: center; color: #34d399; margin-bottom: 16px; }
 `
 
 function createOverlay(message: string, stats: string): HTMLElement {
@@ -93,6 +96,99 @@ chrome.runtime.onMessage.addListener((msg) => {
     const existing = document.getElementById('wisemind-overlay-host')
     existing?.remove()
     const host = createOverlay(msg.payload.message, msg.payload.stats)
+    host.id = 'wisemind-overlay-host'
+    document.body.appendChild(host)
+  }
+})
+
+function createBreakOverlay(title: string, instruction: string, durationSec: number): HTMLElement {
+  const host = document.createElement('div')
+  const shadow = host.attachShadow({ mode: 'open' })
+
+  const style = document.createElement('style')
+  style.textContent = OVERLAY_STYLES
+
+  const card = document.createElement('div')
+  card.className = 'overlay'
+  card.innerHTML = `
+    <button class="close" aria-label="Close">✕</button>
+    <div class="title">Time to move</div>
+    <div class="message"></div>
+    <div class="break-instruction"></div>
+    <div class="actions">
+      <button class="btn btn-secondary" data-action="skip">Skip</button>
+      <button class="btn btn-secondary" data-action="snooze">Snooze 5m</button>
+      <button class="btn btn-primary" data-action="start">Start</button>
+    </div>
+  `
+
+  shadow.appendChild(style)
+  shadow.appendChild(card)
+
+  const msgEl = card.querySelector('.message')
+  if (msgEl) msgEl.textContent = title
+  const instrEl = card.querySelector('.break-instruction')
+  if (instrEl) instrEl.textContent = instruction
+
+  let timer: ReturnType<typeof setInterval> | null = null
+
+  const report = (response: 'completed' | 'skipped' | 'snoozed') => {
+    if (timer) clearInterval(timer)
+    try {
+      if (chrome.runtime?.id) chrome.runtime.sendMessage({ type: 'BREAK_RESPONSE', payload: { response } })
+    } catch {
+      // ignore — context invalidated
+    }
+    host.remove()
+  }
+
+  const startCountdown = () => {
+    const actions = card.querySelector('.actions')
+    if (actions) actions.remove()
+    if (instrEl) instrEl.remove()
+    const count = document.createElement('div')
+    count.className = 'countdown'
+    let remaining = durationSec
+    count.textContent = String(remaining)
+    card.appendChild(count)
+    timer = setInterval(() => {
+      remaining -= 1
+      if (remaining > 0) {
+        count.textContent = String(remaining)
+        return
+      }
+      if (timer) clearInterval(timer)
+      count.remove()
+      const done = document.createElement('div')
+      done.className = 'break-done'
+      done.textContent = '✓ Nicely done — your eyes and body thank you.'
+      card.appendChild(done)
+      const ok = document.createElement('button')
+      ok.className = 'btn btn-primary'
+      ok.textContent = 'Done'
+      ok.addEventListener('click', () => report('completed'))
+      card.appendChild(ok)
+    }, 1000)
+  }
+
+  card.querySelector('.close')?.addEventListener('click', () => report('skipped'))
+  card.querySelectorAll('[data-action]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const action = (e.currentTarget as HTMLElement).dataset.action
+      if (action === 'start') startCountdown()
+      else if (action === 'snooze') report('snoozed')
+      else report('skipped')
+    })
+  })
+
+  return host
+}
+
+chrome.runtime.onMessage.addListener((msg) => {
+  if (msg.type === 'SHOW_BREAK_PROMPT') {
+    const existing = document.getElementById('wisemind-overlay-host')
+    existing?.remove()
+    const host = createBreakOverlay(msg.payload.title, msg.payload.instruction, msg.payload.durationSec)
     host.id = 'wisemind-overlay-host'
     document.body.appendChild(host)
   }
