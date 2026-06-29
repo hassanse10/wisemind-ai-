@@ -5,6 +5,7 @@ import { ScoringEngine } from './ScoringEngine'
 import { AchievementsEngine } from './AchievementsEngine'
 import { NotificationManager } from './NotificationManager'
 import { BreakTimerEngine } from './BreakTimerEngine'
+import { WindDownEngine } from './WindDownEngine'
 import { getSettings, updateSettings, isPrivateMode } from '../shared/StorageManager'
 import { addShortVideoSession, addCoachingEvent, getVisitsByDateRange } from '../shared/db'
 import { getTodayRange } from '../shared/constants'
@@ -20,11 +21,13 @@ const coaching = new CoachingEngine()
 const scoring = new ScoringEngine()
 const achievements = new AchievementsEngine()
 const breakTimer = new BreakTimerEngine()
+const windDown = new WindDownEngine()
 
 tracking.init()
 classifier.init()
 coaching.init()
 breakTimer.init()
+windDown.init()
 
 // Track last activity signal timestamp to support continuousMinutes tracking
 let lastActivityTime = Date.now()
@@ -95,6 +98,13 @@ chrome.alarms.onAlarm.addListener(async (alarm: chrome.alarms.Alarm) => {
     const prompt = await breakTimer.evaluate()
     if (prompt) {
       await NotificationManager.deliverBreak(prompt)
+    }
+  }
+
+  if (alarm.name === 'windDownTick') {
+    const r = await windDown.evaluate()
+    if (r) {
+      await NotificationManager.deliverWindDown(r.message)
     }
   }
 
@@ -175,6 +185,15 @@ chrome.runtime.onMessage.addListener(
           breakTimer.skip()
         }
       })()
+      return false
+    }
+
+    if (message.type === 'WIND_DOWN_RESPONSE') {
+      const payload = message.payload as { response: 'dismissed' | 'snoozed' }
+      if (payload.response === 'snoozed') {
+        windDown.snooze()
+      }
+      // 'dismissed' is acknowledged with no state change
       return false
     }
 
