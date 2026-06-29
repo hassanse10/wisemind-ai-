@@ -4,6 +4,7 @@ import { CoachingEngine } from './CoachingEngine'
 import { ScoringEngine } from './ScoringEngine'
 import { AchievementsEngine } from './AchievementsEngine'
 import { NotificationManager } from './NotificationManager'
+import { BreakTimerEngine } from './BreakTimerEngine'
 import { getSettings, updateSettings, isPrivateMode } from '../shared/StorageManager'
 import { addShortVideoSession, addCoachingEvent, getVisitsByDateRange } from '../shared/db'
 import { getTodayRange } from '../shared/constants'
@@ -18,10 +19,12 @@ const classifier = new ClassifierEngine()
 const coaching = new CoachingEngine()
 const scoring = new ScoringEngine()
 const achievements = new AchievementsEngine()
+const breakTimer = new BreakTimerEngine()
 
 tracking.init()
 classifier.init()
 coaching.init()
+breakTimer.init()
 
 // Track last activity signal timestamp to support continuousMinutes tracking
 let lastActivityTime = Date.now()
@@ -88,6 +91,13 @@ chrome.alarms.onAlarm.addListener(async (alarm: chrome.alarms.Alarm) => {
     chrome.runtime.sendMessage({ type: 'SCORE_UPDATE', payload: scores }).catch(() => {})
   }
 
+  if (alarm.name === 'breakTimerTick') {
+    const prompt = await breakTimer.evaluate()
+    if (prompt) {
+      await NotificationManager.deliverBreak(prompt)
+    }
+  }
+
   if (alarm.name === 'dailySummary') {
     await scoring.computeAndStore()
     const unlocked = await achievements.evaluate()
@@ -144,6 +154,27 @@ chrome.runtime.onMessage.addListener(
         userResponse: payload.response as CoachingEvent['userResponse'],
         mood: payload.mood as CoachingEvent['mood'],
       })
+      return false
+    }
+
+    if (message.type === 'BREAK_RESPONSE') {
+      const payload = message.payload as { response: 'completed' | 'skipped' | 'snoozed' }
+      void (async () => {
+        if (payload.response === 'completed') {
+          breakTimer.completeBreak()
+          const settings = await getSettings()
+          if (settings.todaysSummary) {
+            await updateSettings({
+              todaysSummary: { ...settings.todaysSummary, breaks: settings.todaysSummary.breaks + 1 },
+            })
+          }
+          scheduleRecompute()
+        } else if (payload.response === 'snoozed') {
+          breakTimer.snooze()
+        } else {
+          breakTimer.skip()
+        }
+      })()
       return false
     }
 
@@ -293,6 +324,7 @@ chrome.idle.onStateChanged.addListener(async (state: string) => {
   // A break (idle or locked screen) ends the continuous browsing session
   if (state === 'idle' || state === 'locked') {
     coaching.resetSession()
+    breakTimer.resetSession()
   }
 })
 
