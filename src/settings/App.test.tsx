@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react'
 import { App } from './App'
 
 const mockUpdateSettings = vi.fn()
@@ -25,6 +25,8 @@ vi.mock('../shared/hooks/useStorage', () => ({
     windDownTintEnabled: false,
     windDownStart: 1290,
     windDownBedtime: 1380,
+    wellnessNudgesEnabled: true,
+    wellnessNudgeIntervalMinutes: 40,
   }),
 }))
 
@@ -227,10 +229,21 @@ describe('Settings App', () => {
 
   it('updates the break interval when a preset is clicked', async () => {
     render(<App />)
-    const btn = await screen.findByRole('button', { name: '60 min' })
+    const section = screen.getByText('Break Reminders').closest('section') as HTMLElement
+    const btn = within(section).getByRole('button', { name: '60 min' })
     fireEvent.click(btn)
     expect(mockUpdateSettings).toHaveBeenCalledWith(
       expect.objectContaining({ breakIntervalMinutes: 60 })
+    )
+  })
+
+  it('updates the nudge interval when a preset is clicked', async () => {
+    render(<App />)
+    const section = screen.getByText('Posture & Hydration').closest('section') as HTMLElement
+    const btn = within(section).getByRole('button', { name: '60 min' })
+    fireEvent.click(btn)
+    expect(mockUpdateSettings).toHaveBeenCalledWith(
+      expect.objectContaining({ wellnessNudgeIntervalMinutes: 60 })
     )
   })
 })

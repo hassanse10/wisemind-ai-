@@ -301,6 +301,42 @@ export function App() {
           </div>
         </section>
 
+        {/* Posture & Hydration */}
+        <section className="bg-slate-800/60 rounded-2xl p-6 border border-slate-700/50 space-y-4">
+          <h2 className="text-sm font-semibold text-slate-300">Posture &amp; Hydration</h2>
+          <p className="text-xs text-slate-500">
+            Gentle posture and hydration reminders while you work — small toasts that fade on their own, no clicks. Works without an API key.
+          </p>
+          <label className="flex items-center justify-between">
+            <span className="text-sm text-slate-300">Enable nudges</span>
+            <input
+              type="checkbox"
+              checked={settings.wellnessNudgesEnabled}
+              onChange={e => updateSettings({ wellnessNudgesEnabled: e.target.checked })}
+              className="w-5 h-5 accent-blue-500"
+            />
+          </label>
+          <div>
+            <label className="text-xs text-slate-500 mb-2 block">Remind me every</label>
+            <div className="flex gap-2">
+              {[30, 40, 60, 90].map(mins => (
+                <button
+                  key={mins}
+                  onClick={() => updateSettings({ wellnessNudgeIntervalMinutes: mins })}
+                  disabled={!settings.wellnessNudgesEnabled}
+                  className={`flex-1 py-2 rounded-lg text-sm transition-colors disabled:opacity-40 ${
+                    settings.wellnessNudgeIntervalMinutes === mins
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-slate-700 text-slate-300'
+                  }`}
+                >
+                  {mins} min
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Privacy & Exclusions */}
         <section className="bg-slate-800/60 rounded-2xl p-6 border border-slate-700/50 space-y-4">
           <h2 className="text-sm font-semibold text-slate-300">Privacy &amp; Exclusions</h2>
