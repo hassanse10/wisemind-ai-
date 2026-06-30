@@ -56,11 +56,17 @@ export class TrackingEngine {
   }
 
   private async endSession(): Promise<void> {
-    if (!this.activeSession) return
-    if (await isPrivateMode()) { this.activeSession = null; return }
-
+    // Capture and clear the active session synchronously, before any await.
+    // Two endSession() calls can race (e.g. a tab switch fires onActivated and
+    // onCompleted, or idle + focus-change). If the guard and the clear straddle
+    // an await, the second call resumes after the first has nulled the session
+    // and reads startTime on null. Claiming it up front makes this atomic.
     const session = this.activeSession
+    if (!session) return
     this.activeSession = null
+
+    if (await isPrivateMode()) return
+
     const endTime = Date.now()
     const duration = Math.round((endTime - session.startTime) / 1000)
 

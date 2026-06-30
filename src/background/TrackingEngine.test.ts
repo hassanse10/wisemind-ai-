@@ -48,4 +48,18 @@ describe('TrackingEngine.endSession', () => {
     await engine['endSession']()
     expect(addVisit).not.toHaveBeenCalled()
   })
+
+  it('handles concurrent endSession calls without reading startTime on null', async () => {
+    const engine = new TrackingEngine()
+    engine['activeSession'] = {
+      tabId: 1, url: 'https://github.com', domain: 'github.com',
+      title: 'GitHub', startTime: Date.now() - 10000,
+    }
+    // Two endSession calls race through the async isPrivateMode() check. The
+    // guard + clear must be atomic, otherwise the second call resumes after the
+    // first nulled activeSession and throws "Cannot read properties of null
+    // (reading 'startTime')". This rejects the Promise.all if the race regresses.
+    await Promise.all([engine['endSession'](), engine['endSession']()])
+    expect(addVisit).toHaveBeenCalledTimes(1)
+  })
 })
