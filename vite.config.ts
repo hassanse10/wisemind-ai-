@@ -19,6 +19,7 @@ export default defineConfig({
         newtab: resolve(__dirname, 'src/newtab.html'),
         sidepanel: resolve(__dirname, 'src/sidepanel.html'),
         settings: resolve(__dirname, 'src/settings.html'),
+        breathe: resolve(__dirname, 'src/breathe.html'),
         activityMonitor: resolve(__dirname, 'src/content/activityMonitor.ts'),
         shortVideoDetector: resolve(__dirname, 'src/content/shortVideoDetector.ts'),
         mindfulOverlay: resolve(__dirname, 'src/content/mindfulOverlay.ts'),
