@@ -108,6 +108,7 @@ export function App() {
         {/* quick links */}
         <div className="mt-1 flex gap-2">
           <QuickLink label="Dashboard" onClick={() => chrome.tabs.create({ url: chrome.runtime.getURL('newtab.html') })} />
+          <QuickLink label="Breathe" onClick={() => chrome.tabs.create({ url: chrome.runtime.getURL('breathe.html') })} />
           <QuickLink
             label="AI Coach"
             onClick={() => chrome.windows.getCurrent(w => { if (w.id !== undefined) void chrome.sidePanel.open({ windowId: w.id }) })}

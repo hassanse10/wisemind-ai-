@@ -117,6 +117,12 @@ export function App() {
             Open AI Coach
           </button>
           <button
+            onClick={() => chrome.tabs.create({ url: chrome.runtime.getURL('breathe.html') })}
+            className="rounded-xl border border-white/[0.08] bg-white/[0.05] px-5 py-2.5 text-sm font-semibold text-ink-300 transition-colors hover:bg-white/10"
+          >
+            Breathe
+          </button>
+          <button
             onClick={() => chrome.tabs.create({ url: chrome.runtime.getURL('settings.html') })}
             className="rounded-xl border border-white/[0.08] bg-white/[0.05] px-5 py-2.5 text-sm font-semibold text-ink-300 transition-colors hover:bg-white/10"
           >
