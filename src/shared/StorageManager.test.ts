@@ -58,3 +58,10 @@ describe('DEFAULT_SETTINGS wind-down', () => {
     expect(DEFAULT_SETTINGS.windDownBedtime).toBe(1380)
   })
 })
+
+describe('DEFAULT_SETTINGS wellness nudges', () => {
+  it('defaults nudges on at a 40-minute interval', () => {
+    expect(DEFAULT_SETTINGS.wellnessNudgesEnabled).toBe(true)
+    expect(DEFAULT_SETTINGS.wellnessNudgeIntervalMinutes).toBe(40)
+  })
+})

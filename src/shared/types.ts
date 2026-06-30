@@ -87,6 +87,8 @@ export interface ExtensionSettings {
   windDownTintEnabled: boolean    // opt-in warm screen tint at night
   windDownStart: number           // wind-down start, minutes since midnight
   windDownBedtime: number         // target bedtime, minutes since midnight
+  wellnessNudgesEnabled: boolean       // posture & hydration nudges
+  wellnessNudgeIntervalMinutes: number // minutes between nudges
   lastHealthScore: number
   todaysSummary: DailySummary | null
   achievements: Achievement[]
@@ -132,3 +134,4 @@ export type ExtensionMessage =
   | { type: 'BREAK_RESPONSE'; payload: { response: 'completed' | 'skipped' | 'snoozed' } }
   | { type: 'SHOW_WIND_DOWN'; payload: { message: string } }
   | { type: 'WIND_DOWN_RESPONSE'; payload: { response: 'dismissed' | 'snoozed' } }
+  | { type: 'SHOW_NUDGE'; payload: { message: string } }

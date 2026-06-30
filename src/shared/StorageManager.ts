@@ -16,6 +16,8 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   windDownTintEnabled: false,
   windDownStart: 1290,
   windDownBedtime: 1380,
+  wellnessNudgesEnabled: true,
+  wellnessNudgeIntervalMinutes: 40,
   lastHealthScore: 0,
   todaysSummary: null,
   achievements: [],

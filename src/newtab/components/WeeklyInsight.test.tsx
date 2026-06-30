@@ -55,6 +55,8 @@ function makeSettings(overrides: Partial<ExtensionSettings> = {}): ExtensionSett
     windDownTintEnabled: false,
     windDownStart: 1290,
     windDownBedtime: 1380,
+    wellnessNudgesEnabled: true,
+    wellnessNudgeIntervalMinutes: 40,
     lastHealthScore: 72,
     todaysSummary: null,
     achievements: [],
