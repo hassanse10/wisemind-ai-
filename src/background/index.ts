@@ -6,6 +6,7 @@ import { AchievementsEngine } from './AchievementsEngine'
 import { NotificationManager } from './NotificationManager'
 import { BreakTimerEngine } from './BreakTimerEngine'
 import { WindDownEngine } from './WindDownEngine'
+import { WellnessNudgeEngine } from './WellnessNudgeEngine'
 import { getSettings, updateSettings, isPrivateMode } from '../shared/StorageManager'
 import { addShortVideoSession, addCoachingEvent, getVisitsByDateRange } from '../shared/db'
 import { getTodayRange } from '../shared/constants'
@@ -22,15 +23,20 @@ const scoring = new ScoringEngine()
 const achievements = new AchievementsEngine()
 const breakTimer = new BreakTimerEngine()
 const windDown = new WindDownEngine()
+const wellness = new WellnessNudgeEngine()
 
 tracking.init()
 classifier.init()
 coaching.init()
 breakTimer.init()
 windDown.init()
+wellness.init()
 
 // Track last activity signal timestamp to support continuousMinutes tracking
 let lastActivityTime = Date.now()
+
+// When a break/wind-down prompt was last shown — used to suppress nudge stacking.
+let lastOverlayShownAt = 0
 
 // computeScores fires every 5 minutes to keep scores fresh
 chrome.alarms.create('computeScores', { periodInMinutes: 5 })
@@ -98,6 +104,7 @@ chrome.alarms.onAlarm.addListener(async (alarm: chrome.alarms.Alarm) => {
     const prompt = await breakTimer.evaluate()
     if (prompt) {
       await NotificationManager.deliverBreak(prompt)
+      lastOverlayShownAt = Date.now()
     }
   }
 
@@ -105,6 +112,14 @@ chrome.alarms.onAlarm.addListener(async (alarm: chrome.alarms.Alarm) => {
     const r = await windDown.evaluate()
     if (r) {
       await NotificationManager.deliverWindDown(r.message)
+      lastOverlayShownAt = Date.now()
+    }
+  }
+
+  if (alarm.name === 'wellnessTick') {
+    const message = await wellness.evaluate()
+    if (message && Date.now() - lastOverlayShownAt >= 2 * 60_000) {
+      await NotificationManager.deliverNudge(message)
     }
   }
 
@@ -344,6 +359,7 @@ chrome.idle.onStateChanged.addListener(async (state: string) => {
   if (state === 'idle' || state === 'locked') {
     coaching.resetSession()
     breakTimer.resetSession()
+    wellness.resetSession()
   }
 })
 
