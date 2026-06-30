@@ -248,3 +248,49 @@ chrome.runtime.onMessage.addListener((msg) => {
     document.body.appendChild(host)
   }
 })
+
+const NUDGE_STYLES = `
+  :host { all: initial; }
+  .nudge {
+    position: fixed; bottom: 24px; right: 24px;
+    z-index: 2147483646; font-family: system-ui, sans-serif;
+    background: rgba(15,23,42,0.95); backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+    padding: 12px 16px; color: #e2e8f0; font-size: 13.5px; line-height: 1.4; max-width: 280px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.4); pointer-events: none;
+    opacity: 0; transform: translateY(8px); transition: opacity .4s ease, transform .4s ease;
+  }
+  .nudge.show { opacity: 1; transform: translateY(0); }
+`
+
+function showNudgeToast(message: string): void {
+  const existing = document.getElementById('wisemind-nudge-toast')
+  existing?.remove()
+
+  const host = document.createElement('div')
+  host.id = 'wisemind-nudge-toast'
+  const shadow = host.attachShadow({ mode: 'open' })
+
+  const style = document.createElement('style')
+  style.textContent = NUDGE_STYLES
+
+  const toast = document.createElement('div')
+  toast.className = 'nudge'
+  toast.textContent = message
+
+  shadow.appendChild(style)
+  shadow.appendChild(toast)
+  document.body.appendChild(host)
+
+  requestAnimationFrame(() => toast.classList.add('show'))
+  setTimeout(() => {
+    toast.classList.remove('show')
+    setTimeout(() => host.remove(), 400)
+  }, 6000)
+}
+
+chrome.runtime.onMessage.addListener((msg) => {
+  if (msg.type === 'SHOW_NUDGE') {
+    showNudgeToast(msg.payload.message)
+  }
+})

@@ -37,5 +37,15 @@ export const NotificationManager = {
       }
     }
     chrome.notifications.create({ type: 'basic', iconUrl: 'icons/icon48.png', title: 'Bedtime wind-down', message })
+  },
+  async deliverNudge(message: string): Promise<void> {
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true })
+    const tabId = tabs[0]?.id
+    if (tabId === undefined) return
+    try {
+      await chrome.tabs.sendMessage(tabId, { type: 'SHOW_NUDGE', payload: { message } })
+    } catch {
+      // restricted page — skip silently; a missed posture nudge doesn't matter
+    }
   }
 }
