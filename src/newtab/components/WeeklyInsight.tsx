@@ -129,7 +129,8 @@ function LoadingState() {
       {[0, 1].map(i => (
         <div
           key={i}
-          className="h-5 bg-slate-700/40 rounded-xl animate-pulse"
+          className="h-5 rounded-xl animate-pulse"
+          style={{ background: 'rgba(54,43,26,.08)' }}
         />
       ))}
     </div>
@@ -184,17 +185,17 @@ function WeeklyInsightCard({ summaries, goals, settings }: Props) {
   }, [summaries.length, lastDate, settings.openrouterApiKey, settings.privateModeActive])
 
   return (
-    <div className="bg-white/[0.025] border border-white/[0.06] rounded-2xl p-5">
-      <h3 className="text-sm font-semibold text-slate-300 mb-4">Weekly Insight</h3>
+    <div className="bg-[#eef0e0] border-[1.5px] border-[#4d7c57] rounded-[20px] p-5">
+      <h3 className="font-display text-sm font-extrabold text-ink-100 mb-4">Weekly Insight</h3>
 
       {state.status === 'private_mode' && (
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-ink-400">
           Weekly insight is paused in Private Mode.
         </p>
       )}
 
       {state.status === 'no_key' && (
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-ink-400">
           Add your OpenRouter API key in Settings to get weekly insights.
         </p>
       )}
@@ -202,11 +203,13 @@ function WeeklyInsightCard({ summaries, goals, settings }: Props) {
       {state.status === 'loading' && <LoadingState />}
 
       {state.status === 'loaded' && (
-        <p className="text-sm text-slate-200 leading-relaxed">{state.text}</p>
+        <div className="bg-[#faf5e9] border-[1.5px] border-[rgba(54,43,26,.2)] rounded-[16px] p-4">
+          <p className="text-sm text-ink-400 leading-relaxed">{state.text}</p>
+        </div>
       )}
 
       {state.status === 'error' && (
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-ink-400">
           Weekly insight unavailable right now.
         </p>
       )}

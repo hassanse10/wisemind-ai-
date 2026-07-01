@@ -16,10 +16,10 @@ function fmtAvg(key: MetricTrend['key'], avg: number): string {
 }
 
 function arrow(t: MetricTrend): { glyph: string; color: string } {
-  if (t.direction === 'flat') return { glyph: '→', color: '#7b8aa3' }
+  if (t.direction === 'flat') return { glyph: '→', color: '#7a6a4f' }
   const healthy = (t.direction === 'down') === t.goodWhenDown
   const glyph = t.direction === 'up' ? '↑' : '↓'
-  return { glyph, color: healthy ? '#34d399' : '#f7b955' }
+  return { glyph, color: healthy ? '#2f5238' : '#c9892f' }
 }
 
 function weekday(date: string): string {
@@ -36,7 +36,7 @@ function Bars({ values }: { values: number[] }) {
           className="flex-1 rounded-[2px]"
           style={{
             height: `${Math.max(3, (v / max) * 100)}%`,
-            background: i === values.length - 1 ? '#34d399' : 'rgba(52,211,153,0.32)',
+            background: i === values.length - 1 ? '#4d7c57' : 'rgba(77,124,87,0.32)',
           }}
         />
       ))}
@@ -49,10 +49,11 @@ export function HealthTrends({ summaries }: Props) {
   const trends = computeHealthTrends(summaries)
 
   return (
-    <div className="bg-white/[0.025] border border-white/[0.06] rounded-2xl p-5">
+    <div className="bg-[#faf5e9] border-2 border-[#362b1a] rounded-[20px] p-5"
+      style={{ boxShadow: '6px 8px 0 rgba(54,43,26,.18)' }}>
       <div className="mb-4 flex items-baseline justify-between">
-        <h3 className="text-sm font-semibold text-slate-300">Health Trends</h3>
-        <span className="text-[11.5px] text-ink-600">last {trends.days} days</span>
+        <h3 className="font-display text-sm font-semibold text-ink-200">Health Trends</h3>
+        <span className="text-[11.5px] text-ink-500">last {trends.days} days</span>
       </div>
 
       <div className="space-y-3">
@@ -74,7 +75,7 @@ export function HealthTrends({ summaries }: Props) {
       </div>
 
       {trends.best && trends.worst && trends.best.date !== trends.worst.date && (
-        <p className="mt-4 border-t border-white/[0.06] pt-3 text-[11.5px] text-ink-600">
+        <p className="mt-4 border-t border-[rgba(54,43,26,.1)] pt-3 text-[11.5px] text-ink-500">
           Best day: <span className="text-health">{weekday(trends.best.date)} {trends.best.score}</span>
           {' · '}Hardest: <span className="text-shorts">{weekday(trends.worst.date)} {trends.worst.score}</span>
         </p>

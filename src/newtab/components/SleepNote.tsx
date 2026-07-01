@@ -24,14 +24,14 @@ export function SleepNote({ summary, settings }: Props) {
   return (
     <div className="wm-panel p-5">
       <div className="mb-3 flex items-baseline justify-between">
-        <h3 className="text-sm font-semibold text-ink-300">Sleep &amp; Wind-Down</h3>
-        <span className="text-[11.5px] text-ink-600">
+        <h3 className="font-display text-sm font-semibold text-ink-200">Sleep &amp; Wind-Down</h3>
+        <span className="text-[11.5px] text-ink-500">
           {settings.windDownEnabled
             ? `${hhmm(settings.windDownStart)} → ${hhmm(settings.windDownBedtime)}`
             : 'reminders off'}
         </span>
       </div>
-      <p className="text-[12.5px] leading-relaxed text-ink-500">{note}</p>
+      <p className="text-[12.5px] leading-relaxed text-ink-400">{note}</p>
     </div>
   )
 }

@@ -20,7 +20,7 @@ const TIPS: Tip[] = [
   { icon: '🌀', title: 'Eye rolls', detail: 'Slowly roll your eyes clockwise 5× then counter-clockwise 5× to loosen the surrounding muscles.' },
   { icon: '☀️', title: 'Step into daylight', detail: 'A few minutes of natural light eases eye strain and helps regulate your sleep rhythm.' },
   { icon: '🔅', title: 'Match your brightness', detail: 'Set screen brightness to match the room — a glowing screen in a dark room strains the eyes most.' },
-  { icon: '📏', title: 'Arm’s-length rule', detail: 'Keep the screen about an arm’s length away and just below eye level to relax neck and eyes.' },
+  { icon: '📏', title: "Arm's-length rule", detail: "Keep the screen about an arm's length away and just below eye level to relax neck and eyes." },
   { icon: '🚶', title: 'Micro-walk', detail: 'A 2-minute walk every half hour rests your eyes, back, and refocuses your attention.' },
   { icon: '🫖', title: 'Hydrate', detail: 'Dry eyes worsen with dehydration. A glass of water helps your tear film stay stable.' },
   { icon: '🌙', title: 'Warm the screen at night', detail: 'Enable a warm/night colour filter after dark to cut blue light and ease late-session strain.' },
@@ -62,23 +62,24 @@ export function EyeCare({ summary }: Props) {
       : 'Small, frequent breaks keep your eyes comfortable through the day.'
 
   return (
-    <div className="wm-panel p-5">
+    <div className="bg-[#faf5e9] border-2 border-[#362b1a] rounded-[20px] p-5"
+      style={{ boxShadow: '6px 8px 0 rgba(54,43,26,.18)' }}>
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-ink-300">Rest Your Eyes</h3>
+        <h3 className="font-display text-sm font-semibold text-ink-200">Rest Your Eyes</h3>
         <button
           onClick={() => setSeed(s => s + 1)}
-          className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-2.5 py-1 text-[11.5px] font-medium text-ink-500 transition-colors hover:bg-white/[0.06]"
+          className="rounded-[20px] border-[1.5px] border-[rgba(54,43,26,.35)] bg-transparent px-2.5 py-1 text-[11.5px] font-medium text-ink-500 transition-colors hover:bg-[rgba(54,43,26,.05)]"
         >
           ↻ Shuffle
         </button>
       </div>
 
-      <p className="mb-4 text-[12.5px] leading-relaxed text-ink-500">{nudge}</p>
+      <p className="mb-4 text-[12.5px] leading-relaxed text-ink-400">{nudge}</p>
 
       {/* Featured proposition */}
       <div
-        className="mb-3 flex items-start gap-3 rounded-2xl p-4"
-        style={{ background: 'rgba(52,211,153,.07)', border: '1px solid rgba(52,211,153,.18)' }}
+        className="mb-3 flex items-start gap-3 rounded-[16px] p-4"
+        style={{ background: '#eef0e0', border: '1.5px solid #4d7c57' }}
       >
         <span className="text-2xl leading-none" aria-hidden="true">{featured.icon}</span>
         <div>
@@ -93,11 +94,11 @@ export function EyeCare({ summary }: Props) {
       {/* Remaining propositions */}
       <div className="grid gap-2.5 sm:grid-cols-2">
         {rest.map(tip => (
-          <div key={tip.title} className="flex items-start gap-2.5 rounded-xl bg-white/[0.02] p-3">
+          <div key={tip.title} className="flex items-start gap-2.5 rounded-[16px] bg-[#fffdf5] border-[1.5px] border-[rgba(54,43,26,.25)] p-3">
             <span className="text-lg leading-none" aria-hidden="true">{tip.icon}</span>
             <div>
               <div className="text-[12.5px] font-semibold text-ink-200">{tip.title}</div>
-              <p className="mt-0.5 text-[11.5px] leading-relaxed text-ink-600">{tip.detail}</p>
+              <p className="mt-0.5 text-[11.5px] leading-relaxed text-ink-500">{tip.detail}</p>
             </div>
           </div>
         ))}

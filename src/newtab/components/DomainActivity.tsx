@@ -54,9 +54,10 @@ export function DomainActivity({ visits }: Props) {
 
   if (rows.length === 0) {
     return (
-      <div className="wm-panel p-5">
-        <h3 className="mb-2 text-sm font-semibold text-ink-300">Activity by Domain</h3>
-        <p className="text-sm text-ink-600">No browsing tracked yet today.</p>
+      <div className="bg-[#faf5e9] border-2 border-[#362b1a] rounded-[20px] p-5"
+        style={{ boxShadow: '6px 8px 0 rgba(54,43,26,.18)' }}>
+        <h3 className="font-display mb-2 text-sm font-semibold text-ink-200">Activity by Domain</h3>
+        <p className="text-sm text-ink-500">No browsing tracked yet today.</p>
       </div>
     )
   }
@@ -65,10 +66,11 @@ export function DomainActivity({ visits }: Props) {
   const shown = expanded ? rows : rows.slice(0, 6)
 
   return (
-    <div className="wm-panel p-5">
+    <div className="bg-[#faf5e9] border-2 border-[#362b1a] rounded-[20px] p-5"
+      style={{ boxShadow: '6px 8px 0 rgba(54,43,26,.18)' }}>
       <div className="mb-4 flex items-baseline justify-between">
-        <h3 className="text-sm font-semibold text-ink-300">Activity by Domain</h3>
-        <span className="text-[11.5px] text-ink-600">{rows.length} site{rows.length === 1 ? '' : 's'}</span>
+        <h3 className="font-display text-sm font-semibold text-ink-200">Activity by Domain</h3>
+        <span className="text-[11.5px] text-ink-500">{rows.length} site{rows.length === 1 ? '' : 's'}</span>
       </div>
 
       <div className="space-y-2">
@@ -76,8 +78,8 @@ export function DomainActivity({ visits }: Props) {
           const color = CATEGORY_COLORS[row.category]
           const barPct = Math.round((row.duration / maxDuration) * 100)
           return (
-            <div key={row.domain} className="flex items-center gap-3 rounded-xl bg-white/[0.02] px-3 py-2.5">
-              <span className="w-4 flex-shrink-0 text-center text-[12px] tabular-nums text-ink-700">{i + 1}</span>
+            <div key={row.domain} className="flex items-center gap-3 rounded-[16px] bg-[#fffdf5] border-[1.5px] border-[rgba(54,43,26,.25)] px-3 py-2.5">
+              <span className="w-4 flex-shrink-0 text-center text-[12px] tabular-nums text-ink-500">{i + 1}</span>
               <span
                 className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg text-[12px] font-bold uppercase"
                 style={{ background: `${color}22`, color }}
@@ -95,13 +97,13 @@ export function DomainActivity({ visits }: Props) {
                     {CATEGORY_LABELS[row.category]}
                   </span>
                 </div>
-                <div className="mt-1 h-[4px] overflow-hidden rounded-full bg-white/[0.05]">
+                <div className="mt-1 h-[4px] overflow-hidden rounded-full bg-[rgba(54,43,26,.1)]">
                   <div className="h-full rounded-full" style={{ width: `${barPct}%`, background: color }} />
                 </div>
               </div>
               <div className="flex-shrink-0 text-right">
                 <div className="text-[12.5px] font-semibold tabular-nums text-ink-200">{fmt(row.duration)}</div>
-                <div className="text-[10.5px] tabular-nums text-ink-600">{row.visits} visit{row.visits === 1 ? '' : 's'}</div>
+                <div className="text-[10.5px] tabular-nums text-ink-500">{row.visits} visit{row.visits === 1 ? '' : 's'}</div>
               </div>
             </div>
           )
@@ -111,7 +113,7 @@ export function DomainActivity({ visits }: Props) {
       {rows.length > 6 && (
         <button
           onClick={() => setExpanded(e => !e)}
-          className="mt-3 w-full rounded-xl border border-white/[0.06] bg-white/[0.02] py-2 text-[12.5px] font-medium text-ink-400 transition-colors hover:bg-white/[0.05]"
+          className="mt-3 w-full rounded-[20px] border-[1.5px] border-[rgba(54,43,26,.35)] bg-transparent py-2 text-[12.5px] font-medium text-ink-500 transition-colors hover:bg-[rgba(54,43,26,.05)]"
         >
           {expanded ? 'Show less' : `Show all ${rows.length} sites`}
         </button>

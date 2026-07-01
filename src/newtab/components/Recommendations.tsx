@@ -111,7 +111,8 @@ function LoadingState() {
       {[0, 1, 2].map(i => (
         <div
           key={i}
-          className="h-12 bg-slate-700/40 rounded-xl animate-pulse"
+          className="h-12 rounded-xl animate-pulse"
+          style={{ background: 'rgba(54,43,26,.08)' }}
         />
       ))}
     </div>
@@ -120,9 +121,9 @@ function LoadingState() {
 
 function RecommendationCard({ text }: { text: string }) {
   return (
-    <div className="flex items-start gap-3 bg-slate-700/30 rounded-xl p-4">
-      <span className="mt-0.5 flex-shrink-0 w-2 h-2 rounded-full bg-blue-400 mt-1.5" aria-hidden="true" />
-      <p className="text-sm text-slate-200 leading-relaxed">{text}</p>
+    <div className="flex items-start gap-3 bg-[#faf5e9] border-[1.5px] border-[rgba(54,43,26,.2)] rounded-[16px] p-4">
+      <span className="mt-1.5 flex-shrink-0 w-2 h-2 rounded-full bg-[#4d7c57]" aria-hidden="true" />
+      <p className="text-sm text-ink-400 leading-relaxed">{text}</p>
     </div>
   )
 }
@@ -173,17 +174,17 @@ export function Recommendations({ summary, settings }: Props) {
   }, [summary.date, settings.openrouterApiKey, settings.privateModeActive])
 
   return (
-    <div className="bg-white/[0.025] border border-white/[0.06] rounded-2xl p-5">
-      <h3 className="text-sm font-semibold text-slate-300 mb-4">Today's Recommendations</h3>
+    <div className="bg-[#eef0e0] border-[1.5px] border-[#4d7c57] rounded-[20px] p-5">
+      <h3 className="font-display text-sm font-extrabold text-ink-100 mb-4">Today's Recommendations</h3>
 
       {state.status === 'private_mode' && (
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-ink-400">
           Recommendations are paused in Private Mode.
         </p>
       )}
 
       {state.status === 'no_key' && (
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-ink-400">
           Add your OpenRouter API key in Settings to get daily recommendations.
         </p>
       )}
@@ -199,7 +200,7 @@ export function Recommendations({ summary, settings }: Props) {
       )}
 
       {state.status === 'error' && (
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-ink-400">
           Recommendations unavailable right now.
         </p>
       )}
