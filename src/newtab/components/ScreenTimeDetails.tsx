@@ -37,10 +37,10 @@ export function ScreenTimeDetails({ summary, visits }: Props) {
   ]
 
   return (
-    <div className="wm-panel p-5">
+    <div className="bg-[#fffdf5] border-[1.5px] border-[rgba(54,43,26,.25)] rounded-[18px] p-5">
       <div className="mb-4 flex items-baseline justify-between">
-        <h3 className="text-sm font-semibold text-ink-300">Screen Time Details</h3>
-        <span className="font-display text-sm font-semibold text-ink-300">{fmt(summary.totalTime)}</span>
+        <h3 className="font-display text-base text-[#362b1a]">Screen Time Details</h3>
+        <span className="font-display text-sm font-semibold text-[#5d5138]">{fmt(summary.totalTime)}</span>
       </div>
 
       {/* Full-width stacked bar */}
@@ -61,31 +61,31 @@ export function ScreenTimeDetails({ summary, visits }: Props) {
           return (
             <div key={cat} className="flex items-center gap-3">
               <i className="h-[9px] w-[9px] flex-shrink-0 rounded-[3px]" style={{ background: CATEGORY_COLORS[cat] }} />
-              <span className="w-28 flex-shrink-0 text-[12.5px] text-ink-300">{CATEGORY_LABELS[cat]}</span>
-              <div className="h-[6px] flex-1 overflow-hidden rounded-full bg-white/[0.05]">
+              <span className="w-28 flex-shrink-0 text-[12.5px] text-[#463a25]">{CATEGORY_LABELS[cat]}</span>
+              <div className="h-[6px] flex-1 overflow-hidden rounded-full bg-[rgba(54,43,26,.1)]">
                 <div className="h-full rounded-full" style={{ width: `${pct}%`, background: CATEGORY_COLORS[cat] }} />
               </div>
-              <span className="w-16 flex-shrink-0 text-right text-[12.5px] tabular-nums text-ink-400">{fmt(sec)}</span>
-              <span className="w-9 flex-shrink-0 text-right text-[11.5px] tabular-nums text-ink-600">{pct}%</span>
+              <span className="w-16 flex-shrink-0 text-right text-[12.5px] tabular-nums text-[#7a6a4f]">{fmt(sec)}</span>
+              <span className="w-9 flex-shrink-0 text-right text-[11.5px] tabular-nums text-[#8a7a5c]">{pct}%</span>
             </div>
           )
         })}
       </div>
 
       {/* Session stat grid */}
-      <div className="mt-5 grid grid-cols-3 gap-2.5 border-t border-white/[0.06] pt-4">
+      <div className="mt-5 grid grid-cols-3 gap-2.5 border-t border-[rgba(54,43,26,.1)] pt-4">
         {stats.map(({ label, value, tint }) => (
-          <div key={label} className="rounded-xl bg-white/[0.025] px-3 py-2.5">
+          <div key={label} className="rounded-xl bg-[#f3ecd9] px-3 py-2.5">
             <div className="font-display text-base font-semibold" style={{ color: tint }}>{value}</div>
-            <div className="mt-0.5 text-[11px] text-ink-600">{label}</div>
+            <div className="mt-0.5 text-[11px] text-[#8a7a5c]">{label}</div>
           </div>
         ))}
       </div>
 
       {longest.duration > 0 && longest.domain && (
-        <p className="mt-3 text-[11.5px] leading-relaxed text-ink-600">
-          Longest single stretch: <span className="text-ink-400">{fmt(longest.duration)}</span> on{' '}
-          <span className="text-ink-400">{longest.domain}</span>.
+        <p className="mt-3 text-[11.5px] leading-relaxed text-[#8a7a5c]">
+          Longest single stretch: <span className="text-[#5d5138]">{fmt(longest.duration)}</span> on{' '}
+          <span className="text-[#5d5138]">{longest.domain}</span>.
         </p>
       )}
     </div>

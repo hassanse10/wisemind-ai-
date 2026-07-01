@@ -14,8 +14,8 @@ export function Timeline({ visits }: Props) {
   const maxSec = Math.max(...Object.values(byHour).map(vs => vs.reduce((s, v) => s + v.duration, 0)), 1)
 
   return (
-    <div className="bg-slate-800/60 rounded-2xl p-5 border border-slate-700/50">
-      <h3 className="text-sm font-semibold text-slate-300 mb-4">Today's Timeline</h3>
+    <div className="bg-[#fffdf5] border-[1.5px] border-[rgba(54,43,26,.25)] rounded-[18px] p-[22px_24px]">
+      <h3 className="font-display text-base text-[#362b1a] mb-4">Today's Timeline</h3>
       <div className="flex items-end gap-px h-24 overflow-x-auto">
         {hours.map(h => {
           const hvs = byHour[h] ?? []
@@ -34,7 +34,7 @@ export function Timeline({ visits }: Props) {
                 }}
               />
               {total > 0 && (
-                <div className="absolute bottom-full mb-1 hidden group-hover:block bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-slate-300 whitespace-nowrap z-10">
+                <div className="absolute bottom-full mb-1 hidden group-hover:block bg-[#faf5e9] border border-[rgba(54,43,26,.25)] rounded-lg p-2 text-xs text-[#5d5138] whitespace-nowrap z-10">
                   {h}:00 — {topCategory ? CATEGORY_LABELS[topCategory] : ''} {Math.round(total / 60)}m
                 </div>
               )}
@@ -42,7 +42,7 @@ export function Timeline({ visits }: Props) {
           )
         })}
       </div>
-      <div className="flex justify-between text-xs text-slate-600 mt-1">
+      <div className="flex justify-between text-[11.5px] text-[#a3947a] font-semibold mt-2.5">
         <span>12am</span><span>6am</span><span>12pm</span><span>6pm</span><span>12am</span>
       </div>
     </div>

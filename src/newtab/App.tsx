@@ -42,9 +42,9 @@ export function App() {
 
   if (!summary) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-navy-950 font-sans text-sm text-ink-600">
+      <div className="flex min-h-screen items-center justify-center bg-[#e9dfc9] font-sans text-sm text-ink-500">
         <div className="text-center">
-          <div className="mb-3 font-display text-xl text-ink-200">WiseMind AI</div>
+          <div className="mb-3 font-display text-xl text-ink-100">WiseMind AI</div>
           Tracking starts as you browse. Open a website to begin.
         </div>
       </div>
@@ -55,30 +55,35 @@ export function App() {
   const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening'
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-navy-950 font-sans text-ink-100">
-      <div className="pointer-events-none absolute -right-24 -top-40 h-[520px] w-[520px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(59,130,246,.12), transparent 70%)' }} />
-      <div className="pointer-events-none absolute -left-28 -top-28 h-[460px] w-[460px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(52,211,153,.10), transparent 70%)' }} />
-
-      <div className="relative mx-auto max-w-5xl space-y-6 px-8 py-9">
+    <div className="min-h-screen bg-[#e9dfc9] font-sans text-[#362b1a]">
+      <div className="mx-auto max-w-5xl space-y-6 px-8 py-9">
         {/* top bar */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-[13px] wm-brand-grad shadow-[0_8px_18px_-5px_rgba(52,211,153,.5)]">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <path d="M12 3c-3 0-5 2-5 4.5 0 1 .4 1.9 1 2.6-.9.7-1.5 1.8-1.5 3C6.5 15.5 8.4 17 11 17h.5v4" stroke="#06231a" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M12 3c3 0 5 2 5 4.5 0 1-.4 1.9-1 2.6.9.7 1.5 1.8 1.5 3C17.5 15.5 15.6 17 13 17" stroke="#06231a" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" opacity=".55" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2f5238] border-2 border-[#362b1a]">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f3ecd9" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 21V9"/>
+                <path d="M12 9C12 5 9 3.5 5.5 4 5 8 7.5 10.5 12 9z"/>
+                <path d="M12 13c0-4 3-5.5 6.5-5-.5 4-3 6.5-6.5 5z"/>
               </svg>
             </div>
-            <div className="font-display text-xl font-semibold tracking-tight">WiseMind AI</div>
+            <div className="font-display text-[22px] tracking-tight text-[#362b1a]">WiseMind AI</div>
           </div>
-          <div className="flex items-center gap-2 text-[13.5px] font-semibold text-ink-500">{dateLabel}</div>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 rounded-[20px] bg-[#f6ead2] border-[1.5px] border-[#c9892f] px-4 py-2">
+              <span className="text-[13.5px] font-bold text-[#96650f]">✦ Learning streak</span>
+            </div>
+            <div className="flex items-center gap-2 text-[14px] font-semibold text-[#7a6a4f]">{dateLabel}</div>
+          </div>
         </div>
 
         {/* hero greeting */}
         <div className="max-w-3xl py-2">
-          <div className="mb-2 text-[13px] font-semibold uppercase tracking-[0.04em] text-ink-600">{greeting}</div>
-          <div className="font-display text-3xl font-medium leading-[1.32] tracking-tight text-ink-100">
-            You learned <span className="text-learn">{Math.round((summary.byCategory['learning'] ?? 0) / 60)}m</span> today.{' '}
+          <div className="mb-2.5 text-[12.5px] font-extrabold uppercase tracking-[0.1em] text-[#8a7a5c]">{greeting}</div>
+          <div className="font-display text-[33px] leading-[1.35] tracking-[-0.005em] text-[#362b1a]">
+            You learned{' '}
+            <span className="text-[#96650f] border-b-[3px] border-[#c9892f]">{Math.round((summary.byCategory['learning'] ?? 0) / 60)}m</span>
+            {' '}today.{' '}
             The mind grows in the hours you protect for it.
           </div>
         </div>
@@ -114,19 +119,19 @@ export function App() {
                 if (w.id !== undefined) void chrome.sidePanel.open({ windowId: w.id })
               })
             }}
-            className="rounded-xl px-5 py-2.5 text-sm font-semibold text-[#06231a] transition-opacity hover:opacity-90 wm-brand-grad"
+            className="rounded-[20px] border-[1.5px] border-[#2f5238] bg-[#2f5238] px-5 py-2.5 text-sm font-bold text-[#f3ecd9] transition-opacity hover:opacity-90"
           >
             Open AI Coach
           </button>
           <button
             onClick={() => chrome.tabs.create({ url: chrome.runtime.getURL('breathe.html') })}
-            className="rounded-xl border border-white/[0.08] bg-white/[0.05] px-5 py-2.5 text-sm font-semibold text-ink-300 transition-colors hover:bg-white/10"
+            className="rounded-[20px] border-[1.5px] border-[rgba(54,43,26,.35)] bg-transparent px-5 py-2.5 text-sm font-bold text-[#5d5138] transition-colors hover:bg-[rgba(54,43,26,.05)]"
           >
             Breathe
           </button>
           <button
             onClick={() => chrome.tabs.create({ url: chrome.runtime.getURL('settings.html') })}
-            className="rounded-xl border border-white/[0.08] bg-white/[0.05] px-5 py-2.5 text-sm font-semibold text-ink-300 transition-colors hover:bg-white/10"
+            className="rounded-[20px] border-[1.5px] border-[rgba(54,43,26,.35)] bg-transparent px-5 py-2.5 text-sm font-bold text-[#5d5138] transition-colors hover:bg-[rgba(54,43,26,.05)]"
           >
             Settings
           </button>
