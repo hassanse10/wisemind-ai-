@@ -20,18 +20,12 @@ export function CoachingCard({ message, onDismiss }: Props) {
           <p className="text-[14px] leading-relaxed text-ink-200">{message}</p>
         </div>
       </div>
-      <div className="mt-[13px] flex gap-2">
+      <div className="mt-[13px]">
         <button
           onClick={onDismiss}
-          className="flex-1 rounded-[20px] border-[1.5px] border-[#2f5238] bg-[#2f5238] py-[9px] text-[13px] font-extrabold text-[#f3ecd9] transition-colors hover:bg-[#3d6849]"
+          className="w-full rounded-[24px] border-[1.5px] border-[#2f5238] bg-[#2f5238] py-[9px] px-[16px] text-[13px] font-extrabold text-[#f3ecd9] transition-colors hover:bg-[#3d6849]"
         >
-          Take a break
-        </button>
-        <button
-          onClick={onDismiss}
-          className="flex-1 rounded-[20px] border-[1.5px] border-[rgba(54,43,26,.35)] bg-transparent py-[9px] text-[13px] font-bold text-ink-300 transition-colors hover:bg-[rgba(54,43,26,.06)]"
-        >
-          Continue
+          Dismiss
         </button>
       </div>
     </div>
