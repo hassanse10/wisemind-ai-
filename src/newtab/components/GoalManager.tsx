@@ -49,21 +49,21 @@ export function GoalManager({ goals, onChange }: Props) {
   }
 
   return (
-    <div className="bg-white/[0.025] border border-white/[0.06] rounded-2xl p-5">
-      <h3 className="text-sm font-semibold text-slate-300 mb-4">Manage Goals</h3>
+    <div className="bg-[#fffdf5] border-[1.5px] border-[rgba(54,43,26,.25)] rounded-2xl p-5">
+      <h3 className="font-display text-base text-[#362b1a] mb-4">Manage Goals</h3>
 
       {/* Create form */}
       <div className="space-y-3 mb-5">
         <div className="flex flex-wrap gap-3">
           <div className="flex flex-col gap-1">
-            <label htmlFor="goal-type" className="text-xs text-slate-400">
+            <label htmlFor="goal-type" className="text-xs text-[#5d5138]">
               Type
             </label>
             <select
               id="goal-type"
               value={type}
               onChange={e => setType(e.target.value as 'reduce' | 'increase')}
-              className="bg-slate-700 border border-slate-600 rounded-lg px-3 py-1.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-[#fffdf5] border-[1.5px] border-[rgba(54,43,26,.3)] rounded-lg px-3 py-1.5 text-sm text-[#362b1a] focus:outline-none focus:ring-2 focus:ring-[#4d7c57]"
             >
               <option value="reduce">Reduce</option>
               <option value="increase">Increase</option>
@@ -71,14 +71,14 @@ export function GoalManager({ goals, onChange }: Props) {
           </div>
 
           <div className="flex flex-col gap-1">
-            <label htmlFor="goal-target" className="text-xs text-slate-400">
+            <label htmlFor="goal-target" className="text-xs text-[#5d5138]">
               Target
             </label>
             <select
               id="goal-target"
               value={target}
               onChange={e => setTarget(e.target.value as Goal['target'])}
-              className="bg-slate-700 border border-slate-600 rounded-lg px-3 py-1.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-[#fffdf5] border-[1.5px] border-[rgba(54,43,26,.3)] rounded-lg px-3 py-1.5 text-sm text-[#362b1a] focus:outline-none focus:ring-2 focus:ring-[#4d7c57]"
             >
               {TARGET_OPTIONS.map(opt => (
                 <option key={opt.value} value={opt.value}>
@@ -89,7 +89,7 @@ export function GoalManager({ goals, onChange }: Props) {
           </div>
 
           <div className="flex flex-col gap-1">
-            <label htmlFor="goal-daily-limit" className="text-xs text-slate-400">
+            <label htmlFor="goal-daily-limit" className="text-xs text-[#5d5138]">
               Daily Limit (minutes)
             </label>
             <input
@@ -99,7 +99,7 @@ export function GoalManager({ goals, onChange }: Props) {
               value={dailyLimitMinutes}
               onChange={e => setDailyLimitMinutes(e.target.value)}
               placeholder="e.g. 30"
-              className="bg-slate-700 border border-slate-600 rounded-lg px-3 py-1.5 text-sm text-slate-100 w-32 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-[#fffdf5] border-[1.5px] border-[rgba(54,43,26,.3)] rounded-lg px-3 py-1.5 text-sm text-[#362b1a] w-32 focus:outline-none focus:ring-2 focus:ring-[#4d7c57]"
             />
           </div>
         </div>
@@ -107,7 +107,7 @@ export function GoalManager({ goals, onChange }: Props) {
         <button
           onClick={() => void handleAdd()}
           disabled={!dailyLimitMinutes || parseInt(dailyLimitMinutes, 10) <= 0}
-          className="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 disabled:bg-slate-600 disabled:cursor-not-allowed rounded-lg text-sm font-medium text-white transition-colors"
+          className="px-5 py-1.5 bg-[#2f5238] hover:bg-[#4d7c57] disabled:opacity-40 disabled:cursor-not-allowed rounded-[20px] text-sm font-semibold text-[#f3ecd9] border-[1.5px] border-[#2f5238] transition-colors"
         >
           Add Goal
         </button>
@@ -116,22 +116,22 @@ export function GoalManager({ goals, onChange }: Props) {
       {/* Existing goals list */}
       {goals.length > 0 && (
         <div className="space-y-2">
-          <p className="text-xs text-slate-500 uppercase tracking-wide">Active Goals</p>
+          <p className="text-xs text-[#7a6a4f] uppercase tracking-wide">Active Goals</p>
           {goals.map(g => (
             <div
               key={g.id}
-              className="flex items-center justify-between bg-slate-700/50 rounded-lg px-3 py-2"
+              className="flex items-center justify-between bg-[#f3ecd9] rounded-lg px-3 py-2"
             >
-              <span className="text-sm text-slate-200">
-                <span className="capitalize text-blue-400">{g.type}</span>{' '}
+              <span className="text-sm text-[#463a25]">
+                <span className="capitalize text-[#4d7c57] font-semibold">{g.type}</span>{' '}
                 {goalTargetLabel(g.target)}
                 {g.dailyLimitMinutes != null && (
-                  <span className="text-slate-400 ml-1">({g.dailyLimitMinutes}m/day)</span>
+                  <span className="text-[#7a6a4f] ml-1">({g.dailyLimitMinutes}m/day)</span>
                 )}
               </span>
               <button
                 onClick={() => void handleRemove(g)}
-                className="text-xs text-red-400 hover:text-red-300 transition-colors ml-4"
+                className="text-xs transition-colors ml-4 border-[1.5px] border-[rgba(54,43,26,.35)] rounded-[16px] px-3 py-0.5 text-[#5d5138] hover:text-[#362b1a]"
                 aria-label={`Remove ${goalTargetLabel(g.target)} goal`}
               >
                 Remove

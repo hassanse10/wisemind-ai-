@@ -12,22 +12,52 @@ const ALL_ACHIEVEMENTS = [
 
 interface Props { achievements: Achievement[] }
 
+const UNLOCKED_TINTS = [
+  { bg: '#f6ead2', border: '#c9892f' }, // amber
+  { bg: '#eef0e0', border: '#4d7c57' }, // green
+  { bg: '#e8edf2', border: '#58789f' }, // blue
+]
+
 export function Achievements({ achievements }: Props) {
   const unlockedIds = new Set(achievements.map(a => a.id))
+  let unlockedIndex = 0
   return (
-    <div className="bg-white/[0.025] border border-white/[0.06] rounded-2xl p-5">
-      <h3 className="text-sm font-semibold text-slate-300 mb-4">Achievements</h3>
+    <div className="bg-[#fffdf5] border-[1.5px] border-[rgba(54,43,26,.25)] rounded-2xl p-5">
+      <h3 className="font-display text-base text-[#362b1a] mb-4">Achievements</h3>
       <div className="grid grid-cols-4 gap-3">
-        {ALL_ACHIEVEMENTS.map(a => (
-          <div
-            key={a.id}
-            className={`flex flex-col items-center gap-1 p-3 rounded-xl ${unlockedIds.has(a.id) ? 'bg-blue-950/60 border border-blue-500/30' : 'opacity-30'}`}
-            title={a.desc}
-          >
-            <span className="text-2xl">{a.icon}</span>
-            <span className="text-xs text-slate-400 text-center leading-tight">{a.label}</span>
-          </div>
-        ))}
+        {ALL_ACHIEVEMENTS.map(a => {
+          const unlocked = unlockedIds.has(a.id)
+          const tint = unlocked ? UNLOCKED_TINTS[unlockedIndex++ % UNLOCKED_TINTS.length] : null
+          return (
+            <div
+              key={a.id}
+              className="flex flex-col items-center gap-1.5"
+              title={a.desc}
+            >
+              <div
+                className="w-[54px] h-[54px] rounded-full flex items-center justify-center text-2xl"
+                style={
+                  unlocked
+                    ? { background: tint!.bg, border: `1.5px solid ${tint!.border}` }
+                    : {
+                        background: '#f3ecd9',
+                        border: '1.5px dashed rgba(54,43,26,.4)',
+                        filter: 'grayscale(1)',
+                        opacity: 0.38,
+                      }
+                }
+              >
+                {a.icon}
+              </div>
+              <span
+                className="text-[11px] text-center leading-tight font-bold"
+                style={{ color: unlocked ? '#463a25' : '#7a6a4f' }}
+              >
+                {a.label}
+              </span>
+            </div>
+          )
+        })}
       </div>
     </div>
   )

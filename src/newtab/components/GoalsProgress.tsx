@@ -8,8 +8,8 @@ export function GoalsProgress({ goals, summary }: Props) {
   if (goals.length === 0) return null
 
   return (
-    <div className="bg-white/[0.025] border border-white/[0.06] rounded-2xl p-5">
-      <h3 className="text-sm font-semibold text-slate-300 mb-4">Goals</h3>
+    <div className="bg-[#fffdf5] border-[1.5px] border-[rgba(54,43,26,.25)] rounded-2xl p-5">
+      <h3 className="font-display text-base text-[#362b1a] mb-4">Goals Progress</h3>
       <div className="space-y-4">
         {goals.map(g => {
           const cat = g.target as Category
@@ -20,14 +20,14 @@ export function GoalsProgress({ goals, summary }: Props) {
 
           return (
             <div key={g.id}>
-              <div className="flex justify-between text-xs text-slate-400 mb-1">
-                <span>{CATEGORY_LABELS[cat] ?? g.target}</span>
-                <span className={over ? 'text-red-400' : 'text-slate-400'}>{usedMin}m / {limit}m</span>
+              <div className="flex justify-between text-xs mb-1.5">
+                <span className="text-[#463a25] font-bold">{CATEGORY_LABELS[cat] ?? g.target}</span>
+                <span className={over ? 'text-[#96650f] font-extrabold' : 'text-[#2f5238] font-extrabold'}>{usedMin}m / {limit}m</span>
               </div>
-              <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+              <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(54,43,26,.1)' }}>
                 <div
-                  className={`h-full rounded-full transition-all ${over ? 'bg-red-500' : 'bg-blue-500'}`}
-                  style={{ width: `${pct}%` }}
+                  className="h-full rounded-full transition-all"
+                  style={{ width: `${pct}%`, background: over ? '#c9892f' : '#4d7c57' }}
                 />
               </div>
             </div>
