@@ -18,11 +18,10 @@ export const CATEGORY_LABELS: Record<Category, string> = {
 }
 
 export const CATEGORY_COLORS: Record<Category, string> = {
-  learning: '#10b981', programming: '#3b82f6', productivity: '#8b5cf6',
-  ai_tools: '#06b6d4', reading: '#14b8a6', entertainment: '#f59e0b',
-  gaming: '#ef4444', social_media: '#ec4899', news: '#6366f1',
-  shopping: '#f97316', finance: '#84cc16', health: '#22c55e',
-  communication: '#a78bfa', other: '#9ca3af',
+  learning: '#c9892f', programming: '#58789f', productivity: '#58789f',
+  ai_tools: '#4d7c57', reading: '#4d7c57', entertainment: '#7c5a80',
+  gaming: '#b85c38', social_media: '#7c5a80', news: '#8a7a5c', shopping: '#c9892f',
+  finance: '#4d7c57', health: '#4d7c57', communication: '#58789f', other: '#a3947a',
 }
 
 export const DOMAIN_MAP: Record<string, Category> = {
