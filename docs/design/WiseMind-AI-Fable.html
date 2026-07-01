@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #e9dfc9; }
+  @keyframes wmpulse { 0%,100% { opacity: 1; transform: scale(1);} 50% { opacity:.4; transform: scale(.8);} }
+  @keyframes wmfloat { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-5px);} }
+</style>
+</helmet>
+
+<!-- ============ POPUP ============ -->
+<div data-screen-label="Popup" style="position:absolute; left:60px; top:90px; width:400px;">
+  <div data-drags-parent="1" style="font-family:'Alegreya Sans',sans-serif; font-weight:700; font-size:13px; color:#8a7a5c; margin-bottom:12px; letter-spacing:.08em; text-transform:uppercase;">Popup · 400×580</div>
+  <div style="font-family:'Alegreya Sans',sans-serif; width:400px; height:580px; background:#faf5e9; border:2px solid #362b1a; border-radius:18px; box-shadow:6px 8px 0 rgba(54,43,26,.18); overflow:hidden; color:#362b1a; position:relative;">
+    <!-- header -->
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:20px 22px 0;">
+      <div style="display:flex; align-items:center; gap:11px;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#2f5238; border:2px solid #362b1a; display:flex; align-items:center; justify-content:center;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#f3ecd9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="M12 9C12 5 9 3.5 5.5 4 5 8 7.5 10.5 12 9z"/><path d="M12 13c0-4 3-5.5 6.5-5-.5 4-3 6.5-6.5 5z"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'Young Serif',serif; font-size:17px; letter-spacing:-.01em;">WiseMind</div>
+          <div style="font-size:12.5px; color:#8a7a5c; font-weight:500; margin-top:0px;">Fri, June 27</div>
+        </div>
+      </div>
+      <button style="width:34px; height:34px; border-radius:50%; background:transparent; border:1.5px solid rgba(54,43,26,.3); display:flex; align-items:center; justify-content:center; cursor:pointer; color:#7a6a4f;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" stroke-width="1.7"/><path d="M19.4 13.5a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-2.9 1.2v.1a2 2 0 11-4 0v-.2a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00-1.2-2.9H3a2 2 0 110-4h.2a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3H13a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.2a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V13a1.7 1.7 0 001.5 1z" stroke="currentColor" stroke-width="1.3"/></svg>
+      </button>
+    </div>
+
+    <!-- score hero -->
+    <div style="display:flex; align-items:center; gap:18px; padding:18px 22px 4px;">
+      <div style="position:relative; width:126px; height:126px; flex-shrink:0;">
+        <svg width="126" height="126" viewBox="0 0 128 128">
+          <circle cx="64" cy="64" r="54" fill="#f3ecd9" stroke="rgba(54,43,26,.18)" stroke-width="10"/>
+          <circle cx="64" cy="64" r="54" fill="none" stroke="#4d7c57" stroke-width="10" stroke-linecap="round" stroke-dasharray="339" stroke-dashoffset="75" transform="rotate(-90 64 64)"/>
+        </svg>
+        <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+          <div style="font-family:'Young Serif',serif; font-size:37px; line-height:1;">78</div>
+          <div style="font-size:11px; color:#8a7a5c; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-top:4px;">Health</div>
+        </div>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:10px;">
+        <div style="background:#f3ecd9; border:1.5px solid rgba(54,43,26,.25); border-radius:13px; padding:10px 13px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:7px;">
+            <span style="font-size:13.5px; color:#5d5138; font-weight:700;">Productivity</span>
+            <span style="font-family:'Young Serif',serif; font-size:16px; color:#58789f;">64</span>
+          </div>
+          <div style="height:6px; background:rgba(54,43,26,.1); border-radius:3px; overflow:hidden;"><div style="width:64%; height:100%; background:#58789f; border-radius:3px;"></div></div>
+        </div>
+        <div style="background:#f3ecd9; border:1.5px solid rgba(54,43,26,.25); border-radius:13px; padding:10px 13px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:7px;">
+            <span style="font-size:13.5px; color:#5d5138; font-weight:700;">Learning</span>
+            <span style="font-family:'Young Serif',serif; font-size:16px; color:#c9892f;">85</span>
+          </div>
+          <div style="height:6px; background:rgba(54,43,26,.1); border-radius:3px; overflow:hidden;"><div style="width:85%; height:100%; background:#c9892f; border-radius:3px;"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- screen time bar -->
+    <div style="padding:14px 22px 4px;">
+      <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:9px;">
+        <span style="font-size:11.5px; color:#8a7a5c; font-weight:800; letter-spacing:.09em;">SCREEN TIME TODAY</span>
+        <span style="font-family:'Young Serif',serif; font-size:14px; color:#362b1a;">4h 12m</span>
+      </div>
+      <div style="display:flex; gap:3px; height:10px;">
+        <div style="flex:30; background:#c9892f; border-radius:4px;"></div>
+        <div style="flex:22; background:#58789f; border-radius:4px;"></div>
+        <div style="flex:26; background:#7c5a80; border-radius:4px;"></div>
+        <div style="flex:14; background:#4d7c57; border-radius:4px;"></div>
+        <div style="flex:8; background:rgba(54,43,26,.25); border-radius:4px;"></div>
+      </div>
+      <div style="display:flex; gap:14px; margin-top:9px; flex-wrap:wrap;">
+        <span style="display:flex; align-items:center; gap:5px; font-size:12px; color:#7a6a4f; font-weight:500;"><i style="width:8px;height:8px;border-radius:50%;background:#c9892f;"></i>Learning</span>
+        <span style="display:flex; align-items:center; gap:5px; font-size:12px; color:#7a6a4f; font-weight:500;"><i style="width:8px;height:8px;border-radius:50%;background:#58789f;"></i>Work</span>
+        <span style="display:flex; align-items:center; gap:5px; font-size:12px; color:#7a6a4f; font-weight:500;"><i style="width:8px;height:8px;border-radius:50%;background:#7c5a80;"></i>Social</span>
+        <span style="display:flex; align-items:center; gap:5px; font-size:12px; color:#7a6a4f; font-weight:500;"><i style="width:8px;height:8px;border-radius:50%;background:#4d7c57;"></i>Reading</span>
+      </div>
+    </div>
+
+    <!-- coaching card -->
+    <div style="margin:16px 22px 0; background:#eef0e0; border:1.5px solid #4d7c57; border-radius:15px; padding:14px;">
+      <div style="display:flex; gap:11px;">
+        <div style="width:30px; height:30px; border-radius:50%; background:#2f5238; border:1.5px solid #362b1a; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f3ecd9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="M12 9C12 5 9 3.5 5.5 4 5 8 7.5 10.5 12 9z"/><path d="M12 13c0-4 3-5.5 6.5-5-.5 4-3 6.5-6.5 5z"/></svg>
+        </div>
+        <div style="flex:1;">
+          <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;"><span style="font-size:11px; font-weight:800; color:#2f5238; letter-spacing:.08em;">SAGE · WISE MENTOR</span><span style="width:6px; height:6px; border-radius:50%; background:#4d7c57; animation:wmpulse 2s infinite;"></span></div>
+          <div style="font-size:14px; line-height:1.5; color:#463a25;">{{ popupMsg }}</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:8px; margin-top:13px;">
+        <button style="flex:1; padding:9px; border-radius:20px; border:1.5px solid #2f5238; background:#2f5238; color:#f3ecd9; font-family:'Alegreya Sans'; font-weight:800; font-size:13px; cursor:pointer;">Take a break</button>
+        <button style="flex:1; padding:9px; border-radius:20px; border:1.5px solid rgba(54,43,26,.35); background:transparent; color:#5d5138; font-family:'Alegreya Sans'; font-weight:700; font-size:13px; cursor:pointer;">Continue</button>
+      </div>
+    </div>
+
+    <!-- quick links -->
+    <div style="position:absolute; left:22px; right:22px; bottom:18px; display:flex; gap:8px;">
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; padding:11px 4px; border-radius:13px; background:#f3ecd9; border:1.5px solid rgba(54,43,26,.22); cursor:pointer;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5d5138" stroke-width="1.7"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        <span style="font-size:12px; color:#5d5138; font-weight:700;">Dashboard</span>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; padding:11px 4px; border-radius:13px; background:#f3ecd9; border:1.5px solid rgba(54,43,26,.22); cursor:pointer;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5d5138" stroke-width="1.7"><path d="M21 11.5a8.4 8.4 0 01-9 8.4L3 21l1.1-3.6A8.4 8.4 0 1121 11.5z" stroke-linejoin="round"/></svg>
+        <span style="font-size:12px; color:#5d5138; font-weight:700;">Coach</span>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; padding:11px 4px; border-radius:13px; background:#f3ecd9; border:1.5px solid rgba(54,43,26,.22); cursor:pointer;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5d5138" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="#5d5138"/></svg>
+        <span style="font-size:12px; color:#5d5138; font-weight:700;">Goals</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SIDE PANEL ============ -->
+<div data-screen-label="Side Panel" style="position:absolute; left:540px; top:90px; width:384px;">
+  <div data-drags-parent="1" style="font-family:'Alegreya Sans',sans-serif; font-weight:700; font-size:13px; color:#8a7a5c; margin-bottom:12px; letter-spacing:.08em; text-transform:uppercase;">Side Panel · AI Coach</div>
+  <div style="font-family:'Alegreya Sans',sans-serif; width:384px; height:720px; background:#faf5e9; border:2px solid #362b1a; border-radius:18px; box-shadow:6px 8px 0 rgba(54,43,26,.18); overflow:hidden; color:#362b1a; display:flex; flex-direction:column;">
+    <!-- context bar -->
+    <div style="padding:18px 20px 15px; border-bottom:1.5px solid rgba(54,43,26,.22); background:#f3ecd9;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div style="width:42px; height:42px; border-radius:50%; background:#2f5238; border:2px solid #362b1a; display:flex; align-items:center; justify-content:center;">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#f3ecd9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="M12 9C12 5 9 3.5 5.5 4 5 8 7.5 10.5 12 9z"/><path d="M12 13c0-4 3-5.5 6.5-5-.5 4-3 6.5-6.5 5z"/></svg>
+        </div>
+        <div style="flex:1;">
+          <div style="font-family:'Young Serif',serif; font-size:16px;">Sage</div>
+          <div style="font-size:12.5px; color:#8a7a5c; font-weight:500;">Wise Mentor · here to guide</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:11.5px; color:#a3947a; font-weight:700;">Now</div>
+          <div style="font-size:13px; color:#2f5238; font-weight:800;">Focused 47m</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- conversation -->
+    <div style="flex:1; overflow:hidden; padding:18px 18px 8px; display:flex; flex-direction:column; gap:14px;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div style="flex:1; height:1px; background:rgba(54,43,26,.15);"></div>
+        <span style="font-size:11px; color:#a3947a; font-weight:800; letter-spacing:.08em;">TODAY · 2:14 PM</span>
+        <div style="flex:1; height:1px; background:rgba(54,43,26,.15);"></div>
+      </div>
+
+      <div style="display:flex; gap:9px; max-width:90%;">
+        <div style="width:26px; height:26px; border-radius:50%; background:#2f5238; border:1.5px solid #362b1a; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f3ecd9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="M12 9C12 5 9 3.5 5.5 4 5 8 7.5 10.5 12 9z"/><path d="M12 13c0-4 3-5.5 6.5-5-.5 4-3 6.5-6.5 5z"/></svg>
+        </div>
+        <div style="background:#fffdf5; border:1.5px solid rgba(54,43,26,.25); border-radius:4px 16px 16px 16px; padding:11px 14px; font-size:14px; line-height:1.5; color:#463a25;">Good afternoon. You're on a strong learning streak — <b style="color:#c9892f;">{{ streakDays }} days</b> in a row. How are you feeling about your focus today?</div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end;">
+        <div style="background:#2f5238; border-radius:16px 4px 16px 16px; padding:11px 14px; font-size:14px; line-height:1.5; color:#f3ecd9; max-width:80%;">Pretty good, but I keep slipping into YouTube between tasks.</div>
+      </div>
+
+      <div style="display:flex; gap:9px; max-width:92%;">
+        <div style="width:26px; height:26px; border-radius:50%; background:#2f5238; border:1.5px solid #362b1a; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f3ecd9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="M12 9C12 5 9 3.5 5.5 4 5 8 7.5 10.5 12 9z"/><path d="M12 13c0-4 3-5.5 6.5-5-.5 4-3 6.5-6.5 5z"/></svg>
+        </div>
+        <div style="background:#fffdf5; border:1.5px solid rgba(54,43,26,.25); border-radius:4px 16px 16px 16px; padding:11px 14px; font-size:14px; line-height:1.5; color:#463a25;">{{ chatMsg }}</div>
+      </div>
+
+      <div style="display:flex; gap:9px; align-items:center; padding-left:35px;">
+        <span style="width:6px;height:6px;border-radius:50%;background:#a3947a; animation:wmpulse 1.4s infinite;"></span>
+        <span style="width:6px;height:6px;border-radius:50%;background:#a3947a; animation:wmpulse 1.4s infinite .2s;"></span>
+        <span style="width:6px;height:6px;border-radius:50%;background:#a3947a; animation:wmpulse 1.4s infinite .4s;"></span>
+      </div>
+    </div>
+
+    <!-- quick chips -->
+    <div style="display:flex; gap:8px; padding:8px 16px; overflow:hidden;">
+      <span style="white-space:nowrap; padding:8px 13px; border-radius:20px; background:transparent; border:1.5px solid rgba(54,43,26,.3); font-size:12.5px; color:#5d5138; font-weight:700;">How am I doing?</span>
+      <span style="white-space:nowrap; padding:8px 13px; border-radius:20px; background:transparent; border:1.5px solid rgba(54,43,26,.3); font-size:12.5px; color:#5d5138; font-weight:700;">Am I improving?</span>
+      <span style="white-space:nowrap; padding:8px 13px; border-radius:20px; background:transparent; border:1.5px solid rgba(54,43,26,.3); font-size:12.5px; color:#5d5138; font-weight:700;">Give me a tip</span>
+    </div>
+
+    <!-- input -->
+    <div style="padding:10px 16px 12px;">
+      <div style="display:flex; align-items:center; gap:10px; background:#fffdf5; border:1.5px solid rgba(54,43,26,.35); border-radius:22px; padding:9px 9px 9px 15px;">
+        <span style="flex:1; font-size:13.5px; color:#a3947a; font-style:italic;">Ask your coach anything…</span>
+        <button style="width:32px; height:32px; border-radius:50%; border:none; background:#2f5238; display:flex; align-items:center; justify-content:center; cursor:pointer;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f3ecd9" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- bottom tabs -->
+    <div style="display:flex; border-top:1.5px solid rgba(54,43,26,.22); background:#f3ecd9;">
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:11px 0; color:#2f5238;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M21 11.5a8.4 8.4 0 01-9 8.4L3 21l1.1-3.6A8.4 8.4 0 1121 11.5z" stroke-linejoin="round"/></svg>
+        <span style="font-size:11px; font-weight:800;">Chat</span>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:11px 0; color:#a3947a;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke-linecap="round"/></svg>
+        <span style="font-size:11px; font-weight:700;">Stats</span>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:11px 0; color:#a3947a;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/></svg>
+        <span style="font-size:11px; font-weight:700;">Goals</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MINDFUL OVERLAY ============ -->
+<div data-screen-label="Mindful Check-in" style="position:absolute; left:960px; top:90px; width:440px;">
+  <div data-drags-parent="1" style="font-family:'Alegreya Sans',sans-serif; font-weight:700; font-size:13px; color:#8a7a5c; margin-bottom:12px; letter-spacing:.08em; text-transform:uppercase;">Mindful Check-in · Shadow DOM overlay</div>
+  <div style="font-family:'Alegreya Sans',sans-serif; width:440px; height:720px; border-radius:18px; border:2px solid #362b1a; box-shadow:6px 8px 0 rgba(54,43,26,.18); overflow:hidden; position:relative; background:#000;">
+    <!-- faux shorts feed -->
+    <div style="position:absolute; inset:0; background:linear-gradient(180deg,#1a1d29,#0d0f17);"></div>
+    <div style="position:absolute; top:18px; left:18px; display:flex; align-items:center; gap:8px; color:rgba(255,255,255,.5); font-size:13px; font-weight:600;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#ff0033"><path d="M21.6 7.2s-.2-1.4-.8-2c-.8-.8-1.6-.8-2-.9C16 4 12 4 12 4s-4 0-6.8.3c-.4 0-1.2.1-2 .9-.6.6-.8 2-.8 2S2.2 8.8 2.2 10.5v1.6c0 1.7.2 3.3.2 3.3s.2 1.4.8 2c.8.8 1.8.8 2.3.9 1.6.2 6.5.3 6.5.3s4 0 6.8-.3c.4-.1 1.2-.1 2-.9.6-.6.8-2 .8-2s.2-1.6.2-3.3v-1.6c0-1.7-.2-3.3-.2-3.3zM9.8 14.2V8.6l5.2 2.8-5.2 2.8z"/></svg>
+      Shorts
+    </div>
+
+    <!-- dim + card -->
+    <div style="position:absolute; inset:0; background:rgba(24,19,10,.62); backdrop-filter:blur(3px); display:flex; align-items:center; justify-content:center; padding:22px;">
+      <div style="width:100%; background:#faf5e9; border:2px solid #362b1a; border-radius:18px; padding:24px 22px; box-shadow:6px 8px 0 rgba(0,0,0,.35); animation:wmfloat 5s ease-in-out infinite; color:#362b1a;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+          <div style="width:46px; height:46px; border-radius:50%; background:#2f5238; border:2px solid #362b1a; display:flex; align-items:center; justify-content:center;">
+            <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#f3ecd9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="M12 9C12 5 9 3.5 5.5 4 5 8 7.5 10.5 12 9z"/><path d="M12 13c0-4 3-5.5 6.5-5-.5 4-3 6.5-6.5 5z"/></svg>
+          </div>
+          <div>
+            <div style="font-size:11px; font-weight:800; color:#2f5238; letter-spacing:.1em;">MINDFUL CHECK-IN</div>
+            <div style="font-family:'Young Serif',serif; font-size:17px; margin-top:2px;">A gentle pause</div>
+          </div>
+        </div>
+
+        <div style="height:1px; background:rgba(54,43,26,.18); margin-bottom:14px;"></div>
+
+        <div style="font-size:15.5px; line-height:1.55; color:#463a25; margin-bottom:16px;">{{ checkinMsg }}</div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:16px;">
+          <div style="display:flex; align-items:center; gap:9px; padding:11px 13px; border-radius:13px; background:#eef0e0; border:1.5px solid #4d7c57;"><span style="font-size:18px;">😊</span><span style="font-size:13.5px; color:#2f5238; font-weight:800;">Energized</span></div>
+          <div style="display:flex; align-items:center; gap:9px; padding:11px 13px; border-radius:13px; background:#fffdf5; border:1.5px solid rgba(54,43,26,.25);"><span style="font-size:18px;">😐</span><span style="font-size:13.5px; color:#5d5138; font-weight:700;">Fine</span></div>
+          <div style="display:flex; align-items:center; gap:9px; padding:11px 13px; border-radius:13px; background:#fffdf5; border:1.5px solid rgba(54,43,26,.25);"><span style="font-size:18px;">😴</span><span style="font-size:13.5px; color:#5d5138; font-weight:700;">Tired</span></div>
+          <div style="display:flex; align-items:center; gap:9px; padding:11px 13px; border-radius:13px; background:#f4e7e0; border:1.5px solid #b85c38;"><span style="font-size:18px;">😵</span><span style="font-size:13.5px; color:#8a4326; font-weight:800;">Just scrolling</span></div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:9px;">
+          <button style="width:100%; padding:13px; border-radius:24px; border:1.5px solid #2f5238; background:#2f5238; color:#f3ecd9; font-family:'Alegreya Sans'; font-weight:800; font-size:14px; cursor:pointer;">Take a 5-minute break</button>
+          <div style="display:flex; gap:9px;">
+            <button style="flex:1; padding:11px; border-radius:22px; border:1.5px solid #c9892f; background:transparent; color:#96650f; font-family:'Alegreya Sans'; font-weight:700; font-size:13px; cursor:pointer;">Watch learning</button>
+            <button style="flex:1; padding:11px; border-radius:22px; border:1.5px solid rgba(54,43,26,.3); background:transparent; color:#7a6a4f; font-family:'Alegreya Sans'; font-weight:700; font-size:13px; cursor:pointer;">Continue</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ NEW TAB DASHBOARD ============ -->
+<div data-screen-label="New Tab Dashboard" style="position:absolute; left:60px; top:900px; width:1340px;">
+  <div data-drags-parent="1" style="font-family:'Alegreya Sans',sans-serif; font-weight:700; font-size:13px; color:#8a7a5c; margin-bottom:12px; letter-spacing:.08em; text-transform:uppercase;">New Tab · Full Dashboard</div>
+  <div style="font-family:'Alegreya Sans',sans-serif; width:1340px; background:#faf5e9; border:2px solid #362b1a; border-radius:22px; box-shadow:8px 10px 0 rgba(54,43,26,.18); overflow:hidden; color:#362b1a; position:relative;">
+    <div style="position:relative; padding:34px 40px 40px;">
+      <!-- top bar -->
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:28px;">
+        <div style="display:flex; align-items:center; gap:13px;">
+          <div style="width:42px; height:42px; border-radius:50%; background:#2f5238; border:2px solid #362b1a; display:flex; align-items:center; justify-content:center;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f3ecd9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="M12 9C12 5 9 3.5 5.5 4 5 8 7.5 10.5 12 9z"/><path d="M12 13c0-4 3-5.5 6.5-5-.5 4-3 6.5-6.5 5z"/></svg>
+          </div>
+          <div style="font-family:'Young Serif',serif; font-size:22px;">WiseMind</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <div style="display:flex; align-items:center; gap:7px; padding:8px 16px; border-radius:20px; background:#f6ead2; border:1.5px solid #c9892f;"><span style="font-size:13.5px; color:#96650f; font-weight:800;">✦ {{ streakDays }}-day learning streak</span></div>
+          <div style="display:flex; align-items:center; gap:8px; font-size:14px; color:#7a6a4f; font-weight:600;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>Friday, June 27</div>
+        </div>
+      </div>
+
+      <!-- hero message -->
+      <div style="margin-bottom:30px; max-width:900px;">
+        <div style="font-size:12.5px; color:#8a7a5c; font-weight:800; letter-spacing:.1em; margin-bottom:10px;">GOOD AFTERNOON</div>
+        <div style="font-family:'Young Serif',serif; font-size:33px; line-height:1.35; letter-spacing:-.005em; color:#362b1a; text-wrap:pretty;">You spent <span style="color:#96650f; border-bottom:3px solid #c9892f;">2h 6m learning</span> today — your best in a week. The mind grows in the hours you protect for it.</div>
+      </div>
+
+      <!-- score cards row -->
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-bottom:22px;">
+        <div style="background:#eef0e0; border:1.5px solid #4d7c57; border-radius:18px; padding:22px;">
+          <div style="display:flex; align-items:center; gap:18px;">
+            <div style="position:relative; width:92px; height:92px; flex-shrink:0;">
+              <svg width="92" height="92" viewBox="0 0 92 92"><circle cx="46" cy="46" r="38" fill="#faf5e9" stroke="rgba(54,43,26,.15)" stroke-width="8"/><circle cx="46" cy="46" r="38" fill="none" stroke="#4d7c57" stroke-width="8" stroke-linecap="round" stroke-dasharray="239" stroke-dashoffset="53" transform="rotate(-90 46 46)"/></svg>
+              <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Young Serif',serif; font-size:25px;">78</div>
+            </div>
+            <div>
+              <div style="font-family:'Young Serif',serif; font-size:16px; margin-bottom:4px;">Health</div>
+              <div style="font-size:13.5px; color:#7a6a4f; line-height:1.5;">Good rest, balanced screen time</div>
+              <div style="margin-top:8px; font-size:13px; color:#4d7c57; letter-spacing:3px;">✦✦✦✦<span style="opacity:.3;">✦</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="background:#e8edf2; border:1.5px solid #58789f; border-radius:18px; padding:22px;">
+          <div style="display:flex; align-items:center; gap:18px;">
+            <div style="position:relative; width:92px; height:92px; flex-shrink:0;">
+              <svg width="92" height="92" viewBox="0 0 92 92"><circle cx="46" cy="46" r="38" fill="#faf5e9" stroke="rgba(54,43,26,.15)" stroke-width="8"/><circle cx="46" cy="46" r="38" fill="none" stroke="#58789f" stroke-width="8" stroke-linecap="round" stroke-dasharray="239" stroke-dashoffset="86" transform="rotate(-90 46 46)"/></svg>
+              <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Young Serif',serif; font-size:25px;">64</div>
+            </div>
+            <div>
+              <div style="font-family:'Young Serif',serif; font-size:16px; margin-bottom:4px;">Productivity</div>
+              <div style="font-size:13.5px; color:#7a6a4f; line-height:1.5;">2 deep-focus blocks today</div>
+              <div style="margin-top:8px; font-size:13px; color:#58789f; letter-spacing:3px;">✦✦✦<span style="opacity:.3;">✦✦</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="background:#f6ead2; border:1.5px solid #c9892f; border-radius:18px; padding:22px;">
+          <div style="display:flex; align-items:center; gap:18px;">
+            <div style="position:relative; width:92px; height:92px; flex-shrink:0;">
+              <svg width="92" height="92" viewBox="0 0 92 92"><circle cx="46" cy="46" r="38" fill="#faf5e9" stroke="rgba(54,43,26,.15)" stroke-width="8"/><circle cx="46" cy="46" r="38" fill="none" stroke="#c9892f" stroke-width="8" stroke-linecap="round" stroke-dasharray="239" stroke-dashoffset="36" transform="rotate(-90 46 46)"/></svg>
+              <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Young Serif',serif; font-size:25px;">85</div>
+            </div>
+            <div>
+              <div style="font-family:'Young Serif',serif; font-size:16px; margin-bottom:4px;">Learning</div>
+              <div style="font-size:13.5px; color:#7a6a4f; line-height:1.5;">2h 6m · {{ streakDays }}-day streak active</div>
+              <div style="margin-top:8px; font-size:13px; color:#96650f; letter-spacing:3px;">✦✦✦✦✦</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- timeline -->
+      <div style="background:#fffdf5; border:1.5px solid rgba(54,43,26,.25); border-radius:18px; padding:22px 24px; margin-bottom:22px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+          <div style="font-family:'Young Serif',serif; font-size:16px;">Today's Timeline</div>
+          <div style="display:flex; gap:14px;">
+            <span style="display:flex; align-items:center; gap:5px; font-size:12px; color:#7a6a4f; font-weight:600;"><i style="width:8px;height:8px;border-radius:50%;background:#c9892f;"></i>Learning</span>
+            <span style="display:flex; align-items:center; gap:5px; font-size:12px; color:#7a6a4f; font-weight:600;"><i style="width:8px;height:8px;border-radius:50%;background:#58789f;"></i>Work</span>
+            <span style="display:flex; align-items:center; gap:5px; font-size:12px; color:#7a6a4f; font-weight:600;"><i style="width:8px;height:8px;border-radius:50%;background:#7c5a80;"></i>Social</span>
+            <span style="display:flex; align-items:center; gap:5px; font-size:12px; color:#7a6a4f; font-weight:600;"><i style="width:8px;height:8px;border-radius:50%;background:#4d7c57;"></i>Reading</span>
+            <span style="display:flex; align-items:center; gap:5px; font-size:12px; color:#7a6a4f; font-weight:600;"><i style="width:8px;height:8px;border-radius:50%;background:rgba(54,43,26,.3);"></i>Idle</span>
+          </div>
+        </div>
+        <div style="display:flex; gap:3px; height:46px; align-items:stretch;">
+          <div style="flex:2; background:rgba(54,43,26,.18); border-radius:5px;"></div>
+          <div style="flex:3; background:#58789f; border-radius:5px;"></div>
+          <div style="flex:4; background:#c9892f; border-radius:5px;"></div>
+          <div style="flex:1.5; background:#4d7c57; border-radius:5px;"></div>
+          <div style="flex:2; background:#58789f; border-radius:5px;"></div>
+          <div style="flex:1; background:rgba(54,43,26,.18); border-radius:5px;"></div>
+          <div style="flex:3; background:#7c5a80; border-radius:5px;"></div>
+          <div style="flex:2.5; background:#c9892f; border-radius:5px;"></div>
+          <div style="flex:2; background:#58789f; border-radius:5px;"></div>
+          <div style="flex:1.5; background:rgba(54,43,26,.18); border-radius:5px;"></div>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:11.5px; color:#a3947a; font-weight:600;">
+          <span>7 AM</span><span>9 AM</span><span>11 AM</span><span>1 PM</span><span>3 PM</span><span>Now</span>
+        </div>
+      </div>
+
+      <!-- two col: donut + shorts -->
+      <div style="display:grid; grid-template-columns:1.15fr 1fr; gap:18px; margin-bottom:22px;">
+        <div style="background:#fffdf5; border:1.5px solid rgba(54,43,26,.25); border-radius:18px; padding:22px 24px;">
+          <div style="font-family:'Young Serif',serif; font-size:16px; margin-bottom:18px;">Screen Time Breakdown</div>
+          <div style="display:flex; align-items:center; gap:26px;">
+            <div style="position:relative; width:148px; height:148px; flex-shrink:0; border-radius:50%; background:conic-gradient(#c9892f 0 30%, #58789f 30% 52%, #7c5a80 52% 78%, #4d7c57 78% 92%, rgba(54,43,26,.28) 92% 100%); border:1.5px solid rgba(54,43,26,.3);">
+              <div style="position:absolute; inset:26px; border-radius:50%; background:#faf5e9; border:1.5px solid rgba(54,43,26,.2); display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                <div style="font-family:'Young Serif',serif; font-size:22px;">4h 12m</div>
+                <div style="font-size:10.5px; color:#8a7a5c; font-weight:800; letter-spacing:.1em; margin-top:1px;">TOTAL</div>
+              </div>
+            </div>
+            <div style="flex:1; display:flex; flex-direction:column; gap:11px;">
+              <div style="display:flex; align-items:center; justify-content:space-between;"><span style="display:flex;align-items:center;gap:8px;font-size:14px;color:#463a25;font-weight:700;"><i style="width:9px;height:9px;border-radius:50%;background:#c9892f;"></i>Learning</span><span style="font-size:13.5px;color:#7a6a4f;font-weight:600;">2h 06m</span></div>
+              <div style="display:flex; align-items:center; justify-content:space-between;"><span style="display:flex;align-items:center;gap:8px;font-size:14px;color:#463a25;font-weight:700;"><i style="width:9px;height:9px;border-radius:50%;background:#58789f;"></i>Work</span><span style="font-size:13.5px;color:#7a6a4f;font-weight:600;">55m</span></div>
+              <div style="display:flex; align-items:center; justify-content:space-between;"><span style="display:flex;align-items:center;gap:8px;font-size:14px;color:#463a25;font-weight:700;"><i style="width:9px;height:9px;border-radius:50%;background:#7c5a80;"></i>Social</span><span style="font-size:13.5px;color:#7a6a4f;font-weight:600;">38m</span></div>
+              <div style="display:flex; align-items:center; justify-content:space-between;"><span style="display:flex;align-items:center;gap:8px;font-size:14px;color:#463a25;font-weight:700;"><i style="width:9px;height:9px;border-radius:50%;background:#4d7c57;"></i>Reading</span><span style="font-size:13.5px;color:#7a6a4f;font-weight:600;">21m</span></div>
+              <div style="display:flex; align-items:center; justify-content:space-between;"><span style="display:flex;align-items:center;gap:8px;font-size:14px;color:#463a25;font-weight:700;"><i style="width:9px;height:9px;border-radius:50%;background:rgba(54,43,26,.3);"></i>Other</span><span style="font-size:13.5px;color:#7a6a4f;font-weight:600;">12m</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="background:#fffdf5; border:1.5px solid rgba(54,43,26,.25); border-radius:18px; padding:22px 24px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+            <div style="font-family:'Young Serif',serif; font-size:16px;">Short Video Report</div>
+            <div style="display:flex; align-items:baseline; gap:6px;"><span style="font-family:'Young Serif',serif; font-size:22px; color:#b85c38;">47</span><span style="font-size:12.5px; color:#7a6a4f; font-weight:700;">today</span></div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:14px;">
+            <div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-size:13.5px; color:#463a25; font-weight:700;">YouTube Shorts</span><span style="font-size:12.5px; color:#7a6a4f; font-weight:600;">28 · 19m</span></div>
+              <div style="height:8px; background:rgba(54,43,26,.1); border-radius:4px; overflow:hidden;"><div style="width:60%; height:100%; background:#b85c38; border-radius:4px;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-size:13.5px; color:#463a25; font-weight:700;">Instagram Reels</span><span style="font-size:12.5px; color:#7a6a4f; font-weight:600;">12 · 8m</span></div>
+              <div style="height:8px; background:rgba(54,43,26,.1); border-radius:4px; overflow:hidden;"><div style="width:26%; height:100%; background:#7c5a80; border-radius:4px;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-size:13.5px; color:#463a25; font-weight:700;">TikTok</span><span style="font-size:12.5px; color:#7a6a4f; font-weight:600;">7 · 5m</span></div>
+              <div style="height:8px; background:rgba(54,43,26,.1); border-radius:4px; overflow:hidden;"><div style="width:14%; height:100%; background:#58789f; border-radius:4px;"></div></div>
+            </div>
+          </div>
+          <div style="margin-top:16px; padding:11px 13px; border-radius:12px; background:#eef0e0; border:1.5px solid #4d7c57; font-size:13px; color:#2f5238; line-height:1.5; font-weight:600;">↓ 31% fewer than yesterday — you're trending down. Nicely done.</div>
+        </div>
+      </div>
+
+      <!-- goals + achievements -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:22px;">
+        <div style="background:#fffdf5; border:1.5px solid rgba(54,43,26,.25); border-radius:18px; padding:22px 24px;">
+          <div style="font-family:'Young Serif',serif; font-size:16px; margin-bottom:18px;">Goals Progress</div>
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:7px;"><span style="font-size:14px; color:#463a25; font-weight:700;">Learn 1h+ daily</span><span style="font-size:12.5px; color:#2f5238; font-weight:800;">126 / 60 min ✓</span></div>
+              <div style="height:9px; background:rgba(54,43,26,.1); border-radius:5px; overflow:hidden;"><div style="width:100%; height:100%; background:#4d7c57; border-radius:5px;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:7px;"><span style="font-size:14px; color:#463a25; font-weight:700;">Keep Shorts under 60</span><span style="font-size:12.5px; color:#96650f; font-weight:800;">47 / 60</span></div>
+              <div style="height:9px; background:rgba(54,43,26,.1); border-radius:5px; overflow:hidden;"><div style="width:78%; height:100%; background:#c9892f; border-radius:5px;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:7px;"><span style="font-size:14px; color:#463a25; font-weight:700;">No screens after 11 PM</span><span style="font-size:12.5px; color:#7a6a4f; font-weight:800;">On track</span></div>
+              <div style="height:9px; background:rgba(54,43,26,.1); border-radius:5px; overflow:hidden;"><div style="width:64%; height:100%; background:#58789f; border-radius:5px;"></div></div>
+            </div>
+          </div>
+        </div>
+        <div style="background:#fffdf5; border:1.5px solid rgba(54,43,26,.25); border-radius:18px; padding:22px 24px;">
+          <div style="font-family:'Young Serif',serif; font-size:16px; margin-bottom:18px;">Achievements</div>
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px;">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><div style="width:54px; height:54px; border-radius:50%; background:#f6ead2; border:1.5px solid #c9892f; display:flex; align-items:center; justify-content:center; font-size:23px;">📚</div><span style="font-size:11px; color:#463a25; font-weight:700; text-align:center;">Deep Learner</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><div style="width:54px; height:54px; border-radius:50%; background:#eef0e0; border:1.5px solid #4d7c57; display:flex; align-items:center; justify-content:center; font-size:23px;">🔥</div><span style="font-size:11px; color:#463a25; font-weight:700; text-align:center;">7-day Streak</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><div style="width:54px; height:54px; border-radius:50%; background:#e8edf2; border:1.5px solid #58789f; display:flex; align-items:center; justify-content:center; font-size:23px;">🎯</div><span style="font-size:11px; color:#463a25; font-weight:700; text-align:center;">Balanced Day</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:7px; opacity:.38;"><div style="width:54px; height:54px; border-radius:50%; background:#f3ecd9; border:1.5px dashed rgba(54,43,26,.4); display:flex; align-items:center; justify-content:center; font-size:23px; filter:grayscale(1);">👁️</div><span style="font-size:11px; color:#7a6a4f; font-weight:700; text-align:center;">Eye Care</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:7px; opacity:.38;"><div style="width:54px; height:54px; border-radius:50%; background:#f3ecd9; border:1.5px dashed rgba(54,43,26,.4); display:flex; align-items:center; justify-content:center; font-size:23px; filter:grayscale(1);">🧘</div><span style="font-size:11px; color:#7a6a4f; font-weight:700; text-align:center;">Minimalist</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:7px; opacity:.38;"><div style="width:54px; height:54px; border-radius:50%; background:#f3ecd9; border:1.5px dashed rgba(54,43,26,.4); display:flex; align-items:center; justify-content:center; font-size:23px; filter:grayscale(1);">💪</div><span style="font-size:11px; color:#7a6a4f; font-weight:700; text-align:center;">Healthy Week</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:7px; opacity:.38;"><div style="width:54px; height:54px; border-radius:50%; background:#f3ecd9; border:1.5px dashed rgba(54,43,26,.4); display:flex; align-items:center; justify-content:center; font-size:23px; filter:grayscale(1);">⭐</div><span style="font-size:11px; color:#7a6a4f; font-weight:700; text-align:center;">Focus Week</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:7px; opacity:.38;"><div style="width:54px; height:54px; border-radius:50%; background:#f3ecd9; border:1.5px dashed rgba(54,43,26,.4); display:flex; align-items:center; justify-content:center; font-size:23px; filter:grayscale(1);">🏆</div><span style="font-size:11px; color:#7a6a4f; font-weight:700; text-align:center;">Locked</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- weekly trend + recommendations -->
+      <div style="display:grid; grid-template-columns:1.1fr 1fr; gap:18px;">
+        <div style="background:#fffdf5; border:1.5px solid rgba(54,43,26,.25); border-radius:18px; padding:22px 24px;">
+          <div style="font-family:'Young Serif',serif; font-size:16px; margin-bottom:20px;">Weekly Trend</div>
+          <div style="display:flex; flex-direction:column; gap:18px;">
+            <div style="display:flex; align-items:center; gap:16px;">
+              <div style="width:100px; flex-shrink:0;"><div style="font-size:13.5px; color:#463a25; font-weight:700;">Learning</div><div style="font-size:11.5px; color:#2f5238; font-weight:800;">↑ 22%</div></div>
+              <svg width="100%" height="38" viewBox="0 0 220 38" preserveAspectRatio="none"><polyline points="0,28 36,30 73,22 110,24 146,16 183,12 220,6" fill="none" stroke="#c9892f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div style="display:flex; align-items:center; gap:16px;">
+              <div style="width:100px; flex-shrink:0;"><div style="font-size:13.5px; color:#463a25; font-weight:700;">Entertainment</div><div style="font-size:11.5px; color:#2f5238; font-weight:800;">↓ 14%</div></div>
+              <svg width="100%" height="38" viewBox="0 0 220 38" preserveAspectRatio="none"><polyline points="0,10 36,14 73,12 110,20 146,18 183,26 220,28" fill="none" stroke="#7c5a80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div style="display:flex; align-items:center; gap:16px;">
+              <div style="width:100px; flex-shrink:0;"><div style="font-size:13.5px; color:#463a25; font-weight:700;">Productivity</div><div style="font-size:11.5px; color:#7a6a4f; font-weight:800;">→ steady</div></div>
+              <svg width="100%" height="38" viewBox="0 0 220 38" preserveAspectRatio="none"><polyline points="0,20 36,16 73,22 110,18 146,20 183,17 220,19" fill="none" stroke="#58789f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+        <div style="background:#eef0e0; border:1.5px solid #4d7c57; border-radius:18px; padding:22px 24px;">
+          <div style="font-family:'Young Serif',serif; font-size:16px; margin-bottom:18px;">For You Today</div>
+          <div style="display:flex; flex-direction:column; gap:11px;">
+            <div style="display:flex; gap:12px; padding:13px; border-radius:13px; background:#faf5e9; border:1.5px solid rgba(54,43,26,.2);"><span style="font-size:16px;">🌅</span><div><div style="font-size:14px; color:#362b1a; font-weight:800; margin-bottom:2px;">Protect your morning focus</div><div style="font-size:13px; color:#7a6a4f; line-height:1.45;">Your best learning happens 9–11 AM. Keep social closed then.</div></div></div>
+            <div style="display:flex; gap:12px; padding:13px; border-radius:13px; background:#faf5e9; border:1.5px solid rgba(54,43,26,.2);"><span style="font-size:16px;">👁️</span><div><div style="font-size:14px; color:#362b1a; font-weight:800; margin-bottom:2px;">Try the 20-20-20 rule</div><div style="font-size:13px; color:#7a6a4f; line-height:1.45;">You missed 2 eye breaks. Look 20ft away for 20s, every 20min.</div></div></div>
+            <div style="display:flex; gap:12px; padding:13px; border-radius:13px; background:#faf5e9; border:1.5px solid rgba(54,43,26,.2);"><span style="font-size:16px;">🌙</span><div><div style="font-size:14px; color:#362b1a; font-weight:800; margin-bottom:2px;">Wind down by 11 PM</div><div style="font-size:13px; color:#7a6a4f; line-height:1.45;">Late-night browsing cost you 18 sleep points this week.</div></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<template id="__bundler_thumbnail">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="20" fill="#faf5e9"/><circle cx="50" cy="50" r="22" fill="none" stroke="rgba(54,43,26,.15)" stroke-width="6"/><circle cx="50" cy="50" r="22" fill="none" stroke="#4d7c57" stroke-width="6" stroke-linecap="round" stroke-dasharray="138" stroke-dashoffset="30" transform="rotate(-90 50 50)"/></svg>
+</template>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;coachTone&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;gentle&quot;, &quot;options&quot;: [&quot;gentle&quot;, &quot;direct&quot;, &quot;playful&quot;], &quot;tsType&quot;: &quot;'gentle' | 'direct' | 'playful'&quot;, &quot;section&quot;: &quot;Coach&quot; },
+  &quot;streakDays&quot;: { &quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 7, &quot;min&quot;: 1, &quot;max&quot;: 60, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Data&quot; }
+}">
+class Component extends DCLogic {
+  renderVals() {
+    const tone = this.props.coachTone ?? 'gentle';
+    const streakDays = this.props.streakDays ?? 7;
+    const copy = {
+      gentle: {
+        popupMsg: "You've watched 47 Shorts in a row. A short walk now might feel better than the 48th. What do you think?",
+        chatMsg: "That's a very human pattern — the brain craves a small reward between hard things. Try this: when a task ends, take three slow breaths before opening a new tab. The pause is where the choice lives.",
+        checkinMsg: "You've watched 127 Shorts in 52 minutes. No judgment — just checking in. How does your mind feel right now?"
+      },
+      direct: {
+        popupMsg: "47 Shorts in a row. That's 34 minutes you didn't plan to spend. Stand up, walk, come back with intent.",
+        chatMsg: "You already know the fix: close the tab before you decide what's next, not after. Make the default a pause, not a feed. Three breaths, then choose.",
+        checkinMsg: "127 Shorts in 52 minutes. Be honest with yourself — is this what you sat down to do?"
+      },
+      playful: {
+        popupMsg: "Short #47 just rolled by! Legend says #48 is exactly like the others. Fancy a plot twist — maybe a walk?",
+        chatMsg: "Ah, the classic between-task YouTube detour — a tale as old as tabs. Here's a trick: three slow breaths before the next click. The pause is where the story turns.",
+        checkinMsg: "127 Shorts in 52 minutes — quite the marathon! No judgment from this old sage. How's the mind feeling?"
+      }
+    };
+    return { streakDays, ...copy[tone] };
+  }
+}
+</script>
+</body>
+</html>
