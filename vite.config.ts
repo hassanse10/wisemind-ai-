@@ -12,6 +12,13 @@ export default defineConfig({
   build: {
     outDir: resolve(__dirname, 'dist'),
     emptyOutDir: true,
+    // Disable Vite's module-preload polyfill. It emits a top-level IIFE that
+    // touches `document` (createElement/querySelectorAll/observe). Because a
+    // dynamic import() (settings → db) pulls the shared chunk into the MV3
+    // service worker, that IIFE runs in a DOM-less worker and crashes it with
+    // "document is not defined" (service worker registration failed). Chrome
+    // supports modulepreload natively, so the polyfill is unnecessary here.
+    modulePreload: { polyfill: false },
     rollupOptions: {
       input: {
         background: resolve(__dirname, 'src/background/index.ts'),
