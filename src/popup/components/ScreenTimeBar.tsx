@@ -18,9 +18,9 @@ export function ScreenTimeBar({ summary }: Props) {
 
   return (
     <div>
-      <div className="mb-2.5 flex items-baseline justify-between">
-        <span className="text-xs font-semibold tracking-wide text-ink-600">SCREEN TIME TODAY</span>
-        <span className="font-display text-sm font-semibold text-ink-300">{fmt(summary.totalTime)}</span>
+      <div className="mb-[9px] flex items-baseline justify-between">
+        <span className="text-[11.5px] font-extrabold tracking-[0.09em] text-ink-500">SCREEN TIME TODAY</span>
+        <span className="font-display text-sm text-ink-100">{fmt(summary.totalTime)}</span>
       </div>
       <div className="flex h-[9px] gap-[3px]">
         {entries.map(([cat, sec]) => (
@@ -34,8 +34,8 @@ export function ScreenTimeBar({ summary }: Props) {
       </div>
       <div className="mt-2.5 flex flex-wrap gap-x-3.5 gap-y-1">
         {entries.map(([cat]) => (
-          <span key={cat} className="flex items-center gap-1.5 text-[11px] text-ink-500">
-            <i className="h-[7px] w-[7px] rounded-[2px]" style={{ background: CATEGORY_COLORS[cat] }} />
+          <span key={cat} className="flex items-center gap-[5px] text-[12px] font-medium text-ink-400">
+            <i className="h-[8px] w-[8px] rounded-full" style={{ background: CATEGORY_COLORS[cat] }} />
             {CATEGORY_LABELS[cat]}
           </span>
         ))}

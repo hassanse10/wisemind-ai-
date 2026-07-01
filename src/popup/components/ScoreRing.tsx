@@ -16,7 +16,7 @@ export function ScoreRing({ score, label, color, size = 128, stroke = 11 }: Prop
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        <circle cx={c} cy={c} r={r} fill="none" stroke="rgba(255,255,255,.06)" strokeWidth={stroke} />
+        <circle cx={c} cy={c} r={r} fill="#f3ecd9" stroke="rgba(54,43,26,.18)" strokeWidth={stroke} />
         <circle
           cx={c}
           cy={c}
@@ -33,12 +33,12 @@ export function ScoreRing({ score, label, color, size = 128, stroke = 11 }: Prop
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span
-          className="font-display font-semibold leading-none tracking-tight text-ink-100"
+          className="font-display font-normal leading-none tracking-tight text-ink-100"
           style={{ fontSize: size * 0.3 }}
         >
           {score}
         </span>
-        <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-ink-600">
+        <span className="mt-1 text-[11px] font-bold uppercase tracking-[0.1em] text-ink-500">
           {label}
         </span>
       </div>

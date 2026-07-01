@@ -8,21 +8,22 @@ import { getShortVideosByDateRange, getVisitsByDateRange } from '../shared/db'
 import { getTodayRange } from '../shared/constants'
 
 const BRAND_MARK = (
-  <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
-    <path d="M12 3c-3 0-5 2-5 4.5 0 1 .4 1.9 1 2.6-.9.7-1.5 1.8-1.5 3C6.5 15.5 8.4 17 11 17h.5v4" stroke="#06231a" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M12 3c3 0 5 2 5 4.5 0 1-.4 1.9-1 2.6.9.7 1.5 1.8 1.5 3C17.5 15.5 15.6 17 13 17" stroke="#06231a" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" opacity=".55" />
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#f3ecd9" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 21V9"/>
+    <path d="M12 9C12 5 9 3.5 5.5 4 5 8 7.5 10.5 12 9z"/>
+    <path d="M12 13c0-4 3-5.5 6.5-5-.5 4-3 6.5-6.5 5z"/>
   </svg>
 )
 
 function Pill({ label, value, color }: { label: string; value: number; color: string }) {
   return (
-    <div className="rounded-2xl border border-white/[0.07] bg-white/[0.04] px-3 py-2.5">
-      <div className="mb-2 flex items-center justify-between">
-        <span className="text-[12.5px] font-semibold text-ink-400">{label}</span>
+    <div className="rounded-[13px] border-[1.5px] border-[rgba(54,43,26,.25)] bg-[#f3ecd9] px-[13px] py-[10px]">
+      <div className="mb-[7px] flex items-center justify-between">
+        <span className="text-[13.5px] font-bold text-ink-300">{label}</span>
         <span className="font-display text-base font-semibold" style={{ color }}>{value}</span>
       </div>
-      <div className="h-[5px] overflow-hidden rounded-full bg-white/[0.07]">
-        <div className="h-full rounded-full" style={{ width: `${value}%`, background: color }} />
+      <div className="h-[6px] overflow-hidden rounded-[3px] bg-[rgba(54,43,26,.1)]">
+        <div className="h-full rounded-[3px]" style={{ width: `${value}%`, background: color }} />
       </div>
     </div>
   )
@@ -53,39 +54,38 @@ export function App() {
   const today = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric' })
 
   return (
-    <div className="relative w-[400px] min-h-[580px] overflow-hidden bg-navy-900 p-0 font-sans text-ink-100">
-      <div
-        className="absolute -left-16 -top-32 h-[300px] w-[300px]"
-        style={{ background: 'radial-gradient(circle, rgba(52,211,153,.16), transparent 70%)' }}
-      />
+    <div className="relative w-[400px] min-h-[580px] overflow-hidden bg-[#faf5e9] p-0 font-sans text-ink-100">
 
       <div className="relative flex flex-col gap-4 p-[22px]">
         {/* header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-[34px] w-[34px] items-center justify-center rounded-[11px] wm-brand-grad shadow-[0_6px_16px_-4px_rgba(52,211,153,.5)]">
+            <div className="flex h-[36px] w-[36px] items-center justify-center rounded-full border-2 border-[#362b1a] bg-[#2f5238]">
               {BRAND_MARK}
             </div>
             <div>
-              <div className="font-display text-base font-semibold tracking-tight">WiseMind</div>
-              <div className="mt-px text-[11.5px] font-medium text-ink-600">{today}</div>
+              <div className="font-display text-[17px] font-normal tracking-[-0.01em] text-ink-100">WiseMind</div>
+              <div className="text-[12.5px] font-medium text-ink-500">{today}</div>
             </div>
           </div>
           <button
             onClick={() => chrome.runtime.openOptionsPage()}
-            className="flex h-[34px] w-[34px] items-center justify-center rounded-[10px] border border-white/[0.06] bg-white/5 text-ink-500 transition-colors hover:text-ink-300"
+            className="flex h-[34px] w-[34px] items-center justify-center rounded-full border-[1.5px] border-[rgba(54,43,26,.3)] bg-transparent text-ink-400 transition-colors hover:text-ink-200"
             aria-label="Settings"
           >
-            ⚙
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" strokeWidth="1.7"/>
+              <path d="M19.4 13.5a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-2.9 1.2v.1a2 2 0 11-4 0v-.2a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00-1.2-2.9H3a2 2 0 110-4h.2a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3H13a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.2a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V13a1.7 1.7 0 001.5 1z" stroke="currentColor" strokeWidth="1.3"/>
+            </svg>
           </button>
         </div>
 
         {/* score hero */}
         <div className="flex items-center gap-[18px]">
-          <ScoreRing score={health} label="Health" color="#34d399" size={128} />
+          <ScoreRing score={health} label="Health" color="#4d7c57" size={128} />
           <div className="flex flex-1 flex-col gap-2.5">
-            <Pill label="Productivity" value={productivity} color="#5b9bff" />
-            <Pill label="Learning" value={learning} color="#f7b955" />
+            <Pill label="Productivity" value={productivity} color="#58789f" />
+            <Pill label="Learning" value={learning} color="#c9892f" />
           </div>
         </div>
 
@@ -94,10 +94,10 @@ export function App() {
 
         {/* short video counter */}
         {shortCount > 0 && (
-          <div className="flex items-center gap-2.5 rounded-2xl border border-shorts/20 bg-shorts/[0.08] px-3.5 py-3">
+          <div className="flex items-center gap-2.5 rounded-2xl border-[1.5px] border-[#b85c38] bg-[#f4e7e0] px-3.5 py-3">
             <span className="text-lg">📱</span>
             <span className="text-sm text-ink-200">
-              <b className="font-display text-shorts">{shortCount}</b> Shorts today
+              <b className="font-display text-[#b85c38]">{shortCount}</b> Shorts today
             </span>
           </div>
         )}
@@ -129,7 +129,7 @@ function QuickLink({ label, onClick }: { label: string; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="flex flex-1 flex-col items-center gap-1.5 rounded-[13px] border border-white/[0.05] bg-white/[0.04] px-1 py-3 text-[11px] font-semibold text-ink-400 transition-colors hover:bg-white/[0.07]"
+      className="flex flex-1 flex-col items-center gap-1.5 rounded-[13px] border-[1.5px] border-[rgba(54,43,26,.22)] bg-[#f3ecd9] px-1 py-3 text-[12px] font-bold text-ink-300 transition-colors hover:bg-[#ede5cf]"
     >
       {label}
     </button>
