@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSettings } from '../shared/hooks/useStorage'
 import { updateSettings } from '../shared/StorageManager'
-import type { MentorPersonality, Theme, CoachingFrequency } from '../shared/types'
+import type { MentorPersonality, CoachingFrequency } from '../shared/types'
 
 const PERSONALITIES: Array<{ id: MentorPersonality; label: string; desc: string }> = [
   { id: 'wise',     label: 'Wise Mentor',       desc: 'Calm, thoughtful guidance' },
@@ -31,6 +31,20 @@ const fromHHMM = (v: string) => {
   const [h, m] = v.split(':').map(Number)
   return h * 60 + m
 }
+
+const sectionClass =
+  'bg-[#faf5e9] border-2 border-[#362b1a] rounded-[18px] p-6 space-y-4'
+const sectionStyle = { boxShadow: '6px 8px 0 rgba(54,43,26,.18)' }
+
+const inputClass =
+  'w-full bg-[#fffdf5] border-[1.5px] border-[rgba(54,43,26,.3)] text-[#362b1a] rounded-lg px-4 py-2 text-sm outline-none focus:border-[#2f5238]'
+
+const segBtn = (active: boolean) =>
+  `flex-1 py-2 rounded-lg text-sm transition-colors border-[1.5px] ${
+    active
+      ? 'bg-[#2f5238] text-[#f3ecd9] border-[#2f5238]'
+      : 'bg-[#f3ecd9] text-[#463a25] border-[rgba(54,43,26,.22)]'
+  }`
 
 export function App() {
   const settings = useSettings()
@@ -64,7 +78,7 @@ export function App() {
     updateSettings({ excludedDomains: settings.excludedDomains.filter(d => d !== domain) })
   }
 
-  if (!settings) return <div className="min-h-screen bg-navy-950" />
+  if (!settings) return <div className="min-h-screen bg-[#e9dfc9]" />
 
   async function clearData() {
     const { getDB } = await import('../shared/db')
@@ -97,17 +111,17 @@ export function App() {
   }
 
   return (
-    <div className="min-h-screen bg-navy-950 text-ink-100 font-sans p-8">
+    <div className="min-h-screen bg-[#e9dfc9] text-[#362b1a] font-sans p-8">
       <div className="max-w-2xl mx-auto space-y-8">
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-teal-400 bg-clip-text text-transparent">
+        <h1 className="text-2xl font-bold font-display text-[#2f5238]">
           WiseMind AI Settings
         </h1>
 
         {/* API Configuration */}
-        <section className="bg-slate-800/60 rounded-2xl p-6 border border-slate-700/50 space-y-4">
-          <h2 className="text-sm font-semibold text-slate-300">API Configuration</h2>
+        <section className={sectionClass} style={sectionStyle}>
+          <h2 className="text-sm font-extrabold font-display text-[#463a25]">API Configuration</h2>
           <div>
-            <label htmlFor="api-key" className="text-xs text-slate-500 mb-1 block">
+            <label htmlFor="api-key" className="text-xs text-[#7a6a4f] mb-1 block">
               OpenRouter API Key
             </label>
             <input
@@ -116,18 +130,18 @@ export function App() {
               value={apiKey}
               onChange={e => setApiKey(e.target.value)}
               placeholder="sk-or-..."
-              className="w-full bg-navy-800 border border-white/10 rounded-lg px-4 py-2 text-sm text-slate-100 outline-none focus:border-blue-500"
+              className={inputClass}
             />
           </div>
           <div>
-            <label htmlFor="model-select" className="text-xs text-slate-500 mb-1 block">
+            <label htmlFor="model-select" className="text-xs text-[#7a6a4f] mb-1 block">
               Model
             </label>
             <select
               id="model-select"
               value={settings.selectedModel}
               onChange={e => updateSettings({ selectedModel: e.target.value })}
-              className="w-full bg-navy-800 border border-white/10 rounded-lg px-4 py-2 text-sm text-slate-100"
+              className="w-full bg-[#fffdf5] border-[1.5px] border-[rgba(54,43,26,.3)] text-[#362b1a] rounded-lg px-4 py-2 text-sm outline-none focus:border-[#2f5238]"
             >
               {MODELS.map(m => (
                 <option key={m} value={m}>
@@ -138,57 +152,53 @@ export function App() {
           </div>
           <button
             onClick={saveApiKey}
-            className="bg-blue-600 hover:bg-blue-500 text-white rounded-lg px-6 py-2 text-sm font-medium"
+            className="bg-[#2f5238] hover:bg-[#4d7c57] text-[#f3ecd9] rounded-[20px] px-6 py-2 text-sm font-medium border-[1.5px] border-[#2f5238] transition-colors"
           >
             {saved ? 'Saved' : 'Save'}
           </button>
         </section>
 
         {/* Mentor Personality */}
-        <section className="bg-slate-800/60 rounded-2xl p-6 border border-slate-700/50 space-y-3">
-          <h2 className="text-sm font-semibold text-slate-300">Mentor Personality</h2>
+        <section className={sectionClass} style={sectionStyle}>
+          <h2 className="text-sm font-extrabold font-display text-[#463a25]">Mentor Personality</h2>
           <div className="grid grid-cols-1 gap-2">
             {PERSONALITIES.map(p => (
               <button
                 key={p.id}
                 onClick={() => updateSettings({ mentorPersonality: p.id })}
-                className={`text-left px-4 py-3 rounded-xl border transition-all ${
+                className={`text-left px-4 py-3 rounded-xl border-[1.5px] transition-all ${
                   settings.mentorPersonality === p.id
-                    ? 'border-blue-500 bg-blue-950/60'
-                    : 'border-slate-700 hover:border-slate-600'
+                    ? 'border-[#2f5238] bg-[#eef0e0]'
+                    : 'border-[rgba(54,43,26,.22)] bg-[#f3ecd9] hover:border-[rgba(54,43,26,.4)]'
                 }`}
               >
-                <p className="text-sm font-medium text-slate-200">{p.label}</p>
-                <p className="text-xs text-slate-500">{p.desc}</p>
+                <p className="text-sm font-medium text-[#362b1a]">{p.label}</p>
+                <p className="text-xs text-[#7a6a4f]">{p.desc}</p>
               </button>
             ))}
           </div>
         </section>
 
         {/* Coaching Preferences */}
-        <section className="bg-slate-800/60 rounded-2xl p-6 border border-slate-700/50 space-y-4">
-          <h2 className="text-sm font-semibold text-slate-300">Coaching Preferences</h2>
+        <section className={sectionClass} style={sectionStyle}>
+          <h2 className="text-sm font-extrabold font-display text-[#463a25]">Coaching Preferences</h2>
           <label className="flex items-center justify-between">
-            <span className="text-sm text-slate-300">Enable Coaching</span>
+            <span className="text-sm text-[#463a25]">Enable Coaching</span>
             <input
               type="checkbox"
               checked={settings.coachingEnabled}
               onChange={e => updateSettings({ coachingEnabled: e.target.checked })}
-              className="w-5 h-5 accent-blue-500"
+              className="w-5 h-5 accent-[#2f5238]"
             />
           </label>
           <div>
-            <label className="text-xs text-slate-500 mb-2 block">Coaching Frequency</label>
+            <label className="text-xs text-[#7a6a4f] mb-2 block">Coaching Frequency</label>
             <div className="flex gap-2">
               {FREQUENCIES.map(f => (
                 <button
                   key={f.id}
                   onClick={() => updateSettings({ coachingFrequency: f.id })}
-                  className={`flex-1 py-2 rounded-lg text-sm ${
-                    settings.coachingFrequency === f.id
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-slate-700 text-slate-300'
-                  }`}
+                  className={segBtn(settings.coachingFrequency === f.id)}
                 >
                   {f.label}
                 </button>
@@ -196,7 +206,7 @@ export function App() {
             </div>
           </div>
           <div>
-            <label className="text-xs text-slate-500 mb-1 block">
+            <label className="text-xs text-[#7a6a4f] mb-1 block">
               Coaching Hours ({settings.coachingHours.start}:00 – {settings.coachingHours.end}:00)
             </label>
             <div className="flex gap-3">
@@ -212,7 +222,7 @@ export function App() {
                       coachingHours: { ...settings.coachingHours, [k]: Number(e.target.value) },
                     })
                   }
-                  className="w-20 bg-navy-800 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-100"
+                  className="w-20 bg-[#fffdf5] border-[1.5px] border-[rgba(54,43,26,.3)] text-[#362b1a] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#2f5238]"
                 />
               ))}
             </div>
@@ -220,32 +230,32 @@ export function App() {
         </section>
 
         {/* Break Reminders */}
-        <section className="bg-slate-800/60 rounded-2xl p-6 border border-slate-700/50 space-y-4">
-          <h2 className="text-sm font-semibold text-slate-300">Break Reminders</h2>
-          <p className="text-xs text-slate-500">
+        <section className={sectionClass} style={sectionStyle}>
+          <h2 className="text-sm font-extrabold font-display text-[#463a25]">Break Reminders</h2>
+          <p className="text-xs text-[#7a6a4f]">
             Guided eye &amp; movement breaks during continuous screen time. Works without an API key.
           </p>
           <label className="flex items-center justify-between">
-            <span className="text-sm text-slate-300">Enable break reminders</span>
+            <span className="text-sm text-[#463a25]">Enable break reminders</span>
             <input
               type="checkbox"
               checked={settings.eyeHealthReminders}
               onChange={e => updateSettings({ eyeHealthReminders: e.target.checked })}
-              className="w-5 h-5 accent-blue-500"
+              className="w-5 h-5 accent-[#2f5238]"
             />
           </label>
           <div>
-            <label className="text-xs text-slate-500 mb-2 block">Remind me every</label>
+            <label className="text-xs text-[#7a6a4f] mb-2 block">Remind me every</label>
             <div className="flex gap-2">
               {[30, 45, 60, 90].map(mins => (
                 <button
                   key={mins}
                   onClick={() => updateSettings({ breakIntervalMinutes: mins })}
                   disabled={!settings.eyeHealthReminders}
-                  className={`flex-1 py-2 rounded-lg text-sm transition-colors disabled:opacity-40 ${
+                  className={`flex-1 py-2 rounded-lg text-sm transition-colors disabled:opacity-40 border-[1.5px] ${
                     settings.breakIntervalMinutes === mins
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-slate-700 text-slate-300'
+                      ? 'bg-[#2f5238] text-[#f3ecd9] border-[#2f5238]'
+                      : 'bg-[#f3ecd9] text-[#463a25] border-[rgba(54,43,26,.22)]'
                   }`}
                 >
                   {mins} min
@@ -256,78 +266,78 @@ export function App() {
         </section>
 
         {/* Bedtime Wind-Down */}
-        <section className="bg-slate-800/60 rounded-2xl p-6 border border-slate-700/50 space-y-4">
-          <h2 className="text-sm font-semibold text-slate-300">Bedtime Wind-Down</h2>
-          <p className="text-xs text-slate-500">
+        <section className={sectionClass} style={sectionStyle}>
+          <h2 className="text-sm font-extrabold font-display text-[#463a25]">Bedtime Wind-Down</h2>
+          <p className="text-xs text-[#7a6a4f]">
             Evening reminders and an optional warm screen tint to help you ease toward sleep. Works without an API key.
           </p>
           <label className="flex items-center justify-between">
-            <span className="text-sm text-slate-300">Wind-down reminders</span>
+            <span className="text-sm text-[#463a25]">Wind-down reminders</span>
             <input
               type="checkbox"
               checked={settings.windDownEnabled}
               onChange={e => updateSettings({ windDownEnabled: e.target.checked })}
-              className="w-5 h-5 accent-blue-500"
+              className="w-5 h-5 accent-[#2f5238]"
             />
           </label>
           <label className="flex items-center justify-between">
-            <span className="text-sm text-slate-300">Warm screen tint at night</span>
+            <span className="text-sm text-[#463a25]">Warm screen tint at night</span>
             <input
               type="checkbox"
               checked={settings.windDownTintEnabled}
               onChange={e => updateSettings({ windDownTintEnabled: e.target.checked })}
-              className="w-5 h-5 accent-blue-500"
+              className="w-5 h-5 accent-[#2f5238]"
             />
           </label>
           <div className="flex gap-4">
             <div className="flex-1">
-              <label className="text-xs text-slate-500 mb-1 block">Wind-down starts</label>
+              <label className="text-xs text-[#7a6a4f] mb-1 block">Wind-down starts</label>
               <input
                 type="time"
                 value={toHHMM(settings.windDownStart)}
                 onChange={e => updateSettings({ windDownStart: fromHHMM(e.target.value) })}
-                className="w-full bg-navy-800 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-100"
+                className="w-full bg-[#fffdf5] border-[1.5px] border-[rgba(54,43,26,.3)] text-[#362b1a] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#2f5238]"
               />
             </div>
             <div className="flex-1">
-              <label className="text-xs text-slate-500 mb-1 block">Target bedtime</label>
+              <label className="text-xs text-[#7a6a4f] mb-1 block">Target bedtime</label>
               <input
                 type="time"
                 value={toHHMM(settings.windDownBedtime)}
                 onChange={e => updateSettings({ windDownBedtime: fromHHMM(e.target.value) })}
-                className="w-full bg-navy-800 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-100"
+                className="w-full bg-[#fffdf5] border-[1.5px] border-[rgba(54,43,26,.3)] text-[#362b1a] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#2f5238]"
               />
             </div>
           </div>
         </section>
 
         {/* Posture & Hydration */}
-        <section className="bg-slate-800/60 rounded-2xl p-6 border border-slate-700/50 space-y-4">
-          <h2 className="text-sm font-semibold text-slate-300">Posture &amp; Hydration</h2>
-          <p className="text-xs text-slate-500">
+        <section className={sectionClass} style={sectionStyle}>
+          <h2 className="text-sm font-extrabold font-display text-[#463a25]">Posture &amp; Hydration</h2>
+          <p className="text-xs text-[#7a6a4f]">
             Gentle posture and hydration reminders while you work — small toasts that fade on their own, no clicks. Works without an API key.
           </p>
           <label className="flex items-center justify-between">
-            <span className="text-sm text-slate-300">Enable nudges</span>
+            <span className="text-sm text-[#463a25]">Enable nudges</span>
             <input
               type="checkbox"
               checked={settings.wellnessNudgesEnabled}
               onChange={e => updateSettings({ wellnessNudgesEnabled: e.target.checked })}
-              className="w-5 h-5 accent-blue-500"
+              className="w-5 h-5 accent-[#2f5238]"
             />
           </label>
           <div>
-            <label className="text-xs text-slate-500 mb-2 block">Remind me every</label>
+            <label className="text-xs text-[#7a6a4f] mb-2 block">Remind me every</label>
             <div className="flex gap-2">
               {[30, 40, 60, 90].map(mins => (
                 <button
                   key={mins}
                   onClick={() => updateSettings({ wellnessNudgeIntervalMinutes: mins })}
                   disabled={!settings.wellnessNudgesEnabled}
-                  className={`flex-1 py-2 rounded-lg text-sm transition-colors disabled:opacity-40 ${
+                  className={`flex-1 py-2 rounded-lg text-sm transition-colors disabled:opacity-40 border-[1.5px] ${
                     settings.wellnessNudgeIntervalMinutes === mins
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-slate-700 text-slate-300'
+                      ? 'bg-[#2f5238] text-[#f3ecd9] border-[#2f5238]'
+                      : 'bg-[#f3ecd9] text-[#463a25] border-[rgba(54,43,26,.22)]'
                   }`}
                 >
                   {mins} min
@@ -338,22 +348,22 @@ export function App() {
         </section>
 
         {/* Privacy & Exclusions */}
-        <section className="bg-slate-800/60 rounded-2xl p-6 border border-slate-700/50 space-y-4">
-          <h2 className="text-sm font-semibold text-slate-300">Privacy &amp; Exclusions</h2>
+        <section className={sectionClass} style={sectionStyle}>
+          <h2 className="text-sm font-extrabold font-display text-[#463a25]">Privacy &amp; Exclusions</h2>
           <label className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-300">Private Mode</p>
-              <p className="text-xs text-slate-500">Pauses all tracking and AI calls</p>
+              <p className="text-sm text-[#463a25]">Private Mode</p>
+              <p className="text-xs text-[#7a6a4f]">Pauses all tracking and AI calls</p>
             </div>
             <input
               type="checkbox"
               checked={settings.privateModeActive}
               onChange={() => updateSettings({ privateModeActive: !settings.privateModeActive })}
-              className="w-5 h-5 accent-blue-500"
+              className="w-5 h-5 accent-[#2f5238]"
             />
           </label>
           <div>
-            <label className="text-xs text-slate-500 mb-2 block">Excluded Domains</label>
+            <label className="text-xs text-[#7a6a4f] mb-2 block">Excluded Domains</label>
             <div className="flex gap-2 mb-2">
               <input
                 type="text"
@@ -361,11 +371,11 @@ export function App() {
                 onChange={e => setNewDomain(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && addDomain()}
                 placeholder="example.com"
-                className="flex-1 bg-navy-800 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-100 outline-none focus:border-blue-500"
+                className="flex-1 bg-[#fffdf5] border-[1.5px] border-[rgba(54,43,26,.3)] text-[#362b1a] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#2f5238]"
               />
               <button
                 onClick={addDomain}
-                className="bg-slate-700 hover:bg-slate-600 rounded-lg px-4 py-2 text-sm text-slate-300"
+                className="bg-[#2f5238] hover:bg-[#4d7c57] text-[#f3ecd9] rounded-[20px] px-4 py-2 text-sm font-medium border-[1.5px] border-[#2f5238] transition-colors"
               >
                 Add
               </button>
@@ -375,12 +385,12 @@ export function App() {
                 {settings.excludedDomains.map(domain => (
                   <li
                     key={domain}
-                    className="flex items-center justify-between bg-slate-900/60 rounded-lg px-3 py-2"
+                    className="flex items-center justify-between bg-[#f3ecd9] border-[1.5px] border-[rgba(54,43,26,.22)] rounded-lg px-3 py-2"
                   >
-                    <span className="text-sm text-slate-300">{domain}</span>
+                    <span className="text-sm text-[#463a25]">{domain}</span>
                     <button
                       onClick={() => removeDomain(domain)}
-                      className="text-xs text-red-400 hover:text-red-300"
+                      className="text-xs text-[#8a4326] hover:text-[#b85c38]"
                       aria-label={`Remove ${domain}`}
                     >
                       Remove
@@ -393,36 +403,29 @@ export function App() {
         </section>
 
         {/* Theme */}
-        <section className="bg-slate-800/60 rounded-2xl p-6 border border-slate-700/50">
-          <h2 className="text-sm font-semibold text-slate-300 mb-3">Theme</h2>
-          <div className="flex gap-2">
-            {(['light', 'dark', 'system'] as Theme[]).map(t => (
-              <button
-                key={t}
-                onClick={() => updateSettings({ theme: t })}
-                className={`flex-1 py-2 rounded-lg text-sm capitalize ${
-                  settings.theme === t ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'
-                }`}
-              >
-                {t}
-              </button>
-            ))}
+        <section className={sectionClass} style={sectionStyle}>
+          <h2 className="text-sm font-extrabold font-display text-[#463a25] mb-3">Theme</h2>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-[#463a25]">Appearance</span>
+            <span className="px-3 py-1 rounded-full text-sm bg-[#f3ecd9] border-[1.5px] border-[rgba(54,43,26,.25)] text-[#5d5138]">
+              Fable
+            </span>
           </div>
         </section>
 
         {/* Data Management */}
-        <section className="bg-slate-800/60 rounded-2xl p-6 border border-slate-700/50 space-y-4">
-          <h2 className="text-sm font-semibold text-slate-300">Data</h2>
+        <section className={sectionClass} style={sectionStyle}>
+          <h2 className="text-sm font-extrabold font-display text-[#463a25]">Data</h2>
           <div className="flex gap-3">
             <button
               onClick={exportData}
-              className="flex-1 bg-slate-700 hover:bg-slate-600 rounded-lg py-2 text-sm text-slate-300"
+              className="flex-1 bg-transparent hover:bg-[#f3ecd9] border-[1.5px] border-[rgba(54,43,26,.35)] text-[#5d5138] rounded-[20px] py-2 text-sm transition-colors"
             >
               Export Data
             </button>
             <button
               onClick={() => setShowClearConfirm(true)}
-              className="flex-1 bg-red-950/60 hover:bg-red-900/60 border border-red-500/30 rounded-lg py-2 text-sm text-red-400"
+              className="flex-1 bg-[#f4e7e0] hover:bg-[#f0d9cf] border-[1.5px] border-[#b85c38] text-[#8a4326] rounded-[20px] py-2 text-sm transition-colors"
             >
               Clear Data
             </button>
@@ -438,24 +441,27 @@ export function App() {
           aria-labelledby="confirm-title"
           className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
         >
-          <div className="bg-slate-800 rounded-2xl p-6 max-w-sm w-full mx-4 border border-slate-700 space-y-4">
-            <h3 id="confirm-title" className="text-base font-semibold text-slate-100">
+          <div
+            className="bg-[#faf5e9] rounded-[18px] p-6 max-w-sm w-full mx-4 border-2 border-[#362b1a] space-y-4"
+            style={{ boxShadow: '6px 8px 0 rgba(54,43,26,.18)' }}
+          >
+            <h3 id="confirm-title" className="text-base font-semibold font-display text-[#362b1a]">
               Clear All Data?
             </h3>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-[#5d5138]">
               This will permanently delete all browsing history, scores, and summaries. This cannot be
               undone.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowClearConfirm(false)}
-                className="flex-1 bg-slate-700 hover:bg-slate-600 rounded-lg py-2 text-sm text-slate-300"
+                className="flex-1 bg-transparent hover:bg-[#f3ecd9] border-[1.5px] border-[rgba(54,43,26,.35)] text-[#5d5138] rounded-[20px] py-2 text-sm transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={clearData}
-                className="flex-1 bg-red-600 hover:bg-red-500 rounded-lg py-2 text-sm text-white"
+                className="flex-1 bg-[#f4e7e0] hover:bg-[#f0d9cf] border-[1.5px] border-[#b85c38] text-[#8a4326] rounded-[20px] py-2 text-sm transition-colors"
               >
                 Delete All Data
               </button>

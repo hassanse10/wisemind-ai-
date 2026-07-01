@@ -137,17 +137,10 @@ describe('Settings App', () => {
     }
   })
 
-  it('renders theme selector with light, dark, system buttons', () => {
+  it('renders theme section with static Fable chip', () => {
     render(<App />)
-    expect(screen.getByRole('button', { name: 'light' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'dark' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'system' })).toBeInTheDocument()
-  })
-
-  it('calls updateSettings when theme button clicked', () => {
-    render(<App />)
-    fireEvent.click(screen.getByRole('button', { name: 'dark' }))
-    expect(mockUpdateSettings).toHaveBeenCalledWith({ theme: 'dark' })
+    expect(screen.getByText('Appearance')).toBeInTheDocument()
+    expect(screen.getByText('Fable')).toBeInTheDocument()
   })
 
   it('renders excluded domains input', () => {
