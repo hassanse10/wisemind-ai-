@@ -11,6 +11,7 @@ import { GoalsProgress } from './components/GoalsProgress'
 import { GoalManager } from './components/GoalManager'
 import { Achievements } from './components/Achievements'
 import { WeeklyReport } from './components/WeeklyReport'
+import { HealthTrends } from './components/HealthTrends'
 import { WeeklyInsight } from './components/WeeklyInsight'
 import { Recommendations } from './components/Recommendations'
 import { getLastNDailySummaries, getVisitsByDateRange, getActiveGoals } from '../shared/db'
@@ -99,6 +100,7 @@ export function App() {
         <GoalsProgress goals={goals} summary={summary} />
         <GoalManager goals={goals} onChange={refreshGoals} />
         <WeeklyReport summaries={weeklySummaries} />
+        <HealthTrends summaries={weeklySummaries} />
         {settings && (
           <WeeklyInsight summaries={weeklySummaries} goals={goals} settings={settings} />
         )}
