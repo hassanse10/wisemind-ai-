@@ -47,5 +47,23 @@ export const NotificationManager = {
     } catch {
       // restricted page — skip silently; a missed posture nudge doesn't matter
     }
-  }
+  },
+  async deliverEyeStrainCare(steps: { id: string; title: string; instruction: string; durationSec: number }[]): Promise<void> {
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true })
+    const tabId = tabs[0]?.id
+    if (tabId !== undefined) {
+      try {
+        await chrome.tabs.sendMessage(tabId, { type: 'SHOW_EYE_STRAIN_CARE', payload: { steps } })
+        return
+      } catch {
+        // tab can't receive messages (e.g. chrome:// page), fall through
+      }
+    }
+    chrome.notifications.create({
+      type: 'basic',
+      iconUrl: 'icons/icon48.png',
+      title: 'Eye strain care',
+      message: 'Time for a quick eye-care break — blink, look away, check posture and brightness.',
+    })
+  },
 }

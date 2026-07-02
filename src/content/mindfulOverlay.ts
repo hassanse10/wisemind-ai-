@@ -307,3 +307,112 @@ chrome.runtime.onMessage.addListener((msg) => {
     showNudgeToast(msg.payload.message)
   }
 })
+
+interface EyeStrainStepPayload {
+  id: string
+  title: string
+  instruction: string
+  durationSec: number
+}
+
+function createEyeStrainOverlay(steps: EyeStrainStepPayload[]): HTMLElement {
+  const host = document.createElement('div')
+  const shadow = host.attachShadow({ mode: 'open' })
+
+  const style = document.createElement('style')
+  style.textContent = OVERLAY_STYLES
+
+  const card = document.createElement('div')
+  card.className = 'overlay'
+  card.innerHTML = `
+    <button class="close" aria-label="Close">✕</button>
+    <div class="title">Eye Strain Care</div>
+    <div class="stats"></div>
+    <div class="message"></div>
+    <div class="break-instruction"></div>
+    <div class="countdown"></div>
+    <div class="actions">
+      <button class="btn btn-secondary" data-action="skip">Skip</button>
+    </div>
+  `
+
+  shadow.appendChild(style)
+  shadow.appendChild(card)
+
+  const stepEl = card.querySelector('.stats')
+  const msgEl = card.querySelector('.message')
+  const instrEl = card.querySelector('.break-instruction')
+  const countEl = card.querySelector('.countdown')
+
+  let timer: ReturnType<typeof setInterval> | null = null
+  let stepIndex = 0
+
+  const report = (response: 'completed' | 'skipped') => {
+    if (timer) clearInterval(timer)
+    try {
+      if (chrome.runtime?.id) chrome.runtime.sendMessage({ type: 'EYE_STRAIN_RESPONSE', payload: { response } })
+    } catch {
+      // ignore — context invalidated
+    }
+    host.remove()
+  }
+
+  const showDone = () => {
+    if (stepEl) stepEl.remove()
+    if (msgEl) msgEl.textContent = ''
+    if (instrEl) instrEl.remove()
+    if (countEl) countEl.remove()
+    const actions = card.querySelector('.actions')
+    if (actions) actions.remove()
+    const done = document.createElement('div')
+    done.className = 'break-done'
+    done.textContent = '✓ Nicely done — your eyes thank you.'
+    card.appendChild(done)
+    const ok = document.createElement('button')
+    ok.className = 'btn btn-primary'
+    ok.textContent = 'Done'
+    ok.addEventListener('click', () => report('completed'))
+    card.appendChild(ok)
+  }
+
+  const runStep = () => {
+    const step = steps[stepIndex]
+    if (stepEl) stepEl.textContent = `Step ${stepIndex + 1} of ${steps.length}`
+    if (msgEl) msgEl.textContent = step.title
+    if (instrEl) instrEl.textContent = step.instruction
+    let remaining = step.durationSec
+    if (countEl) countEl.textContent = String(remaining)
+    if (timer) clearInterval(timer)
+    timer = setInterval(() => {
+      remaining -= 1
+      if (remaining > 0) {
+        if (countEl) countEl.textContent = String(remaining)
+        return
+      }
+      if (timer) clearInterval(timer)
+      stepIndex++
+      if (stepIndex < steps.length) {
+        runStep()
+      } else {
+        showDone()
+      }
+    }, 1000)
+  }
+
+  card.querySelector('.close')?.addEventListener('click', () => report('skipped'))
+  card.querySelector('[data-action="skip"]')?.addEventListener('click', () => report('skipped'))
+
+  runStep()
+
+  return host
+}
+
+chrome.runtime.onMessage.addListener((msg) => {
+  if (msg.type === 'SHOW_EYE_STRAIN_CARE') {
+    const existing = document.getElementById('wisemind-overlay-host')
+    existing?.remove()
+    const host = createEyeStrainOverlay(msg.payload.steps)
+    host.id = 'wisemind-overlay-host'
+    document.body.appendChild(host)
+  }
+})
