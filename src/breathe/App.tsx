@@ -29,31 +29,32 @@ export function App() {
   const state = breathingState(elapsed)
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-12 bg-navy-950 font-sans text-ink-100">
+    <div className="flex min-h-screen flex-col items-center justify-center gap-12 bg-[#e9dfc9] font-sans text-ink-100">
       <div className="text-center">
         <div className="mb-2 font-display text-3xl font-medium tracking-tight">
           {state.done ? 'Nicely done' : state.phaseLabel}
         </div>
-        <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-ink-600">
+        <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-ink-500">
           {state.done ? 'carry the calm with you' : `Cycle ${state.cycle} of ${TOTAL_CYCLES}`}
         </div>
       </div>
 
       <div
-        className="rounded-full wm-brand-grad"
+        className="rounded-full"
         style={{
           width: 220,
           height: 220,
+          background: 'linear-gradient(#4d7c57,#2f5238)',
           transform: `scale(${state.scale})`,
           transition: 'transform 0.2s linear',
-          boxShadow: '0 0 90px -10px rgba(52,211,153,0.55)',
+          boxShadow: '0 0 90px -10px rgba(47,82,56,.4)',
         }}
         aria-hidden="true"
       />
 
       <button
         onClick={closeTab}
-        className="rounded-xl border border-white/[0.08] bg-white/[0.05] px-7 py-2.5 text-sm font-semibold text-ink-300 transition-colors hover:bg-white/10"
+        className="rounded-[20px] border-[1.5px] border-[rgba(54,43,26,.35)] bg-transparent px-7 py-2.5 text-sm font-semibold text-ink-300 transition-colors hover:bg-[rgba(54,43,26,.05)]"
       >
         Done
       </button>
