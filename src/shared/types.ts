@@ -89,6 +89,8 @@ export interface ExtensionSettings {
   windDownBedtime: number         // target bedtime, minutes since midnight
   wellnessNudgesEnabled: boolean       // posture & hydration nudges
   wellnessNudgeIntervalMinutes: number // minutes between nudges
+  eyeStrainCareEnabled: boolean        // guided 4-step eye-strain-care overlay
+  eyeStrainCareIntervalMinutes: number // minutes between eye-strain-care prompts
   lastHealthScore: number
   todaysSummary: DailySummary | null
   achievements: Achievement[]
@@ -135,3 +137,5 @@ export type ExtensionMessage =
   | { type: 'SHOW_WIND_DOWN'; payload: { message: string } }
   | { type: 'WIND_DOWN_RESPONSE'; payload: { response: 'dismissed' | 'snoozed' } }
   | { type: 'SHOW_NUDGE'; payload: { message: string } }
+  | { type: 'SHOW_EYE_STRAIN_CARE'; payload: { steps: { id: string; title: string; instruction: string; durationSec: number }[] } }
+  | { type: 'EYE_STRAIN_RESPONSE'; payload: { response: 'completed' | 'skipped' } }

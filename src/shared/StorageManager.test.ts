@@ -65,3 +65,10 @@ describe('DEFAULT_SETTINGS wellness nudges', () => {
     expect(DEFAULT_SETTINGS.wellnessNudgeIntervalMinutes).toBe(40)
   })
 })
+
+describe('DEFAULT_SETTINGS eye strain care', () => {
+  it('defaults enabled at a 30-minute interval', () => {
+    expect(DEFAULT_SETTINGS.eyeStrainCareEnabled).toBe(true)
+    expect(DEFAULT_SETTINGS.eyeStrainCareIntervalMinutes).toBe(30)
+  })
+})

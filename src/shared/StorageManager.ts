@@ -18,6 +18,8 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   windDownBedtime: 1380,
   wellnessNudgesEnabled: true,
   wellnessNudgeIntervalMinutes: 40,
+  eyeStrainCareEnabled: true,
+  eyeStrainCareIntervalMinutes: 30,
   lastHealthScore: 0,
   todaysSummary: null,
   achievements: [],
