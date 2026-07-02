@@ -3,29 +3,29 @@ const OVERLAY_STYLES = `
   :host { all: initial; }
   .overlay {
     position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-    z-index: 2147483647; font-family: system-ui, sans-serif;
-    background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.1); border-radius: 16px;
-    padding: 20px 24px; width: 360px; color: #f1f5f9;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    z-index: 2147483647; font-family: 'Alegreya Sans', system-ui, sans-serif;
+    background: #faf5e9;
+    border: 2px solid #362b1a; border-radius: 18px;
+    padding: 20px 24px; width: 360px; color: #362b1a;
+    box-shadow: 6px 8px 0 rgba(54,43,26,.35);
     animation: slideUp 0.3s ease;
   }
   @keyframes slideUp { from { opacity: 0; transform: translateX(-50%) translateY(20px); } }
-  .title { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px; }
-  .message { font-size: 15px; line-height: 1.5; margin-bottom: 12px; }
-  .stats { font-size: 13px; color: #64748b; margin-bottom: 16px; }
+  .title { font-family: 'Young Serif', 'Alegreya Sans', serif; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; color: #2f5238; text-transform: uppercase; margin-bottom: 8px; }
+  .message { font-size: 15px; line-height: 1.5; margin-bottom: 12px; color: #463a25; }
+  .stats { font-size: 13px; color: #7a6a4f; margin-bottom: 16px; }
   .moods { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-  .mood-btn { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 6px 12px; font-size: 13px; color: #cbd5e1; cursor: pointer; }
-  .mood-btn:hover { background: rgba(255,255,255,0.15); }
+  .mood-btn { background: #fffdf5; border: 1.5px solid rgba(54,43,26,.25); border-radius: 20px; padding: 6px 12px; font-size: 13px; font-family: 'Alegreya Sans', system-ui, sans-serif; color: #5d5138; cursor: pointer; }
+  .mood-btn:hover { background: #f3ecd9; }
   .actions { display: flex; gap: 8px; }
-  .btn { flex: 1; padding: 8px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; }
-  .btn-primary { background: #3b82f6; color: white; }
-  .btn-secondary { background: rgba(255,255,255,0.1); color: #cbd5e1; }
+  .btn { flex: 1; padding: 8px; border-radius: 20px; font-size: 13px; font-weight: 700; font-family: 'Alegreya Sans', system-ui, sans-serif; cursor: pointer; border: none; }
+  .btn-primary { background: #2f5238; color: #f3ecd9; border: 1.5px solid #2f5238; }
+  .btn-secondary { background: transparent; color: #5d5138; border: 1.5px solid rgba(54,43,26,.35); }
   .btn:hover { opacity: 0.85; }
-  .close { position: absolute; top: 12px; right: 14px; background: none; border: none; color: #64748b; cursor: pointer; font-size: 18px; }
-  .break-instruction { font-size: 14px; line-height: 1.5; color: #cbd5e1; margin-bottom: 16px; }
-  .countdown { font-size: 40px; font-weight: 700; text-align: center; color: #34d399; margin: 8px 0 16px; font-variant-numeric: tabular-nums; }
-  .break-done { font-size: 14px; text-align: center; color: #34d399; margin-bottom: 16px; }
+  .close { position: absolute; top: 12px; right: 14px; background: none; border: none; color: #7a6a4f; cursor: pointer; font-size: 18px; }
+  .break-instruction { font-size: 14px; line-height: 1.5; color: #463a25; margin-bottom: 16px; }
+  .countdown { font-family: 'Young Serif', 'Alegreya Sans', serif; font-size: 40px; font-weight: 700; text-align: center; color: #2f5238; margin: 8px 0 16px; font-variant-numeric: tabular-nums; }
+  .break-done { font-size: 14px; text-align: center; color: #2f5238; margin-bottom: 16px; }
 `
 
 function createOverlay(message: string, stats: string): HTMLElement {
@@ -76,14 +76,22 @@ function createOverlay(message: string, stats: string): HTMLElement {
   card.querySelector('.close')?.addEventListener('click', () => dismiss('dismissed'))
   card.querySelectorAll('.mood-btn').forEach(btn => {
     btn.addEventListener('click', e => {
-      card.querySelectorAll('.mood-btn').forEach(b => (b as HTMLElement).style.background = 'rgba(255,255,255,0.07)')
-      ;(e.currentTarget as HTMLElement).style.background = 'rgba(59,130,246,0.4)'
+      card.querySelectorAll('.mood-btn').forEach(b => {
+        const el = b as HTMLElement
+        el.style.background = '#fffdf5'
+        el.style.borderColor = 'rgba(54,43,26,.25)'
+        el.style.color = '#5d5138'
+      })
+      const selected = e.currentTarget as HTMLElement
+      selected.style.background = '#eef0e0'
+      selected.style.borderColor = '#4d7c57'
+      selected.style.color = '#2f5238'
     })
   })
   card.querySelectorAll('[data-action]').forEach(btn => {
     btn.addEventListener('click', e => {
       const action = (e.currentTarget as HTMLElement).dataset.action as 'continue' | 'take_break'
-      const activeMood = card.querySelector('.mood-btn[style*="0.4"]') as HTMLElement | null
+      const activeMood = card.querySelector('.mood-btn[style*="#eef0e0"]') as HTMLElement | null
       dismiss(action, activeMood?.dataset.mood ?? null)
     })
   })
@@ -253,11 +261,11 @@ const NUDGE_STYLES = `
   :host { all: initial; }
   .nudge {
     position: fixed; bottom: 24px; right: 24px;
-    z-index: 2147483646; font-family: system-ui, sans-serif;
-    background: rgba(15,23,42,0.95); backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
-    padding: 12px 16px; color: #e2e8f0; font-size: 13.5px; line-height: 1.4; max-width: 280px;
-    box-shadow: 0 12px 32px rgba(0,0,0,0.4); pointer-events: none;
+    z-index: 2147483646; font-family: 'Alegreya Sans', system-ui, sans-serif;
+    background: #faf5e9;
+    border: 1.5px solid #362b1a; border-radius: 12px;
+    padding: 12px 16px; color: #463a25; font-size: 13.5px; line-height: 1.4; max-width: 280px;
+    box-shadow: 4px 5px 0 rgba(54,43,26,.25); pointer-events: none;
     opacity: 0; transform: translateY(8px); transition: opacity .4s ease, transform .4s ease;
   }
   .nudge.show { opacity: 1; transform: translateY(0); }
