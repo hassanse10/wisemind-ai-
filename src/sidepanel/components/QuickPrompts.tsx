@@ -13,7 +13,7 @@ export function QuickPrompts({ onSelect }: Props) {
         <button
           key={p}
           onClick={() => onSelect(p)}
-          className="whitespace-nowrap rounded-full border-[1.5px] border-[rgba(54,43,26,.3)] bg-transparent px-3.5 py-2 text-xs font-semibold text-ink-300 transition-colors hover:bg-[rgba(54,43,26,.06)]"
+          className="whitespace-nowrap rounded-full border-[1.5px] border-[rgba(54,43,26,.3)] bg-transparent px-3.5 py-2 text-xs font-semibold text-ink-300 transition-colors hover:bg-[rgba(54,43,26,.05)]"
         >
           {p}
         </button>

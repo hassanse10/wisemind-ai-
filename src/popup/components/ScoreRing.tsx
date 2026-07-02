@@ -33,7 +33,7 @@ export function ScoreRing({ score, label, color, size = 128, stroke = 11 }: Prop
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span
-          className="font-display font-normal leading-none tracking-tight text-ink-100"
+          className="font-display leading-none tracking-tight text-ink-100"
           style={{ fontSize: size * 0.3 }}
         >
           {score}

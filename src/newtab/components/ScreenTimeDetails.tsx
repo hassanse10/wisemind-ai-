@@ -40,7 +40,7 @@ export function ScreenTimeDetails({ summary, visits }: Props) {
     <div className="bg-[#fffdf5] border-[1.5px] border-[rgba(54,43,26,.25)] rounded-[18px] p-5">
       <div className="mb-4 flex items-baseline justify-between">
         <h3 className="font-display text-base text-[#362b1a]">Screen Time Details</h3>
-        <span className="font-display text-sm font-semibold text-[#5d5138]">{fmt(summary.totalTime)}</span>
+        <span className="font-display text-sm text-[#5d5138]">{fmt(summary.totalTime)}</span>
       </div>
 
       {/* Full-width stacked bar */}
@@ -76,7 +76,7 @@ export function ScreenTimeDetails({ summary, visits }: Props) {
       <div className="mt-5 grid grid-cols-3 gap-2.5 border-t border-[rgba(54,43,26,.1)] pt-4">
         {stats.map(({ label, value, tint }) => (
           <div key={label} className="rounded-xl bg-[#f3ecd9] px-3 py-2.5">
-            <div className="font-display text-base font-semibold" style={{ color: tint }}>{value}</div>
+            <div className="font-display text-base" style={{ color: tint }}>{value}</div>
             <div className="mt-0.5 text-[11px] text-[#8a7a5c]">{label}</div>
           </div>
         ))}

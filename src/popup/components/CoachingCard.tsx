@@ -23,7 +23,7 @@ export function CoachingCard({ message, onDismiss }: Props) {
       <div className="mt-[13px]">
         <button
           onClick={onDismiss}
-          className="w-full rounded-[24px] border-[1.5px] border-[#2f5238] bg-[#2f5238] py-[9px] px-[16px] text-[13px] font-extrabold text-[#f3ecd9] transition-colors hover:bg-[#3d6849]"
+          className="w-full rounded-[24px] border-[1.5px] border-[#2f5238] bg-[#2f5238] py-[9px] px-[16px] text-[13px] font-extrabold text-[#f3ecd9] transition-colors hover:bg-[#4d7c57]"
         >
           Dismiss
         </button>

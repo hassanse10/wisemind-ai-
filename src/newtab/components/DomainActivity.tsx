@@ -56,7 +56,7 @@ export function DomainActivity({ visits }: Props) {
     return (
       <div className="bg-[#faf5e9] border-2 border-[#362b1a] rounded-[20px] p-5"
         style={{ boxShadow: '6px 8px 0 rgba(54,43,26,.18)' }}>
-        <h3 className="font-display mb-2 text-sm font-semibold text-ink-200">Activity by Domain</h3>
+        <h3 className="font-display mb-2 text-sm text-ink-200">Activity by Domain</h3>
         <p className="text-sm text-ink-500">No browsing tracked yet today.</p>
       </div>
     )
@@ -69,7 +69,7 @@ export function DomainActivity({ visits }: Props) {
     <div className="bg-[#faf5e9] border-2 border-[#362b1a] rounded-[20px] p-5"
       style={{ boxShadow: '6px 8px 0 rgba(54,43,26,.18)' }}>
       <div className="mb-4 flex items-baseline justify-between">
-        <h3 className="font-display text-sm font-semibold text-ink-200">Activity by Domain</h3>
+        <h3 className="font-display text-sm text-ink-200">Activity by Domain</h3>
         <span className="text-[11.5px] text-ink-500">{rows.length} site{rows.length === 1 ? '' : 's'}</span>
       </div>
 

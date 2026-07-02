@@ -13,8 +13,8 @@ const ALL_ACHIEVEMENTS = [
 interface Props { achievements: Achievement[] }
 
 const UNLOCKED_TINTS = [
-  { bg: '#f6ead2', border: '#c9892f' }, // amber
   { bg: '#eef0e0', border: '#4d7c57' }, // green
+  { bg: '#f6ead2', border: '#c9892f' }, // amber
   { bg: '#e8edf2', border: '#58789f' }, // blue
 ]
 

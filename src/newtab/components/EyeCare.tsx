@@ -65,7 +65,7 @@ export function EyeCare({ summary }: Props) {
     <div className="bg-[#faf5e9] border-2 border-[#362b1a] rounded-[20px] p-5"
       style={{ boxShadow: '6px 8px 0 rgba(54,43,26,.18)' }}>
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="font-display text-sm font-semibold text-ink-200">Rest Your Eyes</h3>
+        <h3 className="font-display text-sm text-ink-200">Rest Your Eyes</h3>
         <button
           onClick={() => setSeed(s => s + 1)}
           className="rounded-[20px] border-[1.5px] border-[rgba(54,43,26,.35)] bg-transparent px-2.5 py-1 text-[11.5px] font-medium text-ink-500 transition-colors hover:bg-[rgba(54,43,26,.05)]"
@@ -84,7 +84,7 @@ export function EyeCare({ summary }: Props) {
         <span className="text-2xl leading-none" aria-hidden="true">{featured.icon}</span>
         <div>
           <div className="mb-0.5 flex items-center gap-2">
-            <span className="font-display text-[14px] font-semibold text-ink-100">{featured.title}</span>
+            <span className="font-display text-[14px] text-ink-100">{featured.title}</span>
             <span className="rounded-full bg-health/15 px-1.5 py-px text-[10px] font-semibold text-health">Try now</span>
           </div>
           <p className="text-[12.5px] leading-relaxed text-ink-400">{featured.detail}</p>

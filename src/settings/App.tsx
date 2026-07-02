@@ -113,13 +113,13 @@ export function App() {
   return (
     <div className="min-h-screen bg-[#e9dfc9] text-[#362b1a] font-sans p-8">
       <div className="max-w-2xl mx-auto space-y-8">
-        <h1 className="text-2xl font-bold font-display text-[#2f5238]">
+        <h1 className="text-2xl font-display text-[#2f5238]">
           WiseMind AI Settings
         </h1>
 
         {/* API Configuration */}
         <section className={sectionClass} style={sectionStyle}>
-          <h2 className="text-sm font-extrabold font-display text-[#463a25]">API Configuration</h2>
+          <h2 className="text-sm font-display text-[#463a25]">API Configuration</h2>
           <div>
             <label htmlFor="api-key" className="text-xs text-[#7a6a4f] mb-1 block">
               OpenRouter API Key
@@ -160,7 +160,7 @@ export function App() {
 
         {/* Mentor Personality */}
         <section className={sectionClass} style={sectionStyle}>
-          <h2 className="text-sm font-extrabold font-display text-[#463a25]">Mentor Personality</h2>
+          <h2 className="text-sm font-display text-[#463a25]">Mentor Personality</h2>
           <div className="grid grid-cols-1 gap-2">
             {PERSONALITIES.map(p => (
               <button
@@ -181,7 +181,7 @@ export function App() {
 
         {/* Coaching Preferences */}
         <section className={sectionClass} style={sectionStyle}>
-          <h2 className="text-sm font-extrabold font-display text-[#463a25]">Coaching Preferences</h2>
+          <h2 className="text-sm font-display text-[#463a25]">Coaching Preferences</h2>
           <label className="flex items-center justify-between">
             <span className="text-sm text-[#463a25]">Enable Coaching</span>
             <input
@@ -231,7 +231,7 @@ export function App() {
 
         {/* Break Reminders */}
         <section className={sectionClass} style={sectionStyle}>
-          <h2 className="text-sm font-extrabold font-display text-[#463a25]">Break Reminders</h2>
+          <h2 className="text-sm font-display text-[#463a25]">Break Reminders</h2>
           <p className="text-xs text-[#7a6a4f]">
             Guided eye &amp; movement breaks during continuous screen time. Works without an API key.
           </p>
@@ -267,7 +267,7 @@ export function App() {
 
         {/* Bedtime Wind-Down */}
         <section className={sectionClass} style={sectionStyle}>
-          <h2 className="text-sm font-extrabold font-display text-[#463a25]">Bedtime Wind-Down</h2>
+          <h2 className="text-sm font-display text-[#463a25]">Bedtime Wind-Down</h2>
           <p className="text-xs text-[#7a6a4f]">
             Evening reminders and an optional warm screen tint to help you ease toward sleep. Works without an API key.
           </p>
@@ -313,7 +313,7 @@ export function App() {
 
         {/* Posture & Hydration */}
         <section className={sectionClass} style={sectionStyle}>
-          <h2 className="text-sm font-extrabold font-display text-[#463a25]">Posture &amp; Hydration</h2>
+          <h2 className="text-sm font-display text-[#463a25]">Posture &amp; Hydration</h2>
           <p className="text-xs text-[#7a6a4f]">
             Gentle posture and hydration reminders while you work — small toasts that fade on their own, no clicks. Works without an API key.
           </p>
@@ -349,7 +349,7 @@ export function App() {
 
         {/* Privacy & Exclusions */}
         <section className={sectionClass} style={sectionStyle}>
-          <h2 className="text-sm font-extrabold font-display text-[#463a25]">Privacy &amp; Exclusions</h2>
+          <h2 className="text-sm font-display text-[#463a25]">Privacy &amp; Exclusions</h2>
           <label className="flex items-center justify-between">
             <div>
               <p className="text-sm text-[#463a25]">Private Mode</p>
@@ -404,7 +404,7 @@ export function App() {
 
         {/* Theme */}
         <section className={sectionClass} style={sectionStyle}>
-          <h2 className="text-sm font-extrabold font-display text-[#463a25] mb-3">Theme</h2>
+          <h2 className="text-sm font-display text-[#463a25] mb-3">Theme</h2>
           <div className="flex items-center gap-3">
             <span className="text-sm text-[#463a25]">Appearance</span>
             <span className="px-3 py-1 rounded-full text-sm bg-[#f3ecd9] border-[1.5px] border-[rgba(54,43,26,.25)] text-[#5d5138]">
@@ -415,7 +415,7 @@ export function App() {
 
         {/* Data Management */}
         <section className={sectionClass} style={sectionStyle}>
-          <h2 className="text-sm font-extrabold font-display text-[#463a25]">Data</h2>
+          <h2 className="text-sm font-display text-[#463a25]">Data</h2>
           <div className="flex gap-3">
             <button
               onClick={exportData}
@@ -445,7 +445,7 @@ export function App() {
             className="bg-[#faf5e9] rounded-[18px] p-6 max-w-sm w-full mx-4 border-2 border-[#362b1a] space-y-4"
             style={{ boxShadow: '6px 8px 0 rgba(54,43,26,.18)' }}
           >
-            <h3 id="confirm-title" className="text-base font-semibold font-display text-[#362b1a]">
+            <h3 id="confirm-title" className="text-base font-display text-[#362b1a]">
               Clear All Data?
             </h3>
             <p className="text-sm text-[#5d5138]">

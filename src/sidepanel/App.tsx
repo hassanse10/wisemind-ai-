@@ -211,12 +211,12 @@ export function App() {
             onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage(input)}
             placeholder="Ask your coach anything..."
             disabled={loading}
-            className="flex-1 bg-transparent text-[13px] italic text-ink-100 placeholder:text-ink-500 placeholder:italic outline-none disabled:opacity-50"
+            className="flex-1 bg-transparent text-[13px] text-ink-100 placeholder:text-ink-500 placeholder:italic outline-none disabled:opacity-50"
           />
           <button
             onClick={() => sendMessage(input)}
             disabled={loading || !input.trim()}
-            aria-label="→"
+            aria-label="Send message"
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#2f5238] disabled:opacity-40"
           >
             {loading ? (

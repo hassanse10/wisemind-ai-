@@ -186,7 +186,7 @@ function WeeklyInsightCard({ summaries, goals, settings }: Props) {
 
   return (
     <div className="bg-[#eef0e0] border-[1.5px] border-[#4d7c57] rounded-[20px] p-5">
-      <h3 className="font-display text-sm font-extrabold text-ink-100 mb-4">Weekly Insight</h3>
+      <h3 className="font-display text-sm text-ink-100 mb-4">Weekly Insight</h3>
 
       {state.status === 'private_mode' && (
         <p className="text-sm text-ink-400">

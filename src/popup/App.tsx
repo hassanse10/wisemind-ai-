@@ -20,7 +20,7 @@ function Pill({ label, value, color }: { label: string; value: number; color: st
     <div className="rounded-[13px] border-[1.5px] border-[rgba(54,43,26,.25)] bg-[#f3ecd9] px-[13px] py-[10px]">
       <div className="mb-[7px] flex items-center justify-between">
         <span className="text-[13.5px] font-bold text-ink-300">{label}</span>
-        <span className="font-display text-base font-semibold" style={{ color }}>{value}</span>
+        <span className="font-display text-base" style={{ color }}>{value}</span>
       </div>
       <div className="h-[6px] overflow-hidden rounded-[3px] bg-[rgba(54,43,26,.1)]">
         <div className="h-full rounded-[3px]" style={{ width: `${value}%`, background: color }} />
@@ -64,7 +64,7 @@ export function App() {
               {BRAND_MARK}
             </div>
             <div>
-              <div className="font-display text-[17px] font-normal tracking-[-0.01em] text-ink-100">WiseMind</div>
+              <div className="font-display text-[17px] tracking-[-0.01em] text-ink-100">WiseMind</div>
               <div className="text-[12.5px] font-medium text-ink-500">{today}</div>
             </div>
           </div>

@@ -31,7 +31,7 @@ export function App() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-12 bg-[#e9dfc9] font-sans text-ink-100">
       <div className="text-center">
-        <div className="mb-2 font-display text-3xl font-medium tracking-tight">
+        <div className="mb-2 font-display text-3xl tracking-tight">
           {state.done ? 'Nicely done' : state.phaseLabel}
         </div>
         <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-ink-500">

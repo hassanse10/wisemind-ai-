@@ -24,7 +24,7 @@ export function SleepNote({ summary, settings }: Props) {
   return (
     <div className="wm-panel p-5">
       <div className="mb-3 flex items-baseline justify-between">
-        <h3 className="font-display text-sm font-semibold text-ink-200">Sleep &amp; Wind-Down</h3>
+        <h3 className="font-display text-sm text-ink-200">Sleep &amp; Wind-Down</h3>
         <span className="text-[11.5px] text-ink-500">
           {settings.windDownEnabled
             ? `${hhmm(settings.windDownStart)} → ${hhmm(settings.windDownBedtime)}`

@@ -52,7 +52,7 @@ export function HealthTrends({ summaries }: Props) {
     <div className="bg-[#faf5e9] border-2 border-[#362b1a] rounded-[20px] p-5"
       style={{ boxShadow: '6px 8px 0 rgba(54,43,26,.18)' }}>
       <div className="mb-4 flex items-baseline justify-between">
-        <h3 className="font-display text-sm font-semibold text-ink-200">Health Trends</h3>
+        <h3 className="font-display text-sm text-ink-200">Health Trends</h3>
         <span className="text-[11.5px] text-ink-500">last {trends.days} days</span>
       </div>
 

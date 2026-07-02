@@ -45,12 +45,12 @@ describe('SidePanel App', () => {
 
   it('shows send button', () => {
     render(<App />)
-    expect(screen.getByRole('button', { name: '→' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Send message' })).toBeInTheDocument()
   })
 
   it('send button is disabled when input is empty', () => {
     render(<App />)
-    const sendBtn = screen.getByRole('button', { name: '→' })
+    const sendBtn = screen.getByRole('button', { name: 'Send message' })
     expect(sendBtn).toBeDisabled()
   })
 
@@ -58,7 +58,7 @@ describe('SidePanel App', () => {
     render(<App />)
     const input = screen.getByPlaceholderText(/Ask your coach/i)
     fireEvent.change(input, { target: { value: 'Hello coach' } })
-    const sendBtn = screen.getByRole('button', { name: '→' })
+    const sendBtn = screen.getByRole('button', { name: 'Send message' })
     expect(sendBtn).not.toBeDisabled()
   })
 
@@ -72,7 +72,7 @@ describe('SidePanel App', () => {
     const input = screen.getByPlaceholderText(/Ask your coach/i)
     // unique text so it doesn't collide with a quick-prompt chip of the same label
     fireEvent.change(input, { target: { value: 'Tell me about my day' } })
-    fireEvent.click(screen.getByRole('button', { name: '→' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Send message' }))
 
     expect(screen.getByText('Tell me about my day')).toBeInTheDocument()
 
@@ -88,7 +88,7 @@ describe('SidePanel App', () => {
     render(<App />)
     const input = screen.getByPlaceholderText(/Ask your coach/i)
     fireEvent.change(input, { target: { value: 'Test message' } })
-    fireEvent.click(screen.getByRole('button', { name: '→' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Send message' }))
 
     await waitFor(() => expect(mockFetch).toHaveBeenCalledOnce())
 
@@ -106,7 +106,7 @@ describe('SidePanel App', () => {
     render(<App />)
     const input = screen.getByPlaceholderText(/Ask your coach/i)
     fireEvent.change(input, { target: { value: 'Hi' } })
-    fireEvent.click(screen.getByRole('button', { name: '→' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Send message' }))
 
     await waitFor(() =>
       expect(screen.getByText(/Connection error/i)).toBeInTheDocument()
@@ -122,7 +122,7 @@ describe('SidePanel App', () => {
     render(<App />)
     const input = screen.getByPlaceholderText(/Ask your coach/i) as HTMLInputElement
     fireEvent.change(input, { target: { value: 'Hello' } })
-    fireEvent.click(screen.getByRole('button', { name: '→' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Send message' }))
 
     expect(input.value).toBe('')
   })
@@ -136,7 +136,7 @@ describe('SidePanel App', () => {
     const input = screen.getByPlaceholderText(/Ask your coach/i)
     fireEvent.change(input, { target: { value: 'Hello' } })
     // Click the send button (still shows → before loading starts)
-    fireEvent.click(screen.getByRole('button', { name: '→' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Send message' }))
 
     // After send, loading state begins — check for thinking indicator
     await waitFor(() => expect(screen.getByText(/Coach is thinking/i)).toBeInTheDocument())

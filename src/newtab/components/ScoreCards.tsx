@@ -11,7 +11,6 @@ const CARDS = [
     border: '#4d7c57',
     desc: 'Rest & balanced screen time',
     starsColor: '#4d7c57',
-    starsCount: 4,
   },
   {
     key: 'prod' as const,
@@ -21,7 +20,6 @@ const CARDS = [
     border: '#58789f',
     desc: 'Deep-focus blocks today',
     starsColor: '#58789f',
-    starsCount: 3,
   },
   {
     key: 'learn' as const,
@@ -31,7 +29,6 @@ const CARDS = [
     border: '#c9892f',
     desc: 'Time invested in growth',
     starsColor: '#96650f',
-    starsCount: 5,
   },
 ] as const
 
@@ -49,20 +46,23 @@ export function ScoreCards({ health, productivity, learning }: Props) {
   const values = { health, prod: productivity, learn: learning }
   return (
     <div className="grid grid-cols-3 gap-[18px]">
-      {CARDS.map(({ key, label, color, bg, border, desc, starsColor, starsCount }) => (
-        <div
-          key={key}
-          className="flex items-center gap-[18px] rounded-[18px] p-[22px]"
-          style={{ background: bg, border: `1.5px solid ${border}` }}
-        >
-          <ScoreRing score={values[key]} label="" color={color} size={92} stroke={8} />
-          <div>
-            <div className="mb-1 font-display text-base font-semibold text-[#362b1a]">{label}</div>
-            <div className="text-[13.5px] leading-relaxed text-[#7a6a4f]">{desc}</div>
-            {starRating(starsCount, starsColor)}
+      {CARDS.map(({ key, label, color, bg, border, desc, starsColor }) => {
+        const filled = Math.max(0, Math.min(5, Math.round(values[key] / 20)))
+        return (
+          <div
+            key={key}
+            className="flex items-center gap-[18px] rounded-[18px] p-[22px]"
+            style={{ background: bg, border: `1.5px solid ${border}` }}
+          >
+            <ScoreRing score={values[key]} label="" color={color} size={92} stroke={8} />
+            <div>
+              <div className="mb-1 font-display text-base text-[#362b1a]">{label}</div>
+              <div className="text-[13.5px] leading-relaxed text-[#7a6a4f]">{desc}</div>
+              {starRating(filled, starsColor)}
+            </div>
           </div>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }
