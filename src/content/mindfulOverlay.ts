@@ -79,11 +79,15 @@ function createOverlay(message: string, stats: string): HTMLElement {
     btn.addEventListener('click', e => {
       card.querySelectorAll('.mood-btn').forEach(b => {
         const el = b as HTMLElement
-        el.style.background = '#fffdf5'
-        el.style.borderColor = 'rgba(54,43,26,.25)'
-        el.style.color = '#5d5138'
+        el.removeAttribute('data-selected')
+        // Clear any inline override so each button falls back to its own
+        // CSS-defined default look (e.g. the red just_scrolling tint).
+        el.style.background = ''
+        el.style.borderColor = ''
+        el.style.color = ''
       })
       const selected = e.currentTarget as HTMLElement
+      selected.setAttribute('data-selected', 'true')
       selected.style.background = '#eef0e0'
       selected.style.borderColor = '#4d7c57'
       selected.style.color = '#2f5238'
@@ -92,7 +96,7 @@ function createOverlay(message: string, stats: string): HTMLElement {
   card.querySelectorAll('[data-action]').forEach(btn => {
     btn.addEventListener('click', e => {
       const action = (e.currentTarget as HTMLElement).dataset.action as 'continue' | 'take_break'
-      const activeMood = card.querySelector('.mood-btn[style*="#eef0e0"]') as HTMLElement | null
+      const activeMood = card.querySelector('.mood-btn[data-selected="true"]') as HTMLElement | null
       dismiss(action, activeMood?.dataset.mood ?? null)
     })
   })
