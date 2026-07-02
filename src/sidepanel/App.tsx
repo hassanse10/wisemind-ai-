@@ -117,10 +117,10 @@ export function App() {
 
   if (settings?.privateModeActive) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center gap-4 bg-navy-900 px-6 text-center font-sans text-ink-100">
+      <div className="flex h-screen flex-col items-center justify-center gap-4 bg-[#faf5e9] px-6 text-center font-sans text-ink-100">
         <div className="text-4xl">🔒</div>
         <p className="text-sm font-semibold text-ink-300">Private Mode Active</p>
-        <p className="text-xs text-ink-600">AI coaching is disabled while private mode is on. Turn it off in Settings to continue.</p>
+        <p className="text-xs text-ink-500">AI coaching is disabled while private mode is on. Turn it off in Settings to continue.</p>
       </div>
     )
   }
@@ -128,17 +128,17 @@ export function App() {
   const health = settings?.lastHealthScore ?? 0
 
   return (
-    <div className="relative flex h-screen flex-col bg-navy-900 font-sans text-ink-100">
+    <div className="relative flex h-screen flex-col bg-[#faf5e9] font-sans text-ink-100">
       {/* Achievement toast */}
       {toastLabels.length > 0 && (
         <div
           role="status"
           aria-live="polite"
-          className="absolute left-0 right-0 top-0 z-50 mx-3 mt-2 flex items-start justify-between gap-3 rounded-2xl border border-learn/30 bg-learn/[0.12] px-4 py-3 shadow-lg backdrop-blur"
+          className="absolute left-0 right-0 top-0 z-50 mx-3 mt-2 flex items-start justify-between gap-3 rounded-2xl border border-[#c9892f]/30 bg-[#c9892f]/[0.12] px-4 py-3 shadow-lg"
         >
           <div className="flex min-w-0 flex-col gap-1">
             {toastLabels.map(label => (
-              <span key={label} className="text-sm font-semibold text-learn">
+              <span key={label} className="text-sm font-semibold text-[#c9892f]">
                 🏆 Achievement unlocked: {label}
               </span>
             ))}
@@ -150,7 +150,7 @@ export function App() {
               setToastLabels([])
             }}
             aria-label="Dismiss achievement notification"
-            className="shrink-0 text-lg leading-none text-learn hover:opacity-80"
+            className="shrink-0 text-lg leading-none text-[#c9892f] hover:opacity-80"
           >
             ×
           </button>
@@ -158,21 +158,20 @@ export function App() {
       )}
 
       {/* Context bar */}
-      <div
-        className="shrink-0 border-b border-white/[0.06] px-5 pb-4 pt-[18px]"
-        style={{ background: 'linear-gradient(180deg,rgba(59,130,246,.06),transparent)' }}
-      >
+      <div className="shrink-0 border-b border-[rgba(54,43,26,.22)] bg-[#f3ecd9] px-5 pb-[15px] pt-[18px]">
         <div className="flex items-center gap-3">
-          <div className="flex h-[42px] w-[42px] items-center justify-center rounded-[13px] text-xl wm-brand-grad shadow-[0_8px_18px_-6px_rgba(52,211,153,.5)]">
-            🧠
+          <div className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-full bg-[#2f5238] border-2 border-[#362b1a]">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#f3ecd9" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 21V9"/><path d="M12 9C12 5 9 3.5 5.5 4 5 8 7.5 10.5 12 9z"/><path d="M12 13c0-4 3-5.5 6.5-5-.5 4-3 6.5-6.5 5z"/>
+            </svg>
           </div>
           <div className="flex-1">
-            <div className="font-display text-[15px] font-semibold">Sage</div>
-            <div className="text-[11.5px] font-medium text-ink-600">Your wellness coach · here to guide</div>
+            <div className="font-display text-[16px]">Sage</div>
+            <div className="text-[12.5px] font-medium text-ink-500">Your wellness coach · here to guide</div>
           </div>
           <div className="text-right">
-            <div className="text-[11px] font-semibold text-ink-700">Today</div>
-            <div className="text-xs font-semibold text-health">Health {health}/100</div>
+            <div className="text-[11px] font-semibold text-[#a3947a]">Today</div>
+            <div className="text-xs font-semibold text-[#2f5238]">Health {health}/100</div>
           </div>
         </div>
       </div>
@@ -185,17 +184,17 @@ export function App() {
       {loading && (
         <div className="flex items-center gap-2 px-5 pb-2">
           <div className="flex gap-1">
-            <span className="h-1.5 w-1.5 rounded-full bg-ink-600 wm-anim-pulse" />
-            <span className="h-1.5 w-1.5 rounded-full bg-ink-600 wm-anim-pulse" style={{ animationDelay: '.2s' }} />
-            <span className="h-1.5 w-1.5 rounded-full bg-ink-600 wm-anim-pulse" style={{ animationDelay: '.4s' }} />
+            <span className="h-1.5 w-1.5 rounded-full bg-[#a3947a] wm-anim-pulse" />
+            <span className="h-1.5 w-1.5 rounded-full bg-[#a3947a] wm-anim-pulse" style={{ animationDelay: '.2s' }} />
+            <span className="h-1.5 w-1.5 rounded-full bg-[#a3947a] wm-anim-pulse" style={{ animationDelay: '.4s' }} />
           </div>
-          <span className="text-xs text-ink-600">Coach is thinking…</span>
+          <span className="text-xs text-ink-500">Coach is thinking…</span>
         </div>
       )}
 
       {/* No API key warning */}
       {!settings?.openrouterApiKey && (
-        <div className="mx-4 mb-2 rounded-xl border border-learn/20 bg-learn/[0.08] px-3 py-2 text-xs text-learn">
+        <div className="mx-4 mb-2 rounded-xl border border-[#c9892f]/20 bg-[#c9892f]/[0.08] px-3 py-2 text-xs text-[#96650f]">
           Add your OpenRouter API key in Settings to enable AI coaching.
         </div>
       )}
@@ -205,21 +204,28 @@ export function App() {
 
       {/* Input row */}
       <div className="px-4 pb-3 pt-2.5">
-        <div className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-white/5 px-3 py-2.5 focus-within:border-prod/50">
+        <div className="flex items-center gap-2.5 rounded-[22px] border-[1.5px] border-[rgba(54,43,26,.35)] bg-[#fffdf5] px-3.5 py-2.5">
           <input
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage(input)}
             placeholder="Ask your coach anything..."
             disabled={loading}
-            className="flex-1 bg-transparent text-[13px] text-ink-100 placeholder-ink-700 outline-none disabled:opacity-50"
+            className="flex-1 bg-transparent text-[13px] italic text-ink-100 placeholder:text-ink-500 placeholder:italic outline-none disabled:opacity-50"
           />
           <button
             onClick={() => sendMessage(input)}
             disabled={loading || !input.trim()}
-            className="flex h-8 w-8 items-center justify-center rounded-[10px] text-[#06231a] wm-brand-grad disabled:opacity-40"
+            aria-label="→"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#2f5238] disabled:opacity-40"
           >
-            {loading ? '…' : '→'}
+            {loading ? (
+              <span className="text-[#f3ecd9] text-sm">…</span>
+            ) : (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f3ecd9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            )}
           </button>
         </div>
       </div>
