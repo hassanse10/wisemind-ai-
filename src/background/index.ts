@@ -7,6 +7,7 @@ import { NotificationManager } from './NotificationManager'
 import { BreakTimerEngine } from './BreakTimerEngine'
 import { WindDownEngine } from './WindDownEngine'
 import { WellnessNudgeEngine } from './WellnessNudgeEngine'
+import { EyeStrainCareEngine } from './EyeStrainCareEngine'
 import { getSettings, updateSettings, isPrivateMode } from '../shared/StorageManager'
 import { addShortVideoSession, addCoachingEvent, getVisitsByDateRange } from '../shared/db'
 import { getTodayRange } from '../shared/constants'
@@ -24,6 +25,7 @@ const achievements = new AchievementsEngine()
 const breakTimer = new BreakTimerEngine()
 const windDown = new WindDownEngine()
 const wellness = new WellnessNudgeEngine()
+const eyeStrainCare = new EyeStrainCareEngine()
 
 tracking.init()
 classifier.init()
@@ -31,6 +33,7 @@ coaching.init()
 breakTimer.init()
 windDown.init()
 wellness.init()
+eyeStrainCare.init()
 
 // Track last activity signal timestamp to support continuousMinutes tracking
 let lastActivityTime = Date.now()
@@ -123,6 +126,13 @@ chrome.alarms.onAlarm.addListener(async (alarm: chrome.alarms.Alarm) => {
     }
   }
 
+  if (alarm.name === 'eyeStrainTick') {
+    const steps = await eyeStrainCare.evaluate()
+    if (steps) {
+      await NotificationManager.deliverEyeStrainCare(steps)
+    }
+  }
+
   if (alarm.name === 'dailySummary') {
     await scoring.computeAndStore()
     const unlocked = await achievements.evaluate()
@@ -209,6 +219,25 @@ chrome.runtime.onMessage.addListener(
         windDown.snooze()
       }
       // 'dismissed' is acknowledged with no state change
+      return false
+    }
+
+    if (message.type === 'EYE_STRAIN_RESPONSE') {
+      const payload = message.payload as { response: 'completed' | 'skipped' }
+      void (async () => {
+        if (payload.response === 'completed') {
+          eyeStrainCare.complete()
+          const settings = await getSettings()
+          if (settings.todaysSummary) {
+            await updateSettings({
+              todaysSummary: { ...settings.todaysSummary, breaks: settings.todaysSummary.breaks + 1 },
+            })
+          }
+          scheduleRecompute()
+        } else {
+          eyeStrainCare.skip()
+        }
+      })()
       return false
     }
 
@@ -360,6 +389,7 @@ chrome.idle.onStateChanged.addListener(async (state: string) => {
     coaching.resetSession()
     breakTimer.resetSession()
     wellness.resetSession()
+    eyeStrainCare.resetSession()
   }
 })
 
