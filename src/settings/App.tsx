@@ -265,6 +265,42 @@ export function App() {
           </div>
         </section>
 
+        {/* Eye Strain Care */}
+        <section className={sectionClass} style={sectionStyle}>
+          <h2 className="text-sm font-display text-[#463a25]">Eye Strain Care</h2>
+          <p className="text-xs text-[#7a6a4f]">
+            A guided 4-step break for blinking, focal distance, posture, and screen brightness. Works without an API key.
+          </p>
+          <label className="flex items-center justify-between">
+            <span className="text-sm text-[#463a25]">Enable eye-strain-care walkthrough</span>
+            <input
+              type="checkbox"
+              checked={settings.eyeStrainCareEnabled}
+              onChange={e => updateSettings({ eyeStrainCareEnabled: e.target.checked })}
+              className="w-5 h-5 accent-[#2f5238]"
+            />
+          </label>
+          <div>
+            <label className="text-xs text-[#7a6a4f] mb-2 block">Remind me every</label>
+            <div className="flex gap-2">
+              {[20, 30, 45, 60].map(mins => (
+                <button
+                  key={mins}
+                  onClick={() => updateSettings({ eyeStrainCareIntervalMinutes: mins })}
+                  disabled={!settings.eyeStrainCareEnabled}
+                  className={`flex-1 py-2 rounded-lg text-sm transition-colors disabled:opacity-40 border-[1.5px] ${
+                    settings.eyeStrainCareIntervalMinutes === mins
+                      ? 'bg-[#2f5238] text-[#f3ecd9] border-[#2f5238]'
+                      : 'bg-[#f3ecd9] text-[#463a25] border-[rgba(54,43,26,.22)]'
+                  }`}
+                >
+                  {mins} min
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Bedtime Wind-Down */}
         <section className={sectionClass} style={sectionStyle}>
           <h2 className="text-sm font-display text-[#463a25]">Bedtime Wind-Down</h2>

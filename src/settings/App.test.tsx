@@ -27,6 +27,8 @@ vi.mock('../shared/hooks/useStorage', () => ({
     windDownBedtime: 1380,
     wellnessNudgesEnabled: true,
     wellnessNudgeIntervalMinutes: 40,
+    eyeStrainCareEnabled: true,
+    eyeStrainCareIntervalMinutes: 30,
   }),
 }))
 
@@ -237,6 +239,16 @@ describe('Settings App', () => {
     fireEvent.click(btn)
     expect(mockUpdateSettings).toHaveBeenCalledWith(
       expect.objectContaining({ wellnessNudgeIntervalMinutes: 60 })
+    )
+  })
+
+  it('updates the eye-strain-care interval when a preset is clicked', async () => {
+    render(<App />)
+    const section = screen.getByText('Eye Strain Care').closest('section') as HTMLElement
+    const btn = within(section).getByRole('button', { name: '60 min' })
+    fireEvent.click(btn)
+    expect(mockUpdateSettings).toHaveBeenCalledWith(
+      expect.objectContaining({ eyeStrainCareIntervalMinutes: 60 })
     )
   })
 })
