@@ -17,6 +17,7 @@ const OVERLAY_STYLES = `
   .moods { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
   .mood-btn { background: #fffdf5; border: 1.5px solid rgba(54,43,26,.25); border-radius: 20px; padding: 6px 12px; font-size: 13px; font-family: 'Alegreya Sans', system-ui, sans-serif; color: #5d5138; cursor: pointer; }
   .mood-btn:hover { background: #f3ecd9; }
+  .mood-btn[data-mood="just_scrolling"] { background: #f4e7e0; border: 1.5px solid #b85c38; color: #8a4326; }
   .actions { display: flex; gap: 8px; }
   .btn { flex: 1; padding: 8px; border-radius: 20px; font-size: 13px; font-weight: 700; font-family: 'Alegreya Sans', system-ui, sans-serif; cursor: pointer; border: none; }
   .btn-primary { background: #2f5238; color: #f3ecd9; border: 1.5px solid #2f5238; }
