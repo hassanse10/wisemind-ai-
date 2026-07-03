@@ -4,6 +4,8 @@ import { ScreenTimeBar } from './components/ScreenTimeBar'
 import { CoachingCard } from './components/CoachingCard'
 import { useSettings } from '../shared/hooks/useStorage'
 import { useScores } from '../shared/hooks/useScores'
+import { updateSettings } from '../shared/StorageManager'
+import { categorizeDomain, CATEGORY_COLORS } from '../shared/constants'
 import { getShortVideosByDateRange, getVisitsByDateRange } from '../shared/db'
 import { getTodayRange } from '../shared/constants'
 
@@ -15,6 +17,15 @@ const BRAND_MARK = (
   </svg>
 )
 
+function LockIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+      <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.7"/>
+      <path d="M8 11V7a4 4 0 018 0v4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+    </svg>
+  )
+}
+
 function Pill({ label, value, color }: { label: string; value: number; color: string }) {
   return (
     <div className="rounded-[13px] border-[1.5px] border-[rgba(54,43,26,.25)] bg-[#f3ecd9] px-[13px] py-[10px]">
@@ -25,6 +36,42 @@ function Pill({ label, value, color }: { label: string; value: number; color: st
       <div className="h-[6px] overflow-hidden rounded-[3px] bg-[rgba(54,43,26,.1)]">
         <div className="h-full rounded-[3px]" style={{ width: `${value}%`, background: color }} />
       </div>
+    </div>
+  )
+}
+
+function fmt(totalSec: number): string {
+  const m = Math.round(totalSec / 60)
+  if (m < 1) return '<1m'
+  const h = Math.floor(m / 60)
+  return h > 0 ? `${h}h ${m % 60}m` : `${m}m`
+}
+
+function TopSites({ sites }: { sites: Array<{ domain: string; duration: number }> }) {
+  const top = sites.slice(0, 3)
+  if (top.length === 0) return null
+  return (
+    <div className="flex flex-col gap-2">
+      <span className="text-[11.5px] font-extrabold tracking-wide text-ink-500">TOP SITES TODAY</span>
+      {top.map(site => {
+        const color = CATEGORY_COLORS[categorizeDomain(site.domain) ?? 'other']
+        return (
+          <div
+            key={site.domain}
+            className="flex items-center gap-2.5 rounded-[13px] border-[1.5px] border-[rgba(54,43,26,.25)] bg-[#f3ecd9] px-[13px] py-[9px]"
+          >
+            <span
+              className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg text-[12px] font-bold uppercase"
+              style={{ background: `${color}22`, color }}
+              aria-hidden="true"
+            >
+              {site.domain[0] ?? '?'}
+            </span>
+            <span className="flex-1 truncate text-[13px] font-medium text-ink-200">{site.domain}</span>
+            <span className="flex-shrink-0 text-[12.5px] tabular-nums text-ink-400">{fmt(site.duration)}</span>
+          </div>
+        )
+      })}
     </div>
   )
 }
@@ -53,6 +100,11 @@ export function App() {
   const shortCount = liveShorts ?? summary?.shortVideoCount ?? 0
   const today = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric' })
 
+  const togglePrivateMode = () => {
+    if (!settings) return
+    updateSettings({ privateModeActive: !settings.privateModeActive })
+  }
+
   return (
     <div className="relative w-[400px] min-h-[580px] overflow-hidden bg-[#faf5e9] p-0 font-sans text-ink-100">
 
@@ -68,16 +120,29 @@ export function App() {
               <div className="text-[12.5px] font-medium text-ink-500">{today}</div>
             </div>
           </div>
-          <button
-            onClick={() => chrome.runtime.openOptionsPage()}
-            className="flex h-[34px] w-[34px] items-center justify-center rounded-full border-[1.5px] border-[rgba(54,43,26,.3)] bg-transparent text-ink-400 transition-colors hover:text-ink-200"
-            aria-label="Settings"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" strokeWidth="1.7"/>
-              <path d="M19.4 13.5a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-2.9 1.2v.1a2 2 0 11-4 0v-.2a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00-1.2-2.9H3a2 2 0 110-4h.2a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3H13a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.2a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V13a1.7 1.7 0 001.5 1z" stroke="currentColor" strokeWidth="1.3"/>
-            </svg>
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={togglePrivateMode}
+              aria-label={settings?.privateModeActive ? 'Private mode (on)' : 'Private mode'}
+              className={`flex h-[34px] w-[34px] items-center justify-center rounded-full border-[1.5px] transition-colors ${
+                settings?.privateModeActive
+                  ? 'border-[#2f5238] bg-[#eef0e0] text-[#2f5238]'
+                  : 'border-[rgba(54,43,26,.3)] bg-transparent text-ink-400 hover:text-ink-200'
+              }`}
+            >
+              <LockIcon />
+            </button>
+            <button
+              onClick={() => chrome.runtime.openOptionsPage()}
+              className="flex h-[34px] w-[34px] items-center justify-center rounded-full border-[1.5px] border-[rgba(54,43,26,.3)] bg-transparent text-ink-400 transition-colors hover:text-ink-200"
+              aria-label="Settings"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" strokeWidth="1.7"/>
+                <path d="M19.4 13.5a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-2.9 1.2v.1a2 2 0 11-4 0v-.2a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00-1.2-2.9H3a2 2 0 110-4h.2a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3H13a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.2a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V13a1.7 1.7 0 001.5 1z" stroke="currentColor" strokeWidth="1.3"/>
+              </svg>
+            </button>
+          </div>
         </div>
 
         {/* score hero */}
@@ -101,6 +166,9 @@ export function App() {
             </span>
           </div>
         )}
+
+        {/* top sites */}
+        {summary && <TopSites sites={summary.topSites} />}
 
         {/* coaching card */}
         {coachMsg && <CoachingCard message={coachMsg} onDismiss={() => setCoachMsg(null)} />}
