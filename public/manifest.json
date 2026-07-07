@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "WiseMind AI",
   "version": "1.0.0",
-  "description": "Your intelligent digital wellness coach",
+  "description": "100% local digital wellness coach: screen time, eye-care & break reminders. Nothing you browse ever leaves your device.",
   "permissions": [
     "tabs", "storage", "alarms", "notifications",
     "sidePanel", "scripting", "idle", "webNavigation"
