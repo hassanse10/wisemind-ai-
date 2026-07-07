@@ -49,8 +49,8 @@ describe('DEFAULT_SETTINGS break timer', () => {
 })
 
 describe('DEFAULT_SETTINGS wind-down', () => {
-  it('defaults reminders on and tint off', () => {
-    expect(DEFAULT_SETTINGS.windDownEnabled).toBe(true)
+  it('defaults reminders and tint off (opt-in)', () => {
+    expect(DEFAULT_SETTINGS.windDownEnabled).toBe(false)
     expect(DEFAULT_SETTINGS.windDownTintEnabled).toBe(false)
   })
   it('defaults wind-down 21:30 and bedtime 23:00 (minutes since midnight)', () => {
@@ -60,8 +60,8 @@ describe('DEFAULT_SETTINGS wind-down', () => {
 })
 
 describe('DEFAULT_SETTINGS wellness nudges', () => {
-  it('defaults nudges on at a 40-minute interval', () => {
-    expect(DEFAULT_SETTINGS.wellnessNudgesEnabled).toBe(true)
+  it('defaults nudges off (opt-in) at a 40-minute interval', () => {
+    expect(DEFAULT_SETTINGS.wellnessNudgesEnabled).toBe(false)
     expect(DEFAULT_SETTINGS.wellnessNudgeIntervalMinutes).toBe(40)
   })
 })
