@@ -74,6 +74,6 @@ changes in what the code does.
 
 ## Contact
 
-This is an independently developed, free extension. Questions or concerns
-about privacy can be raised via the project's repository (see the
-extension's store listing for the current link).
+This is an independently developed, free, open-source extension. Questions
+or concerns about privacy can be raised via the project's repository:
+https://github.com/hassanse10/wisemind-ai-

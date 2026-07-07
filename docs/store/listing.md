@@ -8,7 +8,7 @@ reads the feature list.
 
 ## Short description (manifest.json, ≤132 chars)
 
-> 100% local digital wellness coach: screen time, eye-care & break reminders. Nothing you browse ever leaves your device.
+> 100% local, open-source wellness coach: screen time, eye-care & break reminders. Nothing you browse leaves your device.
 
 (119 chars — already applied to `public/manifest.json`.)
 
@@ -48,6 +48,10 @@ reads the feature list.
 >
 > **Free. No ads, no subscription, no upsell.**
 >
+> **Open source.** The full source is public on GitHub — read the code,
+> file an issue, or verify for yourself that nothing leaves your device:
+> github.com/hassanse10/wisemind-ai-
+>
 > See our Privacy Policy for the full, plain-language breakdown of what data
 > this extension touches and where it goes (short answer: nowhere but your
 > own device).
@@ -78,14 +82,13 @@ Each of these must be filled in as free-text justification when submitting.
   optional AI panel only sends data off-device if the user supplies their
   own API key and explicitly uses that panel, directly to the AI provider
   the user configured, not to any server operated by this extension.
-- **Privacy policy URL:** link to `PRIVACY.md` (see repo root) once hosted
-  (e.g. via GitHub Pages or a raw GitHub URL) — required before submission,
-  since this extension requests broad host permissions.
+- **Privacy policy URL:**
+  `https://raw.githubusercontent.com/hassanse10/wisemind-ai-/master/PRIVACY.md`
 
-## Not yet claimed in this copy
+## Open source
 
-"Open source" is not asserted anywhere above because the repository isn't
-confirmed public yet. Add it to the short/detailed description once the
-repo is actually public with a LICENSE file — it's a real trust signal per
-the Expansionist's read of the roast, but claiming it prematurely would be
-false advertising on the store listing.
+The repo is public: github.com/hassanse10/wisemind-ai- (MIT licensed, see
+`LICENSE`). The "open source" claim in the short/detailed description above
+is backed by this — the code really is inspectable by anyone, which is what
+makes the "nothing leaves your device" claim verifiable rather than just
+asserted.

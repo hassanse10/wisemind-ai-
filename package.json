@@ -2,6 +2,11 @@
   "name": "wisemind-ai",
   "version": "1.0.0",
   "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hassanse10/wisemind-ai-.git"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite build --watch",
